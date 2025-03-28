@@ -11,12 +11,14 @@ W: The angle that tells us where the satellite is closest to Earth in its orbit.
 R: earth radius
 NUM_FRAMES: number of frames for the visualisations
 '''
+
+# Parameters for three satellites
 MU = 398600.4418
-A = 7000
-EC = 0.01
-IC = 45
-OMEGA = 60
-W = 30
+A = [7000, 7500, 8000]
+EC = [0.01, 0.02, 0.03]
+IC = [45, 50, 55]
+OMEGA = [60, 125, 200]
+W = [30, 35, 40]
 R = 6371
 NUM_FRAMES = 1000
 
@@ -29,4 +31,4 @@ else:
     print("Some points are not on the surface of the sphere.")
 '''
 
-animate_orbit(speed=50, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
+animate_orbit(speed=50, number_of_satellites=3, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
