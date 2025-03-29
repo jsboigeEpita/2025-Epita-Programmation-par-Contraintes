@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 345300715}
   - component: {fileID: 345300714}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -633,12 +633,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbff1e602ac7a554f907d416f87f79a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stackAmount: 3
-  spacing: 1
-  heightSpacing: 3
-  pillarSize: 0.2
+  stackAmount: 35
+  spacing: 2
+  heightSpacing: 2
+  pillarSize: 0.1
   platformThickness: 0.1
-  platformAttachementThickness: 0
   spaceFromGround: 2
   itemGameObject: {fileID: 345300713}
   structureMaterial: {fileID: 2100000, guid: 074acf99813e7ac4397a8d0e89c97e52, type: 2}
