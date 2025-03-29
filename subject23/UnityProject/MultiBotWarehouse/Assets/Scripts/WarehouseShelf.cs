@@ -30,8 +30,6 @@ public class WarehouseShelf : MonoBehaviour
     [SerializeField]
     private float platformThickness;
     [SerializeField]
-    private float platformAttachementThickness;
-    [SerializeField]
     private float spaceFromGround;
 
     [Header("References")]
@@ -106,6 +104,14 @@ public class WarehouseShelf : MonoBehaviour
     {
         float elapsed = 0f;
 
+        for (int i = 0; i < shelves.Count; i++)
+        {
+            BoxCollider boxCollider = shelves[i].AddComponent<BoxCollider>();
+            boxCollider.center = Vector3.up + Vector3.left * shelves[i].GetComponent<MeshCollider>().bounds.size.x / 2;
+            boxCollider.size = shelves[i].GetComponent<MeshCollider>().bounds.size + 2 * Vector3.up;
+            boxCollider.isTrigger = true;
+        }
+
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
@@ -123,6 +129,8 @@ public class WarehouseShelf : MonoBehaviour
         for (int i = 0; i < shelves.Count; i++)
         {
             shelves[i].transform.localPosition = platformMaxXPositions[(i + 1) % platformMaxXPositions.Count];
+            Destroy(shelves[i].GetComponent<BoxCollider>());
+            shelves[i].GetComponent<item>().Disable();
         }
     }
 
@@ -359,15 +367,18 @@ public class WarehouseShelf : MonoBehaviour
         child.transform.localPosition = position;
         child.transform.localRotation = Quaternion.identity;
         child.transform.localScale = Vector3.one;
+
         MeshFilter meshFilter = child.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = child.AddComponent<MeshRenderer>();
         MeshCollider meshCollider = child.AddComponent<MeshCollider>();
+        child.AddComponent<item>();
 
         Mesh customMesh = new Mesh();
         customMesh.vertices = temporaryMesh.vertices.ToArray();
         customMesh.triangles = temporaryMesh.triangles.ToArray();
         customMesh.RecalculateNormals();
         meshFilter.mesh = customMesh;
+
         meshRenderer.material = shelfMaterial;
 
         meshCollider.sharedMesh = customMesh;
