@@ -4,10 +4,6 @@ from .team import Team
 from .agent import Agent
 
 class GameController:
-    """
-    Controls the game flow and manage teams and agents.
-    """
-    
     def __init__(self, maze: MazeEnvironment):
         """
         Initialize the game controller.
@@ -40,6 +36,11 @@ class GameController:
             for x, y in start_positions:
                 agent = Agent(next_agent_id, team_id, x, y)
                 self.teams[team_id].add_agent(agent)
+
+                # Update discovered tiles based on the start position
+                visible_tiles = self.maze.get_visible_tiles(x, y, agent.vision_range)
+                agent.update_discovered_tiles(visible_tiles)
+
                 next_agent_id += 1
     
     def move_agent(self, agent_id: int, team_id: int, dx: int, dy: int) -> bool:

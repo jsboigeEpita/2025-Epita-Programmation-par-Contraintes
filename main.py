@@ -35,12 +35,17 @@ def manual_game_test():
     game.initialize_teams()
     print("Game initialized:")
     print(game)
+    for team_id, team in game.teams.items():
+        print(f"Team {team_id} discovered tiles: {team.get_discovered_tiles()}")
     
     print("\nMoving Team 1, Agent 0 down")
     game.move_agent(0, 1, 0, 1)  # Move agent 0 of team 1 down
     
     print("\nMoving Team 2, Agent 2 left")
     game.move_agent(2, 2, -1, 0)  # Move agent 2 of team 2 left
+
+    print("\nMoving Team 1, Agent 0 left") # illegal! 
+    game.move_agent(0, 1, -1, 0)  # Move agent 0 of team 1 left
     
     game.update()
     print("\nAfter update:")

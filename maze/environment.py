@@ -2,8 +2,6 @@ import numpy as np
 from typing import List, Tuple, Dict, Set
 
 class MazeEnvironment:
-    """Represents the maze grid and handles environment logic."""
-    
     def __init__(self, width: int, height: int):
         """
         Initialize a maze environment.

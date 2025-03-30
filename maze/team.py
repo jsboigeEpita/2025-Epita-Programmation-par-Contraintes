@@ -2,10 +2,6 @@ from typing import Dict, List, Tuple, Set
 from .agent import Agent
 
 class Team:
-    """
-    Represents a team of agents.
-    """
-    
     def __init__(self, team_id: int, color: str = None):
         """
         Initialize a team.

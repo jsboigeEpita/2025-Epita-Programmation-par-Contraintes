@@ -1,11 +1,7 @@
 from typing import Tuple, Set, Dict, List
 
 class Agent:
-    """
-    Represents an individual agent in the maze.
-    """
-    
-    def __init__(self, agent_id: int, team_id: int, x: int, y: int, vision_range: int = 3):
+    def __init__(self, agent_id: int, team_id: int, x: int, y: int, vision_range: int = 1):
         """
         Initialize an agent.
         """
