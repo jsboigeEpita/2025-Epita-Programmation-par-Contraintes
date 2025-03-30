@@ -53,25 +53,33 @@ class GameController:
         team = self.teams[team_id]
         if agent_id not in team.agents:
             return False
-        
+
         agent = team.agents[agent_id]
         new_x, new_y = agent.move(dx, dy)
-        
+    
         # Check if the move is valid
-        if self.maze.is_valid_move(new_x, new_y):
-            agent.update_position(new_x, new_y)
-            
-            # Update discovered tiles based on the new position
-            visible_tiles = self.maze.get_visible_tiles(new_x, new_y, agent.vision_range)
-            agent.update_discovered_tiles(visible_tiles)
-            
-            # Check if agent reached the goal
-            if self.maze.goal_position:
-                agent.check_goal_reached(self.maze.goal_position)
-            
-            return True
-        
-        return False
+        if not self.maze.is_valid_move(new_x, new_y):
+            return False
+    
+        # Check if there's an agent from another team on the target tile
+        for other_team_id, other_team in self.teams.items():
+            if other_team_id != team_id:
+                for other_agent in other_team.agents.values():
+                    if other_agent.x == new_x and other_agent.y == new_y:
+                        return False
+    
+        # If we get here, the move is valid
+        agent.update_position(new_x, new_y)
+    
+        # Update discovered tiles based on the new position
+        visible_tiles = self.maze.get_visible_tiles(new_x, new_y, agent.vision_range)
+        agent.update_discovered_tiles(visible_tiles)
+    
+        # Check if agent reached the goal
+        if self.maze.goal_position:
+            agent.check_goal_reached(self.maze.goal_position)
+    
+        return True
     
     def check_win_conditions(self):
         """

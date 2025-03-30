@@ -49,9 +49,8 @@ class MazeEnvironment:
         """
         Check if a move to the specified position is valid.
         """
-        return (0 <= x < self.width and 
-                0 <= y < self.height and 
-                self.grid[y, x] == 0)
+        return (0 <= x < self.width and 0 <= y < self.height 
+                and self.grid[y, x] == 0)
     
     def get_visible_tiles(self, x: int, y: int, vision_range: int) -> Set[Tuple[int, int]]:
         """
