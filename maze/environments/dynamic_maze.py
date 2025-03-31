@@ -1,7 +1,7 @@
 import random
 import numpy as np
 from typing import List, Tuple, Dict, Set
-from .environment import MazeEnvironment
+from .static_maze import MazeEnvironment
 
 class DynamicMazeEnvironment(MazeEnvironment):
     """Extension of MazeEnvironment with dynamic wall capabilities"""
@@ -86,6 +86,18 @@ class DynamicMazeEnvironment(MazeEnvironment):
         # Add random internal walls
         for y in range(1, self.height-1):
             for x in range(1, self.width-1):
+                # Check if this position is a start or goal position
+                if hasattr(self, 'goal_position') and (x, y) == self.goal_position:
+                    continue
+            
+                skip = False
+                for team_id, positions in self.start_positions.items():
+                    if (x, y) in positions:
+                        skip = True
+                        break
+
+                if skip:
+                    continue
                 if random.random() < wall_density:
                     self.add_wall(x, y)
         

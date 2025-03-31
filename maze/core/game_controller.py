@@ -1,5 +1,5 @@
 from typing import Dict, List, Tuple, Optional
-from .environment import MazeEnvironment
+from ..environments.static_maze import MazeEnvironment
 from .team import Team
 from .agent import Agent
 
