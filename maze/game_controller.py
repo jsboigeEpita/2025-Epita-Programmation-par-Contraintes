@@ -101,8 +101,16 @@ class GameController:
         if self.game_over:
             return
         
-        # Share vision within teams (for agents on the same tile)
+            # If maze has dynamic elements, update them
+        if hasattr(self.maze, 'update_dynamic_walls'):
+            self.maze.update_dynamic_walls()
+        
+        # Update agent vision based on current positions
         for team in self.teams.values():
+            for agent in team.agents.values():
+                visible_tiles = self.maze.get_visible_tiles(agent.x, agent.y, agent.vision_range)
+                agent.update_discovered_tiles(visible_tiles)
+                agent.check_goal_reached(self.maze.goal_position)
             team.share_vision()
         
         # Check win conditions
