@@ -38,6 +38,12 @@ class Agent:
         if (self.x, self.y) == goal_position:
             self.reached_goal = True
         return self.reached_goal
+
+    def get_discovered_tiles(self) -> Set[Tuple[int, int]]:
+        """
+        Get the set of tiles discovered by this agent.
+        """
+        return self.discovered_tiles
     
     def __str__(self):
         """

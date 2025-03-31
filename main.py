@@ -25,7 +25,9 @@ def create_sample_maze() -> MazeEnvironment:
     return maze
 
 def create_dynamic_maze() -> DynamicMazeEnvironment:
-    """Create a sample maze with dynamic elements"""
+    """
+    Create a sample maze with dynamic elements
+    """
     maze = DynamicMazeEnvironment(15, 15)
     
     # Set start positions for two teams
@@ -42,8 +44,10 @@ def create_dynamic_maze() -> DynamicMazeEnvironment:
     
     return maze
 
-def run_agent_competition(dynamic=True, max_turns=100, delay=0.1):
-    """Run a competition between AI-controlled teams of agents"""
+def run_agent_competition(dynamic=True, max_turns=100, delay=0.2):
+    """
+    Run a competition between AI-controlled teams of agents
+    """
     # Create the maze
     if dynamic:
         maze = create_dynamic_maze()
@@ -79,7 +83,9 @@ def run_agent_competition(dynamic=True, max_turns=100, delay=0.1):
         print("No winner determined.")
 
 def run_ai_simulation(visualizer, agent_controller, max_turns=100, delay=0.2):
-    """Run the simulation with AI controlling the agents"""
+    """
+    Run the simulation with AI controlling the agents
+    """
     import pygame
     import time
     
@@ -162,4 +168,4 @@ def run_ai_simulation(visualizer, agent_controller, max_turns=100, delay=0.2):
 
 if __name__ == "__main__":
     # Run a competition with autonomous agents
-    run_agent_competition(dynamic=True, max_turns=100, delay=0.1)
+    run_agent_competition(dynamic=True, max_turns=100, delay=0.5)

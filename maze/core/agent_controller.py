@@ -21,9 +21,9 @@ class AgentController:
             
         # Process each team's agents
         for team_id, team in self.game_controller.teams.items():
-            discovered_tiles = team.get_discovered_tiles()
-            
             for agent_id, agent in team.agents.items():
+                discovered_tiles = agent.get_discovered_tiles()
+
                 if agent.reached_goal:
                     continue  # Skip agents that have reached the goal
                     
