@@ -1,23 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+using static RuntimeStructure;
 
 public class ShelvingUnit : MonoBehaviour
 {
-    private struct Shape
-    {
-        public List<Vector3> vertices;
-        public List<int> triangles;
-
-        public Shape(List<Vector3> vertices, List<int> triangles)
-        {
-            this.vertices = vertices;
-            this.triangles = triangles;
-        }
-    }
-
     [Header("Settings")]
     [SerializeField]
     private int levelCount = 4;
@@ -32,7 +20,7 @@ public class ShelvingUnit : MonoBehaviour
     [SerializeField]
     private float spaceFromGround = 1;
     [SerializeField]
-    private float rollingSpeed = 2f;
+    private float speed = 2f;
 
     [Header("References")]
     [SerializeField]
@@ -53,7 +41,6 @@ public class ShelvingUnit : MonoBehaviour
     private Collider itemCollider;
 
     private List<GameObject> shelves;
-    private GameObject pusher;
 
     private List<Vector3> platformMaxXPositions;
     private List<Vector3> platformMinXPositions;
@@ -98,7 +85,7 @@ public class ShelvingUnit : MonoBehaviour
     {
         if (!isRolling)
         {
-            StartCoroutine(LerpShelves(rollingSpeed));
+            StartCoroutine(LerpShelves(speed));
         }
     }
 
@@ -130,7 +117,7 @@ public class ShelvingUnit : MonoBehaviour
         for (int i = 0; i < shelves.Count; i++)
         {
             shelves[i].transform.localPosition = platformMaxXPositions[(currentShelfOffset + i + 1) % shelves.Count];
-            
+
             shelves[i].GetComponent<Shelf>().Deactivate();
         }
 
@@ -171,6 +158,12 @@ public class ShelvingUnit : MonoBehaviour
         boxTrigger.center = boxCollider.center + Vector3.up * (boxCollider.size.y / 2 + triggerHeight / 2 - spacing / 2);
         boxTrigger.size = new Vector3(boxCollider.size.x, boxCollider.size.y + triggerHeight - spacing, boxCollider.size.z);
 
+        /*
+        Rigidbody rigidbody = child.AddComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+        rigidbody.useGravity = false;
+        */
+
         Shelf shelf = child.AddComponent<Shelf>();
         shelf.Initialize(boxCollider, boxTrigger, name => name.Contains(itemGameObject.name));
 
@@ -189,8 +182,8 @@ public class ShelvingUnit : MonoBehaviour
         #region Pillars
         float maxX = (itemBounds.x / 2) + spacing + pillarSize * 0.25f;
         float minX = (-itemBounds.x / 2) - spacing - pillarSize * 0.25f;
-        float maxZ = (itemBounds.z / 2) + spacing + pillarSize * 0.25f;
-        float minZ = (-itemBounds.z / 2) - spacing - pillarSize * 0.25f;
+        float maxZ = itemBounds.z + spacing + pillarSize * 0.25f;
+        float minZ = -itemBounds.z - spacing - pillarSize * 0.25f;
 
         Vector3[] pillarPositions = new Vector3[4]
         {
@@ -303,10 +296,6 @@ public class ShelvingUnit : MonoBehaviour
         }
         #endregion
 
-        #region Pickup
-
-        #endregion
-
         #region Platform
         for (int i = 0; i < platformMaxXPositions.Count - 1; i++)
         {
@@ -325,79 +314,5 @@ public class ShelvingUnit : MonoBehaviour
 
         meshRenderer.sharedMaterial = structureMaterial;
         meshCollider.sharedMesh = mesh;
-    }
-
-    private Shape LinkPointsByCube(Vector3 A, Vector3 B, Vector3 up, float rightThickness, float depthThickness, int offset = 0)
-    {
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
-
-        Vector3 direction = (B - A).normalized;
-        Vector3 right = Vector3.Cross(direction, up).normalized;
-
-        Vector3 v0 = A + (-rightThickness * right - depthThickness * up);
-        Vector3 v1 = A + (-rightThickness * right + depthThickness * up);
-        Vector3 v2 = A + (rightThickness * right - depthThickness * up);
-        Vector3 v3 = A + (rightThickness * right + depthThickness * up);
-
-        Vector3 v4 = B + (-rightThickness * right - depthThickness * up);
-        Vector3 v5 = B + (-rightThickness * right + depthThickness * up);
-        Vector3 v6 = B + (rightThickness * right - depthThickness * up);
-        Vector3 v7 = B + (rightThickness * right + depthThickness * up);
-
-        vertices.Add(v0);
-        vertices.Add(v1);
-        vertices.Add(v2);
-        vertices.Add(v3);
-        vertices.Add(v4);
-        vertices.Add(v5);
-        vertices.Add(v6);
-        vertices.Add(v7);
-
-        triangles.Add(offset + 0);
-        triangles.Add(offset + 1);
-        triangles.Add(offset + 3);
-        triangles.Add(offset + 0);
-        triangles.Add(offset + 3);
-        triangles.Add(offset + 2);
-
-        triangles.Add(offset + 4);
-        triangles.Add(offset + 7);
-        triangles.Add(offset + 5);
-        triangles.Add(offset + 4);
-        triangles.Add(offset + 6);
-        triangles.Add(offset + 7);
-
-        triangles.Add(offset + 0);
-        triangles.Add(offset + 5);
-        triangles.Add(offset + 1);
-        triangles.Add(offset + 0);
-        triangles.Add(offset + 4);
-        triangles.Add(offset + 5);
-
-        triangles.Add(offset + 2);
-        triangles.Add(offset + 3);
-        triangles.Add(offset + 7);
-        triangles.Add(offset + 2);
-        triangles.Add(offset + 7);
-        triangles.Add(offset + 6);
-
-        triangles.Add(offset + 0);
-        triangles.Add(offset + 2);
-        triangles.Add(offset + 6);
-        triangles.Add(offset + 0);
-        triangles.Add(offset + 6);
-        triangles.Add(offset + 4);
-
-        triangles.Add(offset + 1);
-        triangles.Add(offset + 7);
-        triangles.Add(offset + 3);
-        triangles.Add(offset + 1);
-        triangles.Add(offset + 5);
-        triangles.Add(offset + 7);
-
-        triangles.Reverse();
-
-        return new Shape(vertices, triangles);
     }
 }
