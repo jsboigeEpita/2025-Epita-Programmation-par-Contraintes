@@ -1,0 +1,9 @@
+observations:
+- location: Paris
+  photo_duration_s: 60
+  photo_size_gb: 1.2
+  success: true
+- location: "Montr\xE9al"
+  photo_duration_s: 60
+  photo_size_gb: 1.2
+  success: true
