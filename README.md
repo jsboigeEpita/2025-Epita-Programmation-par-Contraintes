@@ -18,13 +18,12 @@ Les agences spatiales reçoivent de nombreuses requêtes d'images couvrant des z
 1. **Position du Satellite** : Le satellite doit être au-dessus de la zone à photographier.
 2. **Calibration de la Lentille** : La lentille doit être calibrée avant chaque prise de vue.
 3. **Taille de la Zone** : La taille de la zone photographiée influence la taille de la photo et donc le temps d'envoi sur Terre.
-4. **Énergie du Satellite** : Le satellite doit avoir suffisamment de batterie pour fonctionner toute la nuit.
-5. **Priorité des Prises de Vue** : Chaque prise de vue a une priorité (échelle de 3 à 1).
-6. **Tâche Unique** : Le satellite ne peut pas prendre de photos et les envoyer simultanément.
-7. **Allocation de Ressources** : La mémoire du satellite est limitée (ex : 5 Go) et la taille d'une photo dépend de la taille de la zone photographiée.
-8. **Durée de la Prise de Vue** : La taille de la zone influence la durée de la prise de vue.
-9. **Débit d'Upload** : Le débit d'upload influence le temps d'envoi des clichés.
-10. **Temps de Recalibration** : Le temps nécessaire pour recalibrer la lentille doit être pris en compte.
+4. **Priorité des Prises de Vue** : Chaque prise de vue a une priorité (échelle de 3 à 1).
+5. **Tâche Unique** : Le satellite ne peut pas prendre de photos et les envoyer simultanément.
+6. **Allocation de Ressources** : La mémoire du satellite est limitée (ex : 5 Go) et la taille d'une photo dépend de la taille de la zone photographiée.
+7. **Durée de la Prise de Vue** : La taille de la zone influence la durée de la prise de vue.
+8. **Débit d'Upload** : Le débit d'upload influence le temps d'envoi des clichés.
+9. **Temps de Recalibration** : Le temps nécessaire pour recalibrer la lentille doit être pris en compte.
 
 ### Objectif
 
@@ -60,16 +59,68 @@ L'intégration d'un Large Language Model (LLM) facilite l'interaction avec le sy
     - Fonction : `plan_satellite_shots({"Tokyo": [35.6895, 139.6917], "Montréal": [45.5017, -73.5673]}, {"Tokyo": 3, "Montréal": 2})`
     - Sortie : Plan de prises de vue optimisé avec les heures et les priorités.
 
-### Exemple d'Utilisation
+Voici les formats YAML reformattés pour une meilleure lisibilité :
 
-1. **Demande de l'Utilisateur** :
-    - "Je veux au plus vite les clichés de Tokyo avec une priorité de 3 et de Montréal avec une priorité de 2."
-2. **Traitement de la Demande** :
-    - Le LLM extrait les informations : `{"Tokyo": 3, "Montréal": 2}`
-3. **Récupération des Coordonnées GPS** :
-    - Réponse : `{"Tokyo": [35.6895, 139.6917], "Montréal": [45.5017, -73.5673]}`
-4. **Planification des Prises de Vue** :
-    - Réponse : Plan de prises de vue optimisé.
+### Format d'Input (YAML)
+```yaml
+satellite:
+  memory_capacity_gb: 5
+  battery_capacity_percent: 100
+  recalibration_time_s: 10
+  image_size_per_km2_gb: 0.15
+  duration_per_km2_sec: 1.5
+  max_photo_duration_s: 120
+  min_battery_percent: 20
+  simultaneous_tasks: false
+  upload_speed_mbps: 2
+  recalibration_time_s: 10
+
+constraints:
+  position_required: true
+  calibration_required: true
+  duration_depend_on_size: true
+  limited_memory: true
+  limited_bandwith: true
+  
+requests:
+  - location: "Tokyo"
+    coordinates: [35.6895, 139.6917]
+    priority: 3
+    area_size_km2: 100
+  - location: "Montréal"
+    coordinates: [45.5017, -73.5673]
+    priority: 2
+    area_size_km2: 50
+    estimated_photo_size_gb: 1.0
+    estimated_photo_duration_s: 60
+  - location: "Paris"
+    coordinates: [48.8566, 2.3522]
+    priority: 1
+    area_size_km2: 80
+    estimated_photo_size_gb: 1.5
+    estimated_photo_duration_s: 75
+```
+
+### Format d'Output (YAML)
+```yaml
+schedule:
+  - location: "Tokyo"
+    start_time: "2025-04-02T12:30:00Z"
+    end_time: "2025-04-02T12:31:30Z"
+    priority: 3
+  - location: "Montréal"
+    start_time: "2025-04-02T14:10:00Z"
+    end_time: "2025-04-02T14:11:00Z"
+    priority: 2
+  - location: "Paris"
+    start_time: "2025-04-02T16:00:00Z"
+    end_time: "2025-04-02T16:01:15Z"
+    priority: 1
+summary:
+  total_photos: 3
+  percentage_success: 1.0
+  priority_score: 6
+```
 
 ## 6. Références et Inspirations Techniques
 
