@@ -91,14 +91,9 @@ requests:
     coordinates: [45.5017, -73.5673]
     priority: 2
     area_size_km2: 50
-    estimated_photo_size_gb: 1.0
-    estimated_photo_duration_s: 60
   - location: "Paris"
     coordinates: [48.8566, 2.3522]
     priority: 1
-    area_size_km2: 80
-    estimated_photo_size_gb: 1.5
-    estimated_photo_duration_s: 75
 ```
 
 ### Format d'Output (YAML)
