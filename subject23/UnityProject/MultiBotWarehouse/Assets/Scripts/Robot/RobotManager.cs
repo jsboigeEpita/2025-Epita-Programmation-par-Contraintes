@@ -2,30 +2,38 @@ using UnityEngine;
 
 public class RobotManager : MonoBehaviour
 {
+    [Header("Settings")]
+    public Transform storeTransform;
+
     [Header("Wheel Colliders")]
-    public WheelCollider leftWheelCollider;
-    public WheelCollider rightWheelCollider;
+    [SerializeField]
+    private WheelCollider leftWheelCollider;
+    [SerializeField]
+    private WheelCollider rightWheelCollider;
 
     [Header("Wheel Transforms")]
-    public Transform leftWheelMesh;
-    public Transform rightWheelMesh;
+    [SerializeField]
+    private Transform leftWheelMesh;
+    [SerializeField]
+    private Transform rightWheelMesh;
 
     [Header("Movement Settings")]
-    public float motorForce = 150f;
-    public float turnForce = 30f;
+    [SerializeField]
+    private float motorForce = 150f;
+    [SerializeField]
+    private float turnForce = 30f;
 
     [Header("Debug")]
-    public bool drawDirection = false;
+    [SerializeField]
+    private bool drawDirection = false;
 
     [HideInInspector]
     public Vector2 control;
 
+    [Header("Monitors")]
     public Item currentItem;
-
-    private void Awake()
-    {
-        currentItem = null;
-    }
+    [SerializeField]
+    public Vector3Int gridPosition { get { return Wharehouse.convertGridPosition(transform.position); } }
 
     private void FixedUpdate()
     {

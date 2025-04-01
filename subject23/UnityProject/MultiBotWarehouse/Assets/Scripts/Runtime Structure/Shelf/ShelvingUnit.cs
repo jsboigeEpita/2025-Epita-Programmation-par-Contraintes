@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static RuntimeStructure;
 
 public class ShelvingUnit : MonoBehaviour
@@ -22,11 +21,12 @@ public class ShelvingUnit : MonoBehaviour
     private float spaceFromGround = 1;
     [SerializeField]
     private float speed = 2f;
-    // [SerializeField] private bool generateLoader = true;
 
     [Header("References")]
     [SerializeField]
     private GameObject itemGameObject;
+    [SerializeField]
+    private GameObject supportGameObject;
     [SerializeField]
     private Material structureMaterial;
     [SerializeField]
@@ -36,14 +36,15 @@ public class ShelvingUnit : MonoBehaviour
     [SerializeField]
     private bool rotateButton = false;
 
+    public List<Shelf> shelves { get; private set; }
+    public Shelf currentShelf { get { return shelves[(shelves.Count - currentShelfOffset) % shelves.Count]; } }
+    public List<Item> items { get { return shelves.Select(shelf => shelf.currentItem).ToList(); } }
+
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
 
     private Collider itemCollider;
-
-    private List<GameObject> shelves;
-    // private GameObject loader;
 
     private List<Vector3> platformMaxXPositions;
     private List<Vector3> platformMinXPositions;
@@ -71,106 +72,8 @@ public class ShelvingUnit : MonoBehaviour
             Debug.LogError(this.name + "/" + itemCollider.name + ": itemCollider is null.");
         #endregion
 
-        shelves = new List<GameObject>();
+        shelves = new List<Shelf>();
         GenerateMesh();
-    }
-
-    private void Update()
-    {
-        if (rotateButton)
-        {
-            rotateButton = false;
-            DoOneRotation();
-        }
-    }
-
-    private void DoOneRotation()
-    {
-        if (!isRolling)
-        {
-            StartCoroutine(LerpShelves(speed));
-        }
-    }
-
-    private IEnumerator LerpShelves(float duration)
-    {
-        isRolling = true;
-
-        float elapsed = 0f;
-
-        for (int i = 0; i < shelves.Count; i++)
-        {
-            shelves[i].GetComponent<Shelf>().Activate();
-        }
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-
-            float t = Mathf.Clamp01(elapsed / duration);
-
-            for (int i = 0; i < shelves.Count; i++)
-            {
-                shelves[i].transform.localPosition = Vector3.Lerp(platformMaxXPositions[(currentShelfOffset + i) % shelves.Count], platformMaxXPositions[(currentShelfOffset + i + 1) % shelves.Count], t);
-            }
-
-            yield return null;
-        }
-
-        for (int i = 0; i < shelves.Count; i++)
-        {
-            shelves[i].transform.localPosition = platformMaxXPositions[(currentShelfOffset + i + 1) % shelves.Count];
-
-            shelves[i].GetComponent<Shelf>().Deactivate();
-        }
-
-        currentShelfOffset = (currentShelfOffset + 1) % shelves.Count;
-        isRolling = false;
-    }
-
-    private void AddChildShelf(string name, Vector3 position, Shape shape)
-    {
-        GameObject child = new GameObject(name);
-
-        child.transform.SetParent(transform);
-        child.transform.localPosition = position;
-        child.transform.localRotation = Quaternion.identity;
-        child.transform.localScale = Vector3.one;
-
-        MeshFilter meshFilter = child.AddComponent<MeshFilter>();
-        Mesh customMesh = new Mesh();
-        customMesh.vertices = shape.vertices.ToArray();
-        customMesh.triangles = shape.triangles.ToArray();
-        customMesh.RecalculateNormals();
-        meshFilter.mesh = customMesh;
-
-        MeshRenderer meshRenderer = child.AddComponent<MeshRenderer>();
-        meshRenderer.material = shelfMaterial;
-
-        BoxCollider boxCollider = child.AddComponent<BoxCollider>();
-        boxCollider.center = shape.vertices.Aggregate(Vector3.zero, (acc, x) => acc + x) / shape.vertices.Count;
-        List<float> shapeX = shape.vertices.Select(v => v.x).ToList();
-        List<float> shapeY = shape.vertices.Select(v => v.y).ToList();
-        List<float> shapeZ = shape.vertices.Select(v => v.z).ToList();
-        boxCollider.size = new Vector3(shapeX.Max() - shapeX.Min(), shapeY.Max() - shapeY.Min(), shapeZ.Max() - shapeZ.Min());
-
-        float triggerHeight = itemCollider.bounds.size.y + heightSpacing;
-        BoxCollider boxTrigger = child.AddComponent<BoxCollider>();
-        boxTrigger.enabled = false;
-        boxTrigger.isTrigger = true;
-        boxTrigger.center = boxCollider.center + Vector3.up * (boxCollider.size.y / 2 + triggerHeight / 2 - spacing / 2);
-        boxTrigger.size = new Vector3(boxCollider.size.x, boxCollider.size.y + triggerHeight - spacing, boxCollider.size.z);
-
-        /*
-        Rigidbody rigidbody = child.AddComponent<Rigidbody>();
-        rigidbody.isKinematic = true;
-        rigidbody.useGravity = false;
-        */
-
-        Shelf shelf = child.AddComponent<Shelf>();
-        shelf.Initialize(boxCollider, boxTrigger, name => name.Contains(itemGameObject.name));
-
-        shelves.Add(child);
     }
 
     private void GenerateMesh()
@@ -308,20 +211,15 @@ public class ShelvingUnit : MonoBehaviour
         }
         #endregion
 
-        /*
-        #region Loader
-        if (generateLoader)
-        {
-            AddChildloader("Loader", new Vector3(0, 0, 0));
-        }
-        #endregion
-        */
-
         #region Delivery Point
         BoxCollider boxTrigger = this.gameObject.AddComponent<BoxCollider>();
         boxTrigger.isTrigger = true;
-        boxTrigger.center = new Vector3(0, (itemCollider.bounds.size.y + heightSpacing) / 2, maxZ);
+        boxTrigger.center = new Vector3(0, (itemCollider.bounds.size.y + heightSpacing) / 2, maxZ + spacing * 4);
         boxTrigger.size = new Vector3(itemCollider.bounds.size.y + spacing, itemCollider.bounds.size.y + heightSpacing, itemCollider.bounds.size.y + spacing);
+
+        GameObject support = GameObject.Instantiate(supportGameObject);
+        support.transform.SetParent(this.transform);
+        support.transform.position = new Vector3(0, 0, maxZ + spacing * 4);
         #endregion
 
         mesh.vertices = vertices.ToArray();
@@ -335,26 +233,53 @@ public class ShelvingUnit : MonoBehaviour
         meshCollider.sharedMesh = mesh;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.gameObject.tag == "robot")
+        if (rotateButton)
         {
-            RobotManager robotManager = other.gameObject.GetComponent<RobotManager>();
-
-            if (robotManager.currentItem == null)
-            {
-                robotManager.currentItem
-            }
-
-            if (robotManager.currentItem != null)
-            {
-
-            }
+            rotateButton = false;
+            DoOneRotation();
         }
     }
 
-    /*
-    private void AddChildloader(string name, Vector3 position)
+    public void DoOneRotation()
+    {
+        if (!isRolling)
+        {
+            StartCoroutine(LerpShelves(speed));
+        }
+    }
+
+    private IEnumerator LerpShelves(float duration)
+    {
+        isRolling = true;
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            for (int i = 0; i < shelves.Count; i++)
+            {
+                shelves[i].transform.localPosition = Vector3.Lerp(platformMaxXPositions[(currentShelfOffset + i) % shelves.Count], platformMaxXPositions[(currentShelfOffset + i + 1) % shelves.Count], t);
+            }
+
+            yield return null;
+        }
+
+        for (int i = 0; i < shelves.Count; i++)
+        {
+            shelves[i].transform.localPosition = platformMaxXPositions[(currentShelfOffset + i + 1) % shelves.Count];
+        }
+
+        currentShelfOffset = (currentShelfOffset + 1) % shelves.Count;
+        isRolling = false;
+    }
+
+    private void AddChildShelf(string name, Vector3 position, Shape shape)
     {
         GameObject child = new GameObject(name);
 
@@ -364,13 +289,54 @@ public class ShelvingUnit : MonoBehaviour
         child.transform.localScale = Vector3.one;
 
         MeshFilter meshFilter = child.AddComponent<MeshFilter>();
+        Mesh customMesh = new Mesh();
+        customMesh.vertices = shape.vertices.ToArray();
+        customMesh.triangles = shape.triangles.ToArray();
+        customMesh.RecalculateNormals();
+        meshFilter.mesh = customMesh;
+
         MeshRenderer meshRenderer = child.AddComponent<MeshRenderer>();
-        MeshCollider meshCollider = child.AddComponent<MeshCollider>();
+        meshRenderer.material = shelfMaterial;
 
-        LoaderUnit loaderUnit = child.AddComponent<LoaderUnit>();
-        loaderUnit.Fill(spacing, pillarSize, platformThickness, (Mathf.Max(itemCollider.bounds.size.x, itemCollider.bounds.size.z) + spacing) * 3, spaceFromGround + itemCollider.bounds.size.y / 2 + spacing * 2, itemCollider.bounds.size.y / 2 + spacing * 2, speed, itemGameObject, structureMaterial, shelfMaterial);
+        BoxCollider boxCollider = child.AddComponent<BoxCollider>();
+        boxCollider.center = shape.vertices.Aggregate(Vector3.zero, (acc, x) => acc + x) / shape.vertices.Count;
+        List<float> shapeX = shape.vertices.Select(v => v.x).ToList();
+        List<float> shapeY = shape.vertices.Select(v => v.y).ToList();
+        List<float> shapeZ = shape.vertices.Select(v => v.z).ToList();
+        boxCollider.size = new Vector3(shapeX.Max() - shapeX.Min(), shapeY.Max() - shapeY.Min(), shapeZ.Max() - shapeZ.Min());
 
-        loader = child;
+        Shelf shelf = child.AddComponent<Shelf>();
+        shelf.Initialize(Vector3.up * platformThickness / 2 - Vector3.right * (shapeX.Max() - shapeX.Min()) / 2, itemGameObject.name);
+
+        shelves.Add(shelf);
     }
-    */
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Robot")
+        {
+            RobotManager robotManager = other.gameObject.GetComponentInParent<RobotManager>();
+
+            if (robotManager.currentItem == null)
+            {
+                if (currentShelf.currentItem == null)
+                {
+                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " without any objects.");
+                    return;
+                }
+
+                currentShelf.putOnRobot(robotManager);
+            }
+            else if (robotManager.currentItem != null)
+            {
+                if (currentShelf.currentItem != null)
+                {
+                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an object but an object was already here.");
+                    return;
+                }
+
+                currentShelf.takeFromRobot(robotManager);
+            }
+        }
+    }
 }

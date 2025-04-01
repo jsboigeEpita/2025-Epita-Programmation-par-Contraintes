@@ -174,6 +174,37 @@ Transform:
   - {fileID: 5510922825511555296}
   m_Father: {fileID: 5270049760557785994}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2468542112323234342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1759002598498681516}
+  m_Layer: 0
+  m_Name: Store Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1759002598498681516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2468542112323234342}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.64, z: -0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2140815722232149835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2715010770031695470
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,7 +414,7 @@ GameObject:
   - component: {fileID: 2192515008326796933}
   m_Layer: 0
   m_Name: Robot
-  m_TagString: Untagged
+  m_TagString: Robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -406,6 +437,7 @@ Transform:
   - {fileID: 5270049760557785994}
   - {fileID: 7184293485274546112}
   - {fileID: 3829786491490934782}
+  - {fileID: 1759002598498681516}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7478779056144023897
@@ -447,14 +479,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13bb4d4dcccc67547904f3482bb91193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storeTransform: {fileID: 1759002598498681516}
   leftWheelCollider: {fileID: 2452746299646156702}
   rightWheelCollider: {fileID: 1353604652925091820}
   leftWheelMesh: {fileID: 3566313745582861341}
   rightWheelMesh: {fileID: 5451817045020292637}
-  motorForce: 11
-  turnForce: 5
-  drawDirection: 0
+  motorForce: 100
+  turnForce: 10
+  drawDirection: 1
   control: {x: 0, y: 0}
+  currentItem: {fileID: 0}
 --- !u!114 &8400805103940708064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,6 +514,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  distanceThreshold: 0
 --- !u!1 &3554321686642887265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,7 +1165,7 @@ GameObject:
   - component: {fileID: 3218380942561607007}
   m_Layer: 0
   m_Name: Main Frame
-  m_TagString: Untagged
+  m_TagString: Robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
