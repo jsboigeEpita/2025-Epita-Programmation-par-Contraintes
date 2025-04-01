@@ -14,8 +14,6 @@ public class LoaderUnit : MonoBehaviour
     [SerializeField]
     private float platformThickness = 0.1f;
     [SerializeField]
-    private float groundOffset = 0;
-    [SerializeField]
     private float width = 2f;
     [SerializeField]
     private float height = 2f;
@@ -53,7 +51,21 @@ public class LoaderUnit : MonoBehaviour
 
     public bool isReadyToLoad { get; private set; } = false;
 
-    private void Start()
+    public void Fill(float spacing, float pillarSize, float platformThickness, float width, float height, float depth, float speed, GameObject itemGameObject, Material structureMaterial, Material loaderMaterial)
+    {
+        this.spacing = spacing;
+        this.pillarSize = pillarSize;
+        this.platformThickness = platformThickness;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.speed = speed;
+        this.itemGameObject = itemGameObject;
+        this.structureMaterial = structureMaterial;
+        this.loaderMaterial = loaderMaterial;
+    }
+
+    public void Initialize()
     {
         #region Get Components
         meshFilter = this.GetComponent<MeshFilter>();
@@ -74,6 +86,11 @@ public class LoaderUnit : MonoBehaviour
         #endregion
 
         GenerateMesh();
+    }
+
+    private void Start()
+    {
+        Initialize();
     }
 
     private void Update()
@@ -223,7 +240,7 @@ public class LoaderUnit : MonoBehaviour
 
         #region Platform
         Vector3 middle = (supportPositions[0] + supportPositions[1]) / 2;
-        Shape platform = LinkPointsByCube(supportPositions[0] + Vector3.forward * width / 2 + Vector3.up * (groundOffset - middle.y), supportPositions[1] + Vector3.forward * width / 2 + Vector3.up * (groundOffset - middle.y), Vector3.up, platformThickness, depth);
+        Shape platform = LinkPointsByCube(supportPositions[0] + Vector3.forward * width / 2 - Vector3.up * middle.y, supportPositions[1] + Vector3.forward * width / 2 - Vector3.up * middle.y, Vector3.up, platformThickness, depth);
         AddChildLoader("Platform", middle, platform);
         #endregion
 

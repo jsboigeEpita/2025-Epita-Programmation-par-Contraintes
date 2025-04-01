@@ -20,6 +20,13 @@ public class RobotManager : MonoBehaviour
     [HideInInspector]
     public Vector2 control;
 
+    public Item currentItem;
+
+    private void Awake()
+    {
+        currentItem = null;
+    }
+
     private void FixedUpdate()
     {
         float moveAction = control.x * motorForce;

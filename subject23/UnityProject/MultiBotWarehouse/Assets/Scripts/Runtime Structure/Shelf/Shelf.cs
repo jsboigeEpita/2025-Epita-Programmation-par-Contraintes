@@ -9,12 +9,22 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class Shelf : MonoBehaviour
 {
+    public Item currentItem;
+
+
+
+
     private BoxCollider boxCollider;
     private BoxCollider boxTrigger;
 
     private Func<string, bool> captureColliderFunc;
 
-    private List<(Collider, Transform)> capturedColliders;
+    public List<(Collider, Transform)> capturedColliders { get; private set; }
+
+    private void Awake()
+    {
+        currentItem = null;
+    }
 
     public void Initialize(BoxCollider boxCollider, BoxCollider boxTrigger, Func<string, bool> captureColliderFunc)
     {
@@ -33,6 +43,7 @@ public class Shelf : MonoBehaviour
             {
                 capturedColliders.Add((other, other.transform.parent));
                 other.transform.SetParent(this.transform);
+                other.attachedRigidbody.isKinematic = true;
             }
         }
     }
@@ -47,6 +58,7 @@ public class Shelf : MonoBehaviour
             {
                 (int index, (Collider, Transform)) capturedColliderWithIndex = search[0];
                 capturedColliderWithIndex.Item2.Item1.transform.SetParent(capturedColliderWithIndex.Item2.Item2);
+                capturedColliderWithIndex.Item2.Item1.attachedRigidbody.isKinematic = false;
                 capturedColliders.RemoveAt(capturedColliderWithIndex.index);
             }
             else if (search.Length > 1)
@@ -72,6 +84,7 @@ public class Shelf : MonoBehaviour
         foreach (var capturedCollider in capturedColliders)
         {
             capturedCollider.Item1.transform.SetParent(capturedCollider.Item2);
+            capturedCollider.Item1.attachedRigidbody.isKinematic = false;
         }
 
         capturedColliders.Clear();

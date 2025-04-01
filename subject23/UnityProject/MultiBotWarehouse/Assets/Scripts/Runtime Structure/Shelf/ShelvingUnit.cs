@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static RuntimeStructure;
 
 public class ShelvingUnit : MonoBehaviour
@@ -21,6 +22,7 @@ public class ShelvingUnit : MonoBehaviour
     private float spaceFromGround = 1;
     [SerializeField]
     private float speed = 2f;
+    // [SerializeField] private bool generateLoader = true;
 
     [Header("References")]
     [SerializeField]
@@ -41,6 +43,7 @@ public class ShelvingUnit : MonoBehaviour
     private Collider itemCollider;
 
     private List<GameObject> shelves;
+    // private GameObject loader;
 
     private List<Vector3> platformMaxXPositions;
     private List<Vector3> platformMinXPositions;
@@ -125,7 +128,7 @@ public class ShelvingUnit : MonoBehaviour
         isRolling = false;
     }
 
-    private void AddChildSheld(string name, Vector3 position, Shape shape)
+    private void AddChildShelf(string name, Vector3 position, Shape shape)
     {
         GameObject child = new GameObject(name);
 
@@ -301,8 +304,24 @@ public class ShelvingUnit : MonoBehaviour
         {
             Vector3 pos = new Vector3((platformMaxXPositions[i].x - platformMinXPositions[i].x) / 2, platformMaxXPositions[i].y, platformMaxXPositions[i].z);
             Shape platform = LinkPointsByCube(platformMaxXPositions[i] - pos - Vector3.right * pillarSize * 0.75f, platformMinXPositions[i] - pos + Vector3.right * pillarSize * 0.75f, -Vector3.forward, platformThickness, (maxZ - minZ) / 4);
-            AddChildSheld("Shelf " + i, pos, platform);
+            AddChildShelf("Shelf " + i, pos, platform);
         }
+        #endregion
+
+        /*
+        #region Loader
+        if (generateLoader)
+        {
+            AddChildloader("Loader", new Vector3(0, 0, 0));
+        }
+        #endregion
+        */
+
+        #region Delivery Point
+        BoxCollider boxTrigger = this.gameObject.AddComponent<BoxCollider>();
+        boxTrigger.isTrigger = true;
+        boxTrigger.center = new Vector3(0, (itemCollider.bounds.size.y + heightSpacing) / 2, maxZ);
+        boxTrigger.size = new Vector3(itemCollider.bounds.size.y + spacing, itemCollider.bounds.size.y + heightSpacing, itemCollider.bounds.size.y + spacing);
         #endregion
 
         mesh.vertices = vertices.ToArray();
@@ -315,4 +334,43 @@ public class ShelvingUnit : MonoBehaviour
         meshRenderer.sharedMaterial = structureMaterial;
         meshCollider.sharedMesh = mesh;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "robot")
+        {
+            RobotManager robotManager = other.gameObject.GetComponent<RobotManager>();
+
+            if (robotManager.currentItem == null)
+            {
+                robotManager.currentItem
+            }
+
+            if (robotManager.currentItem != null)
+            {
+
+            }
+        }
+    }
+
+    /*
+    private void AddChildloader(string name, Vector3 position)
+    {
+        GameObject child = new GameObject(name);
+
+        child.transform.SetParent(transform);
+        child.transform.localPosition = position;
+        child.transform.localRotation = Quaternion.identity;
+        child.transform.localScale = Vector3.one;
+
+        MeshFilter meshFilter = child.AddComponent<MeshFilter>();
+        MeshRenderer meshRenderer = child.AddComponent<MeshRenderer>();
+        MeshCollider meshCollider = child.AddComponent<MeshCollider>();
+
+        LoaderUnit loaderUnit = child.AddComponent<LoaderUnit>();
+        loaderUnit.Fill(spacing, pillarSize, platformThickness, (Mathf.Max(itemCollider.bounds.size.x, itemCollider.bounds.size.z) + spacing) * 3, spaceFromGround + itemCollider.bounds.size.y / 2 + spacing * 2, itemCollider.bounds.size.y / 2 + spacing * 2, speed, itemGameObject, structureMaterial, shelfMaterial);
+
+        loader = child;
+    }
+    */
 }
