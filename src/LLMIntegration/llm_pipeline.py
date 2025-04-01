@@ -54,7 +54,7 @@ def parse_user_request(user_text):
             functions=[
                 {
                     "name": "extract_observation_requests",
-                    "description": "Extract locations, priorities, and area sizes from user input.",
+                    "description": "Extract locations, priorities, and area sizes from user input. Please try to be as specific as possible about the location points.",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -76,6 +76,7 @@ def parse_user_request(user_text):
                 }
             ],
             function_call={"name": "extract_observation_requests"},
+            temperature=0.3
         )
         return response.choices[0].message.function_call.arguments
     except Exception as e:
@@ -150,7 +151,7 @@ def describe_solver_output(solver_output):
                 {"role": "system", "content": "You are a helpful assistant that summarizes satellite observation schedules."},
                 {"role": "user", "content": f"Please provide a summary of these scheduled satellite observations: {solver_output_str}"}
             ],
-            max_tokens=300,
+            temperature=0.5
         )
         
         if response.choices and response.choices[0].message:
@@ -175,7 +176,8 @@ def detect_intent_with_llm(user_text):
                 Respond ONLY with the exact intent name."""},
                 {"role": "user", "content": user_text}
             ],
-            max_tokens=20,  # Keep response short
+            max_tokens=20,
+            temperature=0.1
         )
         
         if response.choices and response.choices[0].message:
@@ -188,10 +190,10 @@ def detect_intent_with_llm(user_text):
             else:
                 return "general_question"
         else:
-            return "general_question"  # Default fallback
+            return "general_question"
     except Exception as e:
         print(f"Error detecting intent with LLM: {str(e)}")
-        return "general_question"  # Default to general question on error
+        return "general_question"
 
 @click.command()
 def cli():
@@ -206,7 +208,7 @@ def cli():
         click.echo("\n" + "=" * 50)
         click.secho("[1] Enter a new observation request or ask a question", fg="cyan")
         click.secho("[2] Exit", fg="cyan")
-        choice = click.prompt("Choose an option, default", type=int, default=1)
+        choice = click.prompt("Choose an option", type=int, default=1, show_default=True, show_choices=True)
 
         if choice == 1:
             user_text = click.prompt("\nEnter your observation request or question")
@@ -275,6 +277,7 @@ def cli():
                     response = llm.chat.completions.create(
                         model=model,
                         messages=messages,
+                        temperature=0.3,
                     )
                     
                     assistant_response = response.choices[0].message.content
