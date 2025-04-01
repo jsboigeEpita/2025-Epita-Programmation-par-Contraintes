@@ -28,10 +28,15 @@ class AgentController:
                     continue  # Skip agents that have reached the goal
                 
                 # If goal is known and teammates remain, prioritize vision sharing
-                if self.maze.goal_position in discovered_tiles and self.agents_reached_goal() < len(team.agents) - 1:
-                    pass
+                if self.maze.goal_position in discovered_tiles and self.agents_reached_goal() < len(team.agents):
                     # Find closest teammate to share vision with
-                    # Share vision with teammate
+                    teammate = self.find_closest_teammate(agent, discovered_tiles)
+                    if teammate:
+                        # Move toward the teammate to share vision
+                        move_dir = self.get_move_toward_target(agent, (teammate.x, teammate.y), discovered_tiles)
+                        if move_dir:
+                            self.game_controller.move_agent(agent_id, team_id, move_dir[0], move_dir[1])
+                            continue
 
                 # Determine next move
                 move_dir = self.get_next_move(agent, discovered_tiles)
@@ -47,7 +52,7 @@ class AgentController:
         # If goal is known, try to path to it
         if self.maze.goal_position in discovered_tiles:
             path = self.find_path(agent, self.maze.goal_position, discovered_tiles)
-            if path:
+            if path and len(path) > 1:
                 next_pos = path[1]  # First step is current position, second is next
                 return next_pos[0] - agent.x, next_pos[1] - agent.y
         
@@ -140,12 +145,59 @@ class AgentController:
                     reached += 1
         return reached
     
-    def find_closest_teammate(self, agent, discovered_tiles) -> Optional[Tuple[int, int]]:
+    def find_closest_teammate(self, agent, discovered_tiles):
         """
-        Find the closest agent in the same team to share vision with
+        Find the closest teammate that doesn't know about the goal position
         """
-        pass
-
+        team = self.game_controller.teams[agent.team_id]
+        closest_teammate = None
+        min_distance = float('inf')
+        
+        for teammate_id, teammate in team.agents.items():
+            # Skip if it's the same agent or if teammate already reached the goal
+            if teammate.agent_id == agent.agent_id or teammate.reached_goal:
+                continue
+            
+            # Skip if teammate already knows about the goal
+            if self.maze.goal_position in teammate.discovered_tiles:
+                continue
+                
+            # Calculate Manhattan distance
+            distance = abs(agent.x - teammate.x) + abs(agent.y - teammate.y)
+            
+            if distance < min_distance:
+                min_distance = distance
+                closest_teammate = teammate
+        
+        return closest_teammate
+    
+    def get_move_toward_target(self, agent, target_pos, discovered_tiles) -> Optional[Tuple[int, int]]:
+        """
+        Get the best move to head toward a target position
+        """
+        # Try to find a path if the target is in discovered territory
+        if target_pos in discovered_tiles:
+            path = self.find_path(agent, target_pos, discovered_tiles)
+            if path and len(path) > 1:
+                next_pos = path[1]
+                return next_pos[0] - agent.x, next_pos[1] - agent.y
+        
+        # If no path, move in the general direction
+        best_move = None
+        min_distance = float('inf')
+        
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            nx, ny = agent.x + dx, agent.y + dy
+            
+            if self.is_valid_move(nx, ny, agent.team_id):
+                # Calculate Manhattan distance to target
+                distance = abs(nx - target_pos[0]) + abs(ny - target_pos[1])
+                
+                if distance < min_distance:
+                    min_distance = distance
+                    best_move = (dx, dy)
+        
+        return best_move
     
     def clear_path_cache(self):
         """
