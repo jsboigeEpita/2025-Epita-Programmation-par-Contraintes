@@ -44,9 +44,16 @@ def create_dynamic_maze() -> DynamicMazeEnvironment:
     
     return maze
 
-def run_agent_competition(dynamic=True, max_turns=100, delay=0.2):
+def run_agent_competition(dynamic=True, max_turns=100, delay=0.2, team1_selfishness=0.0, team2_selfishness=0.0):
     """
     Run a competition between AI-controlled teams of agents
+    
+    Parameters:
+    dynamic: Whether to use a dynamic maze with moving walls
+    max_turns: Maximum number of turns before ending simulation
+    delay: Time delay between turns (seconds)
+    team1_selfishness: Selfishness parameter for team 1 (0.0-1.0)
+    team2_selfishness: Selfishness parameter for team 2 (0.0-1.0)
     """
     # Create the maze
     if dynamic:
@@ -59,9 +66,9 @@ def run_agent_competition(dynamic=True, max_turns=100, delay=0.2):
     # Create game controller
     game = GameController(maze)
     
-    # Add teams
-    team1 = game.add_team(1, "Red")
-    team2 = game.add_team(2, "Blue")
+    # Add teams with selfishness parameters
+    team1 = game.add_team(1, "Red", selfishness=team1_selfishness)
+    team2 = game.add_team(2, "Blue", selfishness=team2_selfishness)
     
     # Initialize teams with agents
     game.initialize_teams()
@@ -71,6 +78,10 @@ def run_agent_competition(dynamic=True, max_turns=100, delay=0.2):
     
     # Create visualizer
     visualizer = MazeVisualizer(game, cell_size=40)
+    
+    # Display team selfishness information
+    print(f"Team 1 (Red) selfishness: {team1_selfishness:.2f}")
+    print(f"Team 2 (Blue) selfishness: {team2_selfishness:.2f}")
     
     # Run the visualization and simulation with AI control
     print("Starting AI competition...")
@@ -123,6 +134,15 @@ def run_ai_simulation(visualizer, agent_controller, max_turns=100, delay=0.2):
         visualizer.draw_agents()
         visualizer.draw_game_info()
         
+        # Draw selfishness info for each team
+        font = pygame.font.SysFont('Arial', 16)
+        for i, team_id in enumerate(game.teams.keys()):
+            team = game.teams[team_id]
+            team_color = visualizer.TEAM_COLORS.get(team_id, (255, 255, 255))
+            selfishness_text = f"Team {team_id} selfishness: {team.selfishness:.2f}"
+            text_surface = font.render(selfishness_text, True, team_color)
+            visualizer.screen.blit(text_surface, (10, visualizer.height - 60 + i*20))
+        
         # Update the display
         pygame.display.flip()
         
@@ -147,6 +167,15 @@ def run_ai_simulation(visualizer, agent_controller, max_turns=100, delay=0.2):
         visualizer.draw_agents()
         visualizer.draw_game_info()
         
+        # Draw selfishness info for each team
+        font = pygame.font.SysFont('Arial', 16)
+        for i, team_id in enumerate(game.teams.keys()):
+            team = game.teams[team_id]
+            team_color = visualizer.TEAM_COLORS.get(team_id, (255, 255, 255))
+            selfishness_text = f"Team {team_id} selfishness: {team.selfishness:.2f}"
+            text_surface = font.render(selfishness_text, True, team_color)
+            visualizer.screen.blit(text_surface, (10, visualizer.height - 60 + i*20))
+        
         # Draw "Simulation Complete" message
         font = pygame.font.SysFont('Arial', 24)
         
@@ -168,4 +197,10 @@ def run_ai_simulation(visualizer, agent_controller, max_turns=100, delay=0.2):
 
 if __name__ == "__main__":
     # Run a competition with autonomous agents
-    run_agent_competition(dynamic=True, max_turns=100, delay=0.5)
+    run_agent_competition(
+        dynamic=True, 
+        max_turns=100, 
+        delay=0.5,
+        team1_selfishness=0.0,
+        team2_selfishness=1
+    )

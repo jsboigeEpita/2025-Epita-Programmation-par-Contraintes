@@ -2,19 +2,15 @@ from typing import Dict, List, Tuple, Set
 from .agent import Agent
 
 class Team:
-    def __init__(self, team_id: int, color: str = None, communication_range: int = 3):
+    def __init__(self, team_id: int, color: str = None, communication_range: int = 3, selfishness: float = 0.0):
         """
         Initialize a team.
-        
-        Parameters:
-        team_id: The team identifier
-        color: Color name for visualization
-        communication_range: Max distance at which agents can share information
         """
         self.team_id = team_id
         self.agents: Dict[int, Agent] = {}  # agent_id: Agent
         self.color = color or f"Team {team_id}"
         self.communication_range = communication_range
+        self.selfishness = max(0.0, min(1.0, selfishness))  # Clamp value between 0 and 1
     
     def add_agent(self, agent: Agent):
         """
@@ -51,23 +47,21 @@ class Team:
     def share_vision(self):
         """
         Share vision between agents within communication range of each other.
-        Also, prioritize sharing goal information.
+        The sharing of goal information is influenced by the selfishness parameter.
         """
-        # First, check if any agent has discovered the goal
+        import random
+        
+        # First identify agents that have discovered the goal
         goal_discoverers = []
+        goal_position = None
         
         for agent in self.agents.values():
-            goal_found = False
-            for teammate in self.agents.values():
-                if hasattr(teammate, 'discovered_tiles') and hasattr(teammate.discovered_tiles, '__contains__'):
-                    # Only check if the agent has the expected attributes and methods
-                    if hasattr(teammate, 'maze') and hasattr(teammate.maze, 'goal_position'):
-                        if teammate.maze.goal_position in teammate.discovered_tiles:
-                            goal_found = True
-                            break
-            
-            if goal_found:
-                goal_discoverers.append(agent)
+            for tile in agent.discovered_tiles:
+                # Check if this tile is the goal position
+                if hasattr(agent, 'reached_goal') and agent.reached_goal and (agent.x, agent.y) == tile:
+                    goal_discoverers.append(agent)
+                    goal_position = (agent.x, agent.y)
+                    break
         
         # Group agents by proximity to share vision
         agent_groups = []
@@ -96,9 +90,8 @@ class Team:
             if len(current_group) > 1:
                 agent_groups.append(current_group)
         
-        # For each group, share discovered tiles
+        # Share non-goal vision information (not affected by selfishness)
         for group in agent_groups:
-            # Union of all discovered tiles by agents in this group
             all_discovered = set()
             for agent in group:
                 all_discovered.update(agent.discovered_tiles)
@@ -107,17 +100,20 @@ class Team:
             for agent in group:
                 agent.discovered_tiles.update(all_discovered)
         
-        # Additionally, prioritize sharing goal information
-        # If an agent has found the goal, make sure to share this info with nearby agents
-        for goal_agent in goal_discoverers:
-            for agent in self.agents.values():
-                if agent.agent_id != goal_agent.agent_id:
-                    distance = abs(goal_agent.x - agent.x) + abs(goal_agent.y - agent.y)
-                    
-                    # If within extended communication range, share goal location
-                    if distance <= self.communication_range * 1.5:  # Extend range for critical information
-                        if hasattr(goal_agent, 'maze') and hasattr(goal_agent.maze, 'goal_position'):
-                            agent.discovered_tiles.add(goal_agent.maze.goal_position)
+        # Goal information sharing (affected by selfishness)
+        if goal_position and goal_discoverers:
+            for goal_agent in goal_discoverers:
+                for agent in self.agents.values():
+                    if agent.agent_id != goal_agent.agent_id:
+                        distance = abs(goal_agent.x - agent.x) + abs(goal_agent.y - agent.y)
+                        
+                        # Only share goal location if:
+                        # 1. Agent is within communication range
+                        # 2. Random value exceeds selfishness threshold (i.e., choose to share)
+                        if distance <= self.communication_range:
+                            # Higher selfishness means lower chance of sharing
+                            if random.random() > self.selfishness:
+                                agent.discovered_tiles.add(goal_position)
     
     def has_won(self, goal_position: Tuple[int, int]) -> bool:
         """
@@ -131,4 +127,4 @@ class Team:
         """
         String representation of the team.
         """
-        return f"{self.color} with {len(self.agents)} agents"
+        return f"{self.color} with {len(self.agents)} agents (selfishness: {self.selfishness:.2f})"

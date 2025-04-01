@@ -14,7 +14,7 @@ class AgentController:
         
     def update(self):
         """
-        Update all agents on each turn
+        Update all agents on each turn, taking selfishness into account
         """
         if self.game_controller.game_over:
             return
@@ -27,17 +27,21 @@ class AgentController:
                 if agent.reached_goal:
                     continue  # Skip agents that have reached the goal
                 
-                # If goal is known and teammates remain, prioritize vision sharing
+                # If goal is known and teammates remain, decide whether to help based on selfishness
                 if self.maze.goal_position in discovered_tiles and self.agents_reached_goal() < len(team.agents):
-                    # Find closest teammate to share vision with
-                    teammate = self.find_closest_teammate(agent, discovered_tiles)
-                    if teammate:
-                        # Move toward the teammate to share vision
-                        move_dir = self.get_move_toward_target(agent, (teammate.x, teammate.y), discovered_tiles)
-                        if move_dir:
-                            self.game_controller.move_agent(agent_id, team_id, move_dir[0], move_dir[1])
-                            continue
-
+                    # Calculate whether to be selfish or helpful based on team's selfishness parameter
+                    selfish_choice = random.random() < team.selfishness
+                    
+                    # If not being selfish, try to find a teammate to help
+                    if not selfish_choice:
+                        teammate = self.find_closest_teammate(agent, discovered_tiles)
+                        if teammate:
+                            # Move toward the teammate to share vision
+                            move_dir = self.get_move_toward_target(agent, (teammate.x, teammate.y), discovered_tiles)
+                            if move_dir:
+                                self.game_controller.move_agent(agent_id, team_id, move_dir[0], move_dir[1])
+                                continue
+                
                 # Determine next move
                 move_dir = self.get_next_move(agent, discovered_tiles)
                 

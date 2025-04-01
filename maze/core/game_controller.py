@@ -14,11 +14,11 @@ class GameController:
         self.game_over = False
         self.winning_team: Optional[int] = None
     
-    def add_team(self, team_id: int, color: str = None) -> Team:
+    def add_team(self, team_id: int, color: str = None, selfishness: float = 0.0) -> Team:
         """
         Create and add a new team.
         """
-        team = Team(team_id, color)
+        team = Team(team_id, color, selfishness=selfishness)
         self.teams[team_id] = team
         return team
     
