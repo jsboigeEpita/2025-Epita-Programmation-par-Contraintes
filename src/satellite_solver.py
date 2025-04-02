@@ -1,7 +1,7 @@
 from ortools.sat.python import cp_model
 import math
 
-def calculate_distance(coord1, coord2):
+def calculate_distance(coord1, coord2, satellite_speed):
     """Calculate the great-circle distance between two points on Earth using the Haversine formula."""
     lat1, lon1 = math.radians(coord1[0]), math.radians(coord1[1])
     lat2, lon2 = math.radians(coord2[0]), math.radians(coord2[1])
@@ -14,7 +14,7 @@ def calculate_distance(coord1, coord2):
     r = 6371  # Radius of earth in kilometers
     
     # Convert to seconds (assuming satellite moves at X km/s)
-    satellite_speed = 7  # km/s (example value)
+    # satellite_speed = 100  # km/s (example value)
     return int(c * r / satellite_speed)  # Return travel time in seconds
 
 def solve_satellite_scheduling(satellite, requests):
@@ -44,7 +44,8 @@ def solve_satellite_scheduling(satellite, requests):
                    for i, req in enumerate(requests)]
     
     # Calculate the latest ending time from all time windows
-    horizon = max(req["time_window_sec"][1] for req in requests)
+    # horizon = max(req["time_window_sec"][1] for req in requests)
+    horizon = max(req["time_window_sec"][1] for req in requests) + satellite["recalibration_time_s"]
     
     # Calculate end times for each task
     end_times = []
@@ -120,7 +121,7 @@ def solve_satellite_scheduling(satellite, requests):
             travel_time = 0
             if idx > 0:
                 prev_idx = selected_indices[idx-1]
-                travel_time = calculate_distance(requests[prev_idx]["coordinates"], requests[i]["coordinates"])
+                travel_time = calculate_distance(requests[prev_idx]["coordinates"], requests[i]["coordinates"], satellite['speed_kms_per_s'])
             
             result = {
                 "location": requests[i]["location"],
@@ -130,7 +131,8 @@ def solve_satellite_scheduling(satellite, requests):
                 "end_time": start + duration,
                 "memory_used": memory,
                 "travel_time": travel_time,
-                "selected": True
+                "selected": True,
+                "time_window": requests[i]["time_window_sec"]
             }
             results.append(result)
         
@@ -157,10 +159,11 @@ def solve_satellite_scheduling(satellite, requests):
 satellite = {
     "memory_capacity_gb": 5,
     "image_size_per_km2_gb": 0.15,
-    "image_duration_per_km2_sec": 1.5,
+    "image_duration_per_km2_sec": 3.5,
     "max_photo_duration_s": 120,
     "simultaneous_tasks": False,
     "recalibration_time_s": 30,
+    "speed_kms_per_s": 100
 }
 
 # Image capture requests
@@ -190,12 +193,15 @@ total_memory = 0
 total_priority = 0
 prev_end_time = 0
 
-for r in selected_results:
+for idx, r in enumerate(selected_results):
     if r["selected"]:  # This is a selected location
-        print(f"{r['location']} (Priority {r['priority']}): Start at {r['start_time']}s, Duration: {r['duration']}s")
+        print(f"{r['location']} (Priority {r['priority']}): Start at {r['start_time']}s, Duration: {r['duration']}s, Time window: {r['time_window']}")
         print(f"  Memory used: {r['memory_used']:.2f} GB, Travel time from previous: {r['travel_time']}s")
-        print(f"  Recalibration time: {satellite['recalibration_time_s']}s")
-        end_time = r['start_time'] + r['duration'] + satellite['recalibration_time_s']
+        if idx == len(selected_results) - 1:
+            print(f"  No recalibration.")
+        else:
+            print(f"  Recalibration time: {satellite['recalibration_time_s']}s")
+        end_time = r['start_time'] + r['duration'] + satellite['recalibration_time_s'] * (idx != len(selected_results) - 1)
         print(f"  End task at: {end_time}s")
         
         if prev_end_time > 0:
