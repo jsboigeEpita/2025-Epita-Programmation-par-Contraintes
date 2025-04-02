@@ -484,8 +484,8 @@ MonoBehaviour:
   rightWheelCollider: {fileID: 1353604652925091820}
   leftWheelMesh: {fileID: 3566313745582861341}
   rightWheelMesh: {fileID: 5451817045020292637}
-  motorForce: 100
-  turnForce: 10
+  motorForce: 21
+  turnForce: 11
   drawDirection: 1
   control: {x: 0, y: 0}
   currentItem: {fileID: 0}
