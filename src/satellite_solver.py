@@ -43,6 +43,17 @@ def solve_satellite_scheduling(satellite, requests):
     start_times = [model.NewIntVar(req["time_window_sec"][0], req["time_window_sec"][1], f"start_{i}") 
                    for i, req in enumerate(requests)]
     
+    # Calculer les temps de déplacement pour chaque paire de demandes
+    travel_times = {}
+    for i in range(num_requests):
+        for j in range(num_requests):
+            if i != j:
+                travel_times[i, j] = calculate_distance(
+                    requests[i]["coordinates"],
+                    requests[j]["coordinates"],
+                    satellite['speed_kms_per_s']
+                )
+    
     # Calculate the latest ending time from all time windows
     # horizon = max(req["time_window_sec"][1] for req in requests)
     horizon = max(req["time_window_sec"][1] for req in requests) + satellite["recalibration_time_s"]
@@ -62,22 +73,37 @@ def solve_satellite_scheduling(satellite, requests):
     for i in range(num_requests):
         for j in range(i+1, num_requests):
             sequence[i, j] = model.NewBoolVar(f"sequence_{i}_{j}")
-    
+            
     # Non-overlapping constraints
+    # for i in range(num_requests):
+    #     for j in range(i+1, num_requests):
+    #         # If both tasks are selected, they cannot overlap
+    #         i_end = model.NewIntVar(0, horizon, f"end_{i}")
+    #         model.Add(i_end == start_times[i] + capture_durations[i] + satellite["recalibration_time_s"] + travel_times[i,j])
+            
+    #         # Either i before j or j before i
+    #         # If i before j
+    #         model.Add(i_end + travel_times[i,j] <= start_times[j]).OnlyEnforceIf([is_selected[i], is_selected[j], sequence[i, j]])
+            
+    #         # If j before i
+    #         j_end = model.NewIntVar(0, horizon, f"end_{j}")
+    #         model.Add(j_end == start_times[j] + capture_durations[j] + satellite["recalibration_time_s"] +  + travel_times[i,j])
+    #         model.Add(j_end +  + travel_times[i,j] <= start_times[i]).OnlyEnforceIf([is_selected[i], is_selected[j], sequence[i, j].Not()])
+            
     for i in range(num_requests):
         for j in range(i+1, num_requests):
-            # If both tasks are selected, they cannot overlap
-            i_end = model.NewIntVar(0, horizon, f"end_{i}")
-            model.Add(i_end == start_times[i] + capture_durations[i] + satellite["recalibration_time_s"])
+            # Si les deux tâches sont sélectionnées, alors soit i précède j, soit j précède i.
+            # Si i précède j :
+            model.Add(
+                start_times[j] >= start_times[i] + capture_durations[i] + satellite["recalibration_time_s"] + travel_times[i, j]
+            ).OnlyEnforceIf([is_selected[i], is_selected[j], sequence[i, j]])
             
-            # Either i before j or j before i
-            # If i before j
-            model.Add(i_end <= start_times[j]).OnlyEnforceIf([is_selected[i], is_selected[j], sequence[i, j]])
+            # Sinon, si j précède i :
+            model.Add(
+                start_times[i] >= start_times[j] + capture_durations[j] + satellite["recalibration_time_s"] + travel_times[j, i]
+            ).OnlyEnforceIf([is_selected[i], is_selected[j], sequence[i, j].Not()])
             
-            # If j before i
-            j_end = model.NewIntVar(0, horizon, f"end_{j}")
-            model.Add(j_end == start_times[j] + capture_durations[j] + satellite["recalibration_time_s"])
-            model.Add(j_end <= start_times[i]).OnlyEnforceIf([is_selected[i], is_selected[j], sequence[i, j].Not()])
+    
 
     # Time window constraints
     for i, req in enumerate(requests):
@@ -96,6 +122,7 @@ def solve_satellite_scheduling(satellite, requests):
     # Maximize priority objective
     priority_score = sum(requests[i]["priority"] * is_selected[i] for i in range(num_requests))
     model.Maximize(priority_score)
+    
     
     # Solve the model
     solver = cp_model.CpSolver()
@@ -128,7 +155,7 @@ def solve_satellite_scheduling(satellite, requests):
                 "priority": requests[i]["priority"],
                 "start_time": start,
                 "duration": duration,
-                "end_time": start + duration,
+                "end_time": start + duration + travel_time,
                 "memory_used": memory,
                 "travel_time": travel_time,
                 "selected": True,
@@ -163,15 +190,15 @@ satellite = {
     "max_photo_duration_s": 120,
     "simultaneous_tasks": False,
     "recalibration_time_s": 30,
-    "speed_kms_per_s": 100
+    "speed_kms_per_s": 50
 }
 
 # Image capture requests
 requests = [
-    {"location": "Tokyo", "coordinates": (35.6895, 139.6917), "priority": 3, "area_size_km2": 10, "time_window_sec": (0, 100)},
-    {"location": "Paris", "coordinates": (48.8566, 2.3522), "priority": 1, "area_size_km2": 8, "time_window_sec": (100, 150)},
-    {"location": "Montréal", "coordinates": (45.5017, -73.5673), "priority": 2, "area_size_km2": 8, "time_window_sec": (50, 120)},
-    {"location": "New-York", "coordinates": (40.730610, -73.935242), "priority": 3, "area_size_km2": 6, "time_window_sec": (50, 120)}
+    {"location": "Tokyo", "coordinates": (35.6895, 139.6917), "priority": 3, "area_size_km2": 10, "time_window_sec": (0, 1000)},
+    {"location": "Paris", "coordinates": (48.8566, 2.3522), "priority": 1, "area_size_km2": 8, "time_window_sec": (1000, 1500)},
+    {"location": "Montréal", "coordinates": (45.5017, -73.5673), "priority": 2, "area_size_km2": 8, "time_window_sec": (500, 1200)},
+    {"location": "New-York", "coordinates": (40.730610, -73.935242), "priority": 3, "area_size_km2": 6, "time_window_sec": (500, 1200)}
 ]
 
 
@@ -198,20 +225,36 @@ for idx, r in enumerate(selected_results):
         print(f"{r['location']} (Priority {r['priority']}): Start at {r['start_time']}s, Duration: {r['duration']}s, Time window: {r['time_window']}")
         print(f"  Memory used: {r['memory_used']:.2f} GB, Travel time from previous: {r['travel_time']}s")
         if idx == len(selected_results) - 1:
+            effective_end = r['start_time'] + r['duration']
+            
             print(f"  No recalibration.")
         else:
+            effective_end = r['start_time'] + r['duration'] + satellite['recalibration_time_s']
+            
             print(f"  Recalibration time: {satellite['recalibration_time_s']}s")
-        end_time = r['start_time'] + r['duration'] + satellite['recalibration_time_s'] * (idx != len(selected_results) - 1)
-        print(f"  End task at: {end_time}s")
+        # end_time = r['start_time'] + r['duration'] + r['travel_time'] + satellite['recalibration_time_s'] * (idx != len(selected_results) - 1)
+        # print(f"  End task at: {end_time}s")
+        print(f"  End task at: {effective_end}s")
         
-        if prev_end_time > 0:
+        
+        # if prev_end_time > 0:
+            # print(f"  Time since previous task: {r['start_time'] - prev_end_time}s")
+            
+        if idx > 0:
+            # L'intervalle entre le début de la tâche courante et la fin effective de la précédente
             print(f"  Time since previous task: {r['start_time'] - prev_end_time}s")
         
-        prev_end_time = end_time
+        # prev_end_time = end_time
+        prev_end_time = effective_end
+        
         print()
         
         total_memory += r['memory_used']
         total_priority += r['priority']
+        
+        
+
+        
 
 print(f"Total memory used: {total_memory:.2f} GB out of {satellite['memory_capacity_gb']} GB")
 print(f"Total priority score: {total_priority}")
