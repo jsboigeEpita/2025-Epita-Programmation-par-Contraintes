@@ -1,4 +1,3 @@
-from imagingTaskGeneration import generate_random_points, are_points_on_surface
 from visualization import animate_orbit
 
 '''
@@ -22,13 +21,4 @@ W = [30, 35, 40]
 R = 6371
 NUM_FRAMES = 1000
 
-'''
-# extra verification on the task points to make sure they are on the earth sphere
-random_points = generate_random_points(15, R)
-if are_points_on_surface(random_points, R):
-    print("All points are on the surface of the sphere.")
-else:
-    print("Some points are not on the surface of the sphere.")
-'''
-
-animate_orbit(speed=50, number_of_satellites=3, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
+animate_orbit(speed=50, number_of_satellites=3, number_of_tasks=30, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
