@@ -1,10 +1,25 @@
 <template>
+	<v-app class="ms-app">
+		<v-main class="ms-app-main">
+			<router-view />
+		</v-main>
+	</v-app>
     <!-- <nav>
         <router-link to="/">Accueil</router-link>
         <router-link to="/config">Configurateur</router-link>
     </nav> -->
-    <router-view />
 </template>
 
-<script setup lang="ts">
-</script>
+<style lang="scss" scoped>
+.ms-app {
+	background-color: var(--color-background-dark);
+	overflow-x: hidden;
+
+	&-main {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		max-height: 100vh;
+	}
+}
+</style>
