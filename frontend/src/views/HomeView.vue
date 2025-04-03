@@ -42,32 +42,32 @@
 
         <div class="flex items-center mt-5 space-x-8">
 			<img
-                :src="isSelected('Watercooling') ? WatercoolingGreen : Disque"
-                alt="Watercooling"
+                :src="isSelected('Disque') ? DisqueGreen : Disque"
+                alt="Disque"
                 class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Watercooling') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Watercooling')"
+                :class="isSelected('Disque') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
+                @click="toggleComponent('Disque')"
             />
 			<img
-                :src="isSelected('Watercooling') ? WatercoolingGreen : Motherboard"
-                alt="Watercooling"
+                :src="isSelected('Motherboard') ? MotherboardGreen : Motherboard"
+                alt="Motherboard"
                 class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Watercooling') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Watercooling')"
+                :class="isSelected('Motherboard') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
+                @click="toggleComponent('Motherboard')"
             />
 			<img
-                :src="isSelected('Watercooling') ? WatercoolingGreen : Processeur"
-                alt="Watercooling"
+                :src="isSelected('Processeur') ? ProcesseurGreen : Processeur"
+                alt="Processeur"
                 class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Watercooling') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Watercooling')"
+                :class="isSelected('Processeur') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
+                @click="toggleComponent('Processeur')"
             />
 			<img
-                :src="isSelected('Watercooling') ? WatercoolingGreen : Ram"
-                alt="Watercooling"
+                :src="isSelected('Ram') ? RamGreen : Ram"
+                alt="Ram"
                 class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Watercooling') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Watercooling')"
+                :class="isSelected('Ram') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
+                @click="toggleComponent('Ram')"
             />
 		</div>
     </div>
@@ -92,6 +92,10 @@ import CaseGreen from '../assets/images/computer-green/Case.png';
 import GraphicsGreen from '../assets/images/computer-green/Graphics.png';
 import VentiradGreen from '../assets/images/computer-green/Ventirad.png';
 import WatercoolingGreen from '../assets/images/computer-green/Watercooling.png';
+import DisqueGreen from '../assets/images/computer-green/Disque.png';
+import MotherboardGreen from '../assets/images/computer-green/Motherboard.png';
+import ProcesseurGreen from '../assets/images/computer-green/Processeur.png';
+import RamGreen from '../assets/images/computer-green/Ram.png';
 
 const selectedComponents = ref<string[]>([]);
 
