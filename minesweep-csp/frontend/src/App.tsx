@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import GameBoard from "./components/GameBoard";
 import GameControls from "./components/GameControls";
 import SolverDropdown from "./components/SolverDropdown";
+import ExplosionsCounter from "./components/ExplosionsCounter";
 import MoveHistory from "./components/MoveHistory";
 import "./App.css";
 import { GameState, Solver, Move } from "./utils/types";
@@ -10,31 +11,7 @@ import { MinesweeperAPI } from "./utils/backend";
 const DEFAULT_COLS = 10;
 const DEFAULT_ROWS = 10;
 const DEFAULT_MINES = 10;
-const DEFAULT_SOLVER = "basic";
-
-// Define default solvers until we fetch from API
-const DEFAULT_SOLVERS: Solver[] = [
-  {
-    id: "basic",
-    name: "Basic Solver",
-    description: "A simple solver using basic strategies",
-  },
-  {
-    id: "csp",
-    name: "CSP Solver",
-    description: "Constraint satisfaction programming solver",
-  },
-  {
-    id: "astar",
-    name: "A* Solver",
-    description: "An A* based solver (coming soon)",
-  },
-  {
-    id: "astar_boost",
-    name: "A* Boost",
-    description: "An enhanced A* solver with heuristics (coming soon)",
-  },
-];
+const DEFAULT_SOLVER = "greedy";
 
 function App() {
   const [gameId, setGameId] = useState<string | null>(null);
@@ -42,7 +19,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [solverType, setSolverType] = useState<string>(DEFAULT_SOLVER);
-  const [solvers, setSolvers] = useState<Solver[]>(DEFAULT_SOLVERS);
+  const [solvers, setSolvers] = useState<Solver[] | null>(null);
   const [moveHistory, setMoveHistory] = useState<Move[]>([]);
   const timerRef = useRef<number | null>(null);
 
@@ -55,12 +32,11 @@ function App() {
         setSolvers(availableSolvers);
       } catch (error) {
         console.error("Error fetching solvers:", error);
-        // Fall back to default solvers
       }
     };
 
-    fetchSolvers();
-  }, []);
+    if (!solvers) fetchSolvers();
+  }, [solvers]);
 
   // Stop the timer when game is over or reset
   const stopTimer = () => {
@@ -198,21 +174,24 @@ function App() {
     }
   };
 
-  const handleChangeSolver = async (newSolverType: string) => {
-    if (!gameId || !gameState) return;
+  const handleChangeSolver = useCallback(
+    async (newSolverType: string) => {
+      if (!gameId || !gameState) return;
 
-    try {
-      console.log("Changing solver to:", newSolverType);
-      const { state } = await MinesweeperAPI.changeSolver(
-        gameId,
-        newSolverType
-      );
-      setGameState(state);
-      setSolverType(newSolverType);
-    } catch (error) {
-      console.error("Error changing solver:", error);
-    }
-  };
+      try {
+        console.log("Changing solver to:", newSolverType);
+        const { state } = await MinesweeperAPI.changeSolver(
+          gameId,
+          newSolverType
+        );
+        setGameState(state);
+        setSolverType(newSolverType);
+      } catch (error) {
+        console.error("Error changing solver:", error);
+      }
+    },
+    [gameId, gameState]
+  );
 
   // Clean up timer on component unmount
   useEffect(() => {
@@ -234,6 +213,9 @@ function App() {
               currentSolver={solverType}
               onSelect={handleChangeSolver}
             />
+            {gameState && (
+              <ExplosionsCounter count={gameState.explosions || 0} />
+            )}
           </div>
           <h1 className="header-title">Minesweeper</h1>
           <div className="header-right">{/* Empty for symmetry */}</div>

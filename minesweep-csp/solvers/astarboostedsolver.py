@@ -1,5 +1,6 @@
 import random
 
+
 class AstarBoostedSolver:
     def __init__(self, game):
         self.game = game
@@ -97,19 +98,25 @@ class AstarBoostedSolver:
             for x in range(self.width):
                 if self.game.revealed[y][x]:
                     unrevealed_neighbors = [
-                        (nx, ny) 
-                        for nx in range(max(0, x-1), min(self.width, x+2))
-                        for ny in range(max(0, y-1), min(self.height, y+2))
-                        if not self.game.revealed[ny][nx] and not self.game.flagged[ny][nx]
+                        (nx, ny)
+                        for nx in range(max(0, x - 1), min(self.width, x + 2))
+                        for ny in range(max(0, y - 1), min(self.height, y + 2))
+                        if not self.game.revealed[ny][nx]
+                        and not self.game.flagged[ny][nx]
                     ]
-                    
+
                     # Compute local mine probability
-                    remaining_mines = self.game.grid[y][x] - self.get_flagged_neighbors_count(x, y)
-                    local_prob = remaining_mines / len(unrevealed_neighbors) if unrevealed_neighbors else 0
-                    
+                    remaining_mines = self.game.grid[y][
+                        x
+                    ] - self.get_flagged_neighbors_count(x, y)
+                    local_prob = (
+                        remaining_mines / len(unrevealed_neighbors)
+                        if unrevealed_neighbors
+                        else 0
+                    )
+
                     frontier_cells.extend(
-                        (nx, ny, local_prob) 
-                        for nx, ny in unrevealed_neighbors
+                        (nx, ny, local_prob) for nx, ny in unrevealed_neighbors
                     )
 
         # If no frontier cells found, fall back to random
