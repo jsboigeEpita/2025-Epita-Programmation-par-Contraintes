@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import GameBoard from "./components/GameBoard";
 import GameControls from "./components/GameControls";
 import SolverDropdown from "./components/SolverDropdown";
+import ExplosionsCounter from "./components/ExplosionsCounter";
 import MoveHistory from "./components/MoveHistory";
 import "./App.css";
 import { GameState, Solver, Move } from "./utils/types";
@@ -34,8 +35,8 @@ function App() {
       }
     };
 
-    fetchSolvers();
-  }, []);
+    if (!solvers) fetchSolvers();
+  }, [solvers]);
 
   // Stop the timer when game is over or reset
   const stopTimer = () => {
@@ -173,21 +174,24 @@ function App() {
     }
   };
 
-  const handleChangeSolver = async (newSolverType: string) => {
-    if (!gameId || !gameState) return;
+  const handleChangeSolver = useCallback(
+    async (newSolverType: string) => {
+      if (!gameId || !gameState) return;
 
-    try {
-      console.log("Changing solver to:", newSolverType);
-      const { state } = await MinesweeperAPI.changeSolver(
-        gameId,
-        newSolverType
-      );
-      setGameState(state);
-      setSolverType(newSolverType);
-    } catch (error) {
-      console.error("Error changing solver:", error);
-    }
-  };
+      try {
+        console.log("Changing solver to:", newSolverType);
+        const { state } = await MinesweeperAPI.changeSolver(
+          gameId,
+          newSolverType
+        );
+        setGameState(state);
+        setSolverType(newSolverType);
+      } catch (error) {
+        console.error("Error changing solver:", error);
+      }
+    },
+    [gameId, gameState]
+  );
 
   // Clean up timer on component unmount
   useEffect(() => {
@@ -209,6 +213,9 @@ function App() {
               currentSolver={solverType}
               onSelect={handleChangeSolver}
             />
+            {gameState && (
+              <ExplosionsCounter count={gameState.explosions || 0} />
+            )}
           </div>
           <h1 className="header-title">Minesweeper</h1>
           <div className="header-right">{/* Empty for symmetry */}</div>

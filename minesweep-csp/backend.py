@@ -10,26 +10,13 @@ class SolverFactory:
 
     @staticmethod
     def create_solver(solver_type, game):
-        """
-        Create a solver instance based on the specified type.
-
-        Args:
-            solver_type (str): The type of solver to create ('basic', 'astar', 'astar_boost')
-            game: The game instance to create a solver for
-
-        Returns:
-            A solver instance
-        """
         if solver_type == "basic":
             return GreedySolver(game)
         elif solver_type == "astar":
-            # This will be implemented later
             return AstarSolver(game)
         elif solver_type == "astar_boost":
-            # This will be implemented later
             return AstarBoostedSolver(game)
         else:
-            # Default to basic solver
             return GreedySolver(game)
 
 
@@ -169,6 +156,7 @@ class MinesweeperBackend:
             "height": self.height,
             "num_mines": self.num_mines,
             "solver_type": self.solver_type,
+            "explosions": self.nb_explosions,
         }
 
     def change_solver(self, solver_type: str):

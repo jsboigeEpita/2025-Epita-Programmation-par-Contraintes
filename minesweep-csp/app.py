@@ -5,7 +5,12 @@ from backend import MinesweeperBackend
 app = Flask(__name__)
 CORS(
     app,
-    origins=["http://localhost:8080", "http://127.0.0.1:8080"],
+    origins=[
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
     supports_credentials=True,
     allow_headers=["Content-Type", "Authorization", "Accept"],
     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -39,7 +44,11 @@ def get_game_state(game_id):
     if game_id not in games:
         return jsonify({"error": "Game not found"}), 404
 
-    return jsonify({"state": games[game_id].get_game_state()})
+    state = games[game_id].get_game_state()
+
+    state["explosions"] = games[game_id].nb_explosions
+
+    return jsonify({"state": state})
 
 
 @app.route("/api/game/<game_id>/reveal", methods=["POST"])
@@ -188,6 +197,34 @@ def delete_game(game_id):
 
     del games[game_id]
     return jsonify({"message": "Game deleted successfully"})
+
+
+@app.route("/api/game/<game_id>/explosions", methods=["GET"])
+def get_explosion_count(game_id):
+    """Get the number of explosions for a specific game."""
+    if game_id not in games:
+        return jsonify({"error": "Game not found"}), 404
+
+    return jsonify({"explosions": games[game_id].nb_explosions, "game_id": game_id})
+
+
+@app.route("/api/explosions", methods=["GET"])
+def get_all_explosion_stats():
+    """Get explosion statistics for all active games."""
+    stats = {
+        "total_explosions": sum(game.nb_explosions for game in games.values()),
+        "average_explosions": (
+            sum(game.nb_explosions for game in games.values()) / len(games)
+            if games
+            else 0
+        ),
+        "games": {
+            game_id: {"explosions": game.nb_explosions, "solver_type": game.solver_type}
+            for game_id, game in games.items()
+        },
+    }
+
+    return jsonify(stats)
 
 
 # Add a simple health check endpoint
