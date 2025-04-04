@@ -5,7 +5,7 @@ A Constraint Satisfaction Problem (CSP) implementation of Minesweeper with multi
 ## Contributors
 
 - Armand BLIN `(armand.blin@epita.fr)`
-- Baptiste ARNOLD `(baptiste.anorld@epita.fr)`
+- Baptiste ARNOLD `(baptiste.arnold@epita.fr)`
 - Angela SAADE `(angela.saade@epita.fr)`
 
 ## Features
