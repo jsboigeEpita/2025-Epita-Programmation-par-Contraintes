@@ -1,0 +1,27 @@
+{
+  "Samsung": [
+    {
+      "model": "870 EVO",
+      "manufacturer": "Samsung",
+      "form_factor": "2.5\"",
+      "interface": "SATA 6 Gbps",
+      "capacities": [
+        "250 GB",
+        "500 GB",
+        "1 TB",
+        "2 TB",
+        "4 TB"
+      ],
+      "nand_type": "TLC 3D NAND",
+      "controller": "Samsung MKX",
+      "sequential_read": "560 MB/s",
+      "sequential_write": "530 MB/s",
+      "random_read_IOPS": "98K",
+      "random_write_IOPS": "88K",
+      "endurance_TBW": "150 TBW (250GB) \u2013 2400 TBW (4TB)",
+      "warranty_years": 5,
+      "release_date": "January 2021",
+      "features": "SLC caching (TurboWrite), AES 256-bit encryption"
+    }
+  ]
+}
