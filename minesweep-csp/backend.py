@@ -108,7 +108,7 @@ class MinesweeperBackend:
         if self.grid[y][x] == -1:
             self.nb_explosions += 1
             self.revealed[y][x] = False
-            self.flagged[y][x] = True
+            self.toggle_flag(x, y)
             return True
 
         if self.grid[y][x] == 0:
@@ -139,15 +139,20 @@ class MinesweeperBackend:
             return
         if not self.revealed[y][x]:
             self.flagged[y][x] = not self.flagged[y][x]
+        if self._check_win():
+            self.won = True
+            self.game_over = True
 
     def _check_win(self) -> bool:
         """Check if the game has been won."""
+        print("Checking if won")
         for y in range(self.height):
             for x in range(self.width):
-                if self.grid[y][x] != -1 and not self.revealed[y][x]:
-                    return False
                 if self.grid[y][x] == -1 and not self.flagged[y][x]:
                     return False
+                if self.grid[y][x] != -1 and not self.revealed[y][x]:
+                    return False
+        print("Game won")
         return True
 
     def get_game_state(self) -> dict:
