@@ -1,9 +1,10 @@
 from typing import Tuple, Optional
 import random
-from solver import MinesweeperSolver
-from astarsolver import AstarSolver
-from astarboostedsolver import AstarBoostedSolver
-from greedysolver import GreedySolver
+from solvers.solver import MinesweeperSolver
+from solvers.astarsolver import AstarSolver
+from solvers.astarboostedsolver import AstarBoostedSolver
+from solvers.greedysolver import GreedySolver
+
 
 class SolverFactory:
     """Factory for creating different solver instances."""
@@ -145,7 +146,6 @@ class MinesweeperBackend:
 
     def _check_win(self) -> bool:
         """Check if the game has been won."""
-        print("Checking if won")
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] == -1 and not self.flagged[y][x]:
@@ -247,14 +247,14 @@ class MinesweeperBackend:
         while not self.game_over and iterations < max_iterations:
             # Try to get and apply the next solver move
             move = self.solve_next_move()
-            
+
             # If no move is available, break the loop
             if move is None:
                 break
-            
+
             # Apply the solver move
             move_result = self.apply_solver_move()
-            
+
             # Increment iterations
             iterations += 1
 
@@ -264,8 +264,8 @@ class MinesweeperBackend:
 
         # Prepare and return results
         return {
-            'success': self.won,
-            'iterations': iterations,
-            'explosions': self.nb_explosions - initial_explosions,
-            'won': self.won
+            "success": self.won,
+            "iterations": iterations,
+            "explosions": self.nb_explosions - initial_explosions,
+            "won": self.won,
         }
