@@ -1,6 +1,5 @@
 from typing import Tuple, Optional
 import random
-from solvers.solver import MinesweeperSolver
 from solvers.astarsolver import AstarSolver
 from solvers.astarboostedsolver import AstarBoostedSolver
 from solvers.greedysolver import GreedySolver
@@ -15,7 +14,7 @@ class SolverFactory:
         Create a solver instance based on the specified type.
 
         Args:
-            solver_type (str): The type of solver to create ('basic', 'csp', 'astar', 'astar_boost')
+            solver_type (str): The type of solver to create ('basic', 'astar', 'astar_boost')
             game: The game instance to create a solver for
 
         Returns:
@@ -23,8 +22,6 @@ class SolverFactory:
         """
         if solver_type == "basic":
             return GreedySolver(game)
-        elif solver_type == "csp":
-            return MinesweeperSolver(game)
         elif solver_type == "astar":
             # This will be implemented later
             return AstarSolver(game)
@@ -33,7 +30,7 @@ class SolverFactory:
             return AstarBoostedSolver(game)
         else:
             # Default to basic solver
-            return MinesweeperSolver(game)
+            return GreedySolver(game)
 
 
 class MinesweeperBackend:
@@ -47,7 +44,7 @@ class MinesweeperBackend:
             width (int): Width of the game board
             height (int): Height of the game board
             num_mines (int): Number of mines to place
-            solver_type (str): Type of solver to use ('basic', 'csp', 'astar', 'astar_boost')
+            solver_type (str): Type of solver to use ('basic', 'astar', 'astar_boost')
         """
         self.width = width
         self.height = height

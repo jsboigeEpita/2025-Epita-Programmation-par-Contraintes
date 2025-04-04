@@ -10,31 +10,7 @@ import { MinesweeperAPI } from "./utils/backend";
 const DEFAULT_COLS = 10;
 const DEFAULT_ROWS = 10;
 const DEFAULT_MINES = 10;
-const DEFAULT_SOLVER = "basic";
-
-// Define default solvers until we fetch from API
-const DEFAULT_SOLVERS: Solver[] = [
-  {
-    id: "basic",
-    name: "Basic Solver",
-    description: "A simple solver using basic strategies",
-  },
-  {
-    id: "csp",
-    name: "CSP Solver",
-    description: "Constraint satisfaction programming solver",
-  },
-  {
-    id: "astar",
-    name: "A* Solver",
-    description: "An A* based solver (coming soon)",
-  },
-  {
-    id: "astar_boost",
-    name: "A* Boost",
-    description: "An enhanced A* solver with heuristics (coming soon)",
-  },
-];
+const DEFAULT_SOLVER = "greedy";
 
 function App() {
   const [gameId, setGameId] = useState<string | null>(null);
@@ -42,7 +18,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [solverType, setSolverType] = useState<string>(DEFAULT_SOLVER);
-  const [solvers, setSolvers] = useState<Solver[]>(DEFAULT_SOLVERS);
+  const [solvers, setSolvers] = useState<Solver[] | null>(null);
   const [moveHistory, setMoveHistory] = useState<Move[]>([]);
   const timerRef = useRef<number | null>(null);
 
@@ -55,7 +31,6 @@ function App() {
         setSolvers(availableSolvers);
       } catch (error) {
         console.error("Error fetching solvers:", error);
-        // Fall back to default solvers
       }
     };
 

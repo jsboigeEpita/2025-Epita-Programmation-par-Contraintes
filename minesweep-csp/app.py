@@ -145,12 +145,7 @@ def get_available_solvers():
                 {
                     "id": "greedy",
                     "name": "Greedy Solver",
-                    "description": "A basic solver that makes random guesses when no obvious moves are available",
-                },
-                {
-                    "id": "csp",
-                    "name": "CSP Solver",
-                    "description": "A solver using constraint satisfaction programming to find optimal moves",
+                    "description": "A basic solver that makes random guesses without taking into account cells information",
                 },
                 {
                     "id": "astar",
@@ -160,7 +155,7 @@ def get_available_solvers():
                 {
                     "id": "astar_boost",
                     "name": "A* Boost",
-                    "description": "An enhanced A* solver with probabilistic frontier analysis for better mine probability estimation",
+                    "description": "An enhanced A* solver with probabilistic frontier analysis for better mine probability estimation when no trivial moves is found",
                 },
             ]
         }

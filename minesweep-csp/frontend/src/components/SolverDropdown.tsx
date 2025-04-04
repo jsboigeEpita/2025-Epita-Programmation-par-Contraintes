@@ -3,7 +3,7 @@ import { Solver } from "../utils/types";
 import "./SolverDropdown.css";
 
 interface SolverDropdownProps {
-  solvers: Solver[];
+  solvers: Solver[] | null;
   currentSolver: string;
   onSelect: (solverId: string) => void;
 }
@@ -13,12 +13,9 @@ const SolverDropdown: React.FC<SolverDropdownProps> = ({
   currentSolver,
   onSelect,
 }) => {
+  console.log(solvers, currentSolver);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Get current solver details
-  const currentSolverDetails =
-    solvers.find((s) => s.id === currentSolver) || solvers[0];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -50,13 +47,17 @@ const SolverDropdown: React.FC<SolverDropdownProps> = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="solver-icon">🧩</span>
-        <span className="solver-name">{currentSolverDetails.name}</span>
+        <span className="solver-name">
+          {!solvers
+            ? "Loading"
+            : solvers.find((s) => s.id === currentSolver)?.name ?? ""}
+        </span>
         <span className="solver-arrow">{isOpen ? "▲" : "▼"}</span>
       </button>
 
       {isOpen && (
         <div className="solver-dropdown-menu">
-          {solvers.map((solver) => (
+          {solvers?.map((solver) => (
             <div
               key={solver.id}
               className={`solver-dropdown-item ${
