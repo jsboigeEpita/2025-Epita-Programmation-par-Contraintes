@@ -3,8 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+node_modules/
+
+.DS_Store
+
 # C extensions
 *.so
+
+benchmark_results/
 
 # Distribution / packaging
 .Python
@@ -171,3 +177,5 @@ cython_debug/
 .pypirc
 
 .vscode
+.yaml
+.env

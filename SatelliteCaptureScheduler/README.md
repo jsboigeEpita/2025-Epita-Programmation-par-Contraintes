@@ -24,6 +24,7 @@ Les agences spatiales reçoivent de nombreuses requêtes d'images couvrant des z
 7. **Durée de la Prise de Vue** : La taille de la zone influence la durée de la prise de vue.
 8. **Débit d'Upload** : Le débit d'upload influence le temps d'envoi des clichés.
 9. **Temps de Recalibration** : Le temps nécessaire pour recalibrer la lentille doit être pris en compte.
+10. **Météo à l'endroit voulu** : Une météo capricieuse à l'endroit de la capture peut empêcher la prise de vue.
 
 ### Objectif
 
@@ -74,6 +75,7 @@ satellite:
   simultaneous_tasks: false
   upload_speed_mbps: 2
   recalibration_time_s: 10
+  cloud_probability: 0.3
 
 constraints:
   position_required: true
