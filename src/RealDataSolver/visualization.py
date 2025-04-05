@@ -37,6 +37,17 @@ def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, MU=398600
         t_full_orbit = np.linspace(0, 2 * np.pi * np.sqrt(A[i]**3 / MU), 50)
         trajectories.append(np.array([new_satellite.position_at(t)[:3] for t in t_full_orbit]))
     
+    # get time windows
+    """
+     for satellite in satellites:
+        for point in satellite_imaging:
+            return False
+        begin = 0
+        end = 86400
+    """
+   
+        
+    
     def update_frame(frame):
         ax.clear()
         
@@ -54,9 +65,7 @@ def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, MU=398600
         for i in range(number_of_satellites):
             visibility_data = can_image_points(satellites[i], satellite_imaging, t, min_elevation_angle)
             all_visibility_data.append(visibility_data)
-            for visibility in visibility_data:
-                if visibility[1]:
-                    print(visibility)
+           
             # Draw satellite
             x, y, z, _ = satellites[i].position_at(t)
             ax.scatter(x, y, z, color='red', marker='o', s=50)
