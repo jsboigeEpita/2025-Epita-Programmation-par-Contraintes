@@ -31,11 +31,6 @@ public class ProjectService {
     @Inject 
     CpuRepository cpuRepository;
 
-    // public List<MotherboardContract> filterMotherboard(String sessionId)
-    // {
-    //     return motherboardsRepository.listAll().stream().map();
-    // }
-
     @Inject
     SocketMbToCpu mbCpuConverter;
 
@@ -48,9 +43,9 @@ public class ProjectService {
         List<Motherboard> allMotherboards = motherboardsRepository.listAll();
         List<Motherboard> compatibleMotherboards = new ArrayList<>();
 
-        Cpu cpu = cpuRepository.findAll().firstResult();
+        Cpu cpu = null;
 
-        logger.info("CPU: " + cpu.name);
+        // logger.info("CPU: " + cpu.name);
 
 
         IntVar[] motherboardVars = new IntVar[allMotherboards.size()];
@@ -62,9 +57,7 @@ public class ProjectService {
             {
 
                 Motherboard mb = allMotherboards.get(i);
-                
                 Boolean isCompatible = mbCpuConverter.socketArchitectureMap.get(mb.socketCpu).contains(cpu.microarchitecture);
-                
                 motherboardVars[i] = model.intVar("mb_" + i, isCompatible ? 1 : 0);
             }
         }

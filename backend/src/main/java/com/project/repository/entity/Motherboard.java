@@ -8,7 +8,6 @@ import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 
 @MongoEntity(collection = "motherboards")
-@PlanningEntity
 public class Motherboard extends PanacheMongoEntity {
 
     public ObjectId id;
