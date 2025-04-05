@@ -1,0 +1,3 @@
+We need to schedule multiple satellite observations with varying priorities and coverage areas. For urban and infrastructure targets, we require detailed imagery of Tokyo Bay, the Sydney Harbor Bridge, and the Opera House. In terms of natural landscapes, we need to capture approximately 500 km² of the Amazon rainforest and 1000 km² of the Sahara Desert.
+Additionally, we have high-priority requests to assess damage from recent events: Hurricane damage in Miami from last week, which require a wide area of observation. Lastly, schedule an observation of Mount Everest with high priority and imagery of Yellowstone National Park with a priority level of 2.
+Oh and, I want a tiny picture of Le Kremlin Bicêtre in France very very urgently to use as a wallpaper.
