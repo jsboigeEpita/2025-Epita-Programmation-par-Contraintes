@@ -1,0 +1,46 @@
+.game-board {
+  display: inline-block;
+  background-color: #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 2rem;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #eee;
+  user-select: none;
+}
+
+.cell.revealed {
+  background-color: #ddd;
+}
+
+.cell:hover {
+  background-color: #ddd;
+}
+
+.cell.revealed:hover {
+  background-color: #ccc;
+}
+
+/* Number colors */
+.blue { color: blue; }
+.green { color: green; }
+.red { color: red; }
+.purple { color: purple; }
+.maroon { color: maroon; }
+.turquoise { color: turquoise; }
+.black { color: black; }
+.gray { color: gray; } 

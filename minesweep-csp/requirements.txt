@@ -1,0 +1,4 @@
+flask==3.0.2
+flask-cors==4.0.0 
+z3
+z3-solver==4.12.2.0

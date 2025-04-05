@@ -1,0 +1,85 @@
+.move-history {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    margin-left: 20px;
+    height: 100%;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.move-history-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.moves-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.moves-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.move-item {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+    color: #555;
+}
+
+.move-item:last-child {
+    border-bottom: none;
+}
+
+.move-item:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+.no-moves {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 20px 0;
+}
+
+/* Scrollbar styling */
+.moves-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.moves-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.moves-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.moves-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .move-history {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 20px;
+        max-height: 300px;
+    }
+}
