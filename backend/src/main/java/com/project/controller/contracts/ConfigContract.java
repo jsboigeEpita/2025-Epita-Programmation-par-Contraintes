@@ -1,32 +1,23 @@
 package com.project.controller.contracts;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ConfigContract {
 
-    @JsonProperty("pcCase")
     private CaseContract pcCase;
     
-    @JsonProperty("cpu")
     private CPUContract cpu;
 
-    @JsonProperty("cpuCooler")
     private CPUCoolerContract cpuCooler;
 
-    @JsonProperty("memory")
     private MemoryContract memory;
     
-    @JsonProperty("motherboard")
     private MotherboardContract motherboard;
     
-    @JsonProperty("powerSupply")
     private PowerSupplyContract powerSupply;
     
-    @JsonProperty("videoCard")
     private VideoCardContract videoCard;
 
-    public ConfigContract() {
-    }
+    public ConfigContract() {}
 
     public ConfigContract(CaseContract pcCase, CPUContract cpu, CPUCoolerContract cpuCooler, MemoryContract memory, MotherboardContract motherboard, PowerSupplyContract powerSupply, VideoCardContract videoCard) {
         this.pcCase = pcCase;

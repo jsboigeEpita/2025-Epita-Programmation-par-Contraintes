@@ -1,102 +1,94 @@
 package com.project.controller.contracts;
 
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MotherboardContract {
-    private String name;
-    private String price;
+    // public String name;
+    // public String price;
+    // public String socketCpu;
+    // public String formFactor;
+    // public int maxMemory;
+    // public int memorySlots;
+    // public String color;
+    // public String powerConsumption;
 
-    @JsonProperty("Socket / CPU")
-    private String socketCpu;
+    // public MotherboardContract() {
+    // }
 
-    @JsonProperty("Form Factor")
-    private String formFactor;
+    // public MotherboardContract(String name, String price, String socketCpu, String formFactor, String memoryMax, String memorySlots, String color, int powerConsumption) {
+    //     this.name = name;
+    //     this.price = price;
+    //     this.socketCpu = socketCpu;
+    //     this.formFactor = formFactor;
+    //     this.memoryMax = memoryMax;
+    //     this.memorySlots = memorySlots;
+    //     this.color = color;
+    //     this.powerConsumption = powerConsumption;
+    // }
 
-    @JsonProperty("Memory Max")
-    private String memoryMax;
+    // public String getName() {
+    //     return name;
+    // }
 
-    @JsonProperty("Memory Slots")
-    private String memorySlots;
-    private String color;
-    
-    @JsonProperty("Power Consumption")
-    private int powerConsumption;
+    // public void setName(String name) {
+    //     this.name = name;
+    // }
 
-    public MotherboardContract() {
-    }
+    // public String getPrice() {
+    //     return price;
+    // }
 
-    public MotherboardContract(String name, String price, String socketCpu, String formFactor, String memoryMax, String memorySlots, String color, int powerConsumption) {
-        this.name = name;
-        this.price = price;
-        this.socketCpu = socketCpu;
-        this.formFactor = formFactor;
-        this.memoryMax = memoryMax;
-        this.memorySlots = memorySlots;
-        this.color = color;
-        this.powerConsumption = powerConsumption;
-    }
+    // public void setPrice(String price) {
+    //     this.price = price;
+    // }
 
-    public String getName() {
-        return name;
-    }
+    // public String getSocketCpu() {
+    //     return socketCpu;
+    // }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    // public void setSocketCpu(String socketCpu) {
+    //     this.socketCpu = socketCpu;
+    // }
 
-    public String getPrice() {
-        return price;
-    }
+    // public String getFormFactor() {
+    //     return formFactor;
+    // }
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
+    // public void setFormFactor(String formFactor) {
+    //     this.formFactor = formFactor;
+    // }
 
-    public String getSocketCpu() {
-        return socketCpu;
-    }
+    // public String getMemoryMax() {
+    //     return memoryMax;
+    // }
 
-    public void setSocketCpu(String socketCpu) {
-        this.socketCpu = socketCpu;
-    }
+    // public void setMemoryMax(String memoryMax) {
+    //     this.memoryMax = memoryMax;
+    // }
 
-    public String getFormFactor() {
-        return formFactor;
-    }
+    // public String getMemorySlots() {
+    //     return memorySlots;
+    // }
 
-    public void setFormFactor(String formFactor) {
-        this.formFactor = formFactor;
-    }
+    // public void setMemorySlots(String memorySlots) {
+    //     this.memorySlots = memorySlots;
+    // }
 
-    public String getMemoryMax() {
-        return memoryMax;
-    }
+    // public String getColor() {
+    //     return color;
+    // }
 
-    public void setMemoryMax(String memoryMax) {
-        this.memoryMax = memoryMax;
-    }
+    // public void setColor(String color) {
+    //     this.color = color;
+    // }
 
-    public String getMemorySlots() {
-        return memorySlots;
-    }
+    // public int getPowerConsumption() {
+    //     return powerConsumption;
+    // }
 
-    public void setMemorySlots(String memorySlots) {
-        this.memorySlots = memorySlots;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getPowerConsumption() {
-        return powerConsumption;
-    }
-
-    public void setPowerConsumption(int powerConsumption) {
-        this.powerConsumption = powerConsumption;
-    }
+    // public void setPowerConsumption(int powerConsumption) {
+    //     this.powerConsumption = powerConsumption;
+    // }
 }
