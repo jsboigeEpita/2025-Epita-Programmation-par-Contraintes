@@ -5,18 +5,17 @@ import java.util.List;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
+import org.jboss.logging.Logger;
 
 import com.project.converter.SocketMbToCpu;
 import com.project.repository.CpuRepository;
 import com.project.repository.MotherboardsRepository;
-import com.project.repository.entity.Motherboard;
 import com.project.repository.entity.Cpu;
+import com.project.repository.entity.Motherboard;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.jboss.logging.Logger;
 
 
 @ApplicationScoped
@@ -38,8 +37,6 @@ public class ProjectService {
 
     @Inject
     SocketMbToCpu mbCpuConverter;
-
-
 
     public List<Motherboard> filterMotherboard(String sessionId) {
         

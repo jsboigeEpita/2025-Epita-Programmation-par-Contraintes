@@ -2,13 +2,11 @@ package com.project.repository.entity;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
-import org.optaplanner.core.api.domain.entity.PlanningEntity;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 
 @MongoEntity(collection = "cpus")
-@PlanningEntity
 public class Cpu extends PanacheMongoEntity {
     
     public ObjectId id;
