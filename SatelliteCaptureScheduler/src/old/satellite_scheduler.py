@@ -30,7 +30,6 @@ class TaskType(Enum):
     IMAGE_CAPTURE = "Image Capture"
     DATA_TRANSMISSION = "Data Transmission"
     LENS_CALIBRATION = "Lens Calibration"
-    
 
 class Task:
     def __init__(self, task_id, task_type: TaskType, duration, priority=0, location=None, memory_required=0, battery_required=0):
