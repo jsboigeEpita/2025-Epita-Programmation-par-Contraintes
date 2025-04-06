@@ -33,7 +33,7 @@ public class RobotManager : MonoBehaviour
     [Header("Monitors")]
     public Item currentItem;
     [SerializeField]
-    public Vector3Int gridPosition { get { return Wharehouse.convertGridPosition(transform.position); } }
+    public Vector3Int gridPosition { get { return Wharehouse.convertPos2Grid(transform.position); } }
 
     private void FixedUpdate()
     {
