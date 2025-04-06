@@ -29,12 +29,11 @@ class Satellite:
 class TaskType(Enum):
     IMAGE_CAPTURE = "Image Capture"
     DATA_TRANSMISSION = "Data Transmission"
-    MAINTENANCE = "Maintenance"
     LENS_CALIBRATION = "Lens Calibration"
     
 
 class Task:
-    def __init__(self, task_id, task_type: TaskType, duration, priority, location=None, memory_required=0, battery_required=0):
+    def __init__(self, task_id, task_type: TaskType, duration, priority=0, location=None, memory_required=0, battery_required=0):
         self.task_id = task_id
         self.task_type = task_type
         self.duration = duration
@@ -45,8 +44,7 @@ class Task:
 
     
 class Track:
-    def __init__(self, satellite, start_time, duration, zones):
-        self.satellite = satellite
+    def __init__(self, start_time, duration, zones):
         self.start_time = start_time
         self.duration = duration
         self.zones = zones  # List of zones the satellite will pass over
@@ -59,95 +57,111 @@ class Track:
     
     
 class Zone:
-    def __init__(self, name, coordinates, visibility_window, priority, has_ground_station=False):
+    def __init__(self, name, coordinates, visibility_window, has_ground_station=False):
         self.name = name 
         self.coordinates = coordinates  # GPS coordinates (latitude, longitude)e
-        self.visibility_window = visibility_window  # Time window when the zone is visible
-        self.priority = priority 
+        self.visibility_window = visibility_window  # Time window when the zone is visible (start_time, end_time)
         self.has_ground_station  = has_ground_station  # True if the zone has a ground station for data transmission
 
     def is_visible(self, current_time):
         start, end = self.visibility_window
         return start <= current_time <= end
     
-
 class SatelliteScheduler:
-    def __init__(self, tasks, zones, memory_capacity, battery_capacity, time_horizon):
-        self.tasks = tasks
-        self.zones = zones
-        self.memory_capacity = memory_capacity
-        self.battery_capacity = battery_capacity
-        self.time_horizon = time_horizon
+    def __init__(self, satellite, images_to_capture, track):
+        self.satellite = satellite
+        self.images_to_capture = images_to_capture  # Liste des images à capturer
+        self.track = track  # Liste des zones à survoler
         self.model = cp_model.CpModel()
         self.task_starts = {}
         self.task_done = {}
+        self.tasks = []
         self.solver = cp_model.CpSolver()
-
-    def define_variables(self):
-        for task in self.tasks:
-            self.task_starts[task.task_id] = self.model.NewIntVar(0, self.time_horizon, f"start_{task.task_id}")
-            self.task_done[task.task_id] = self.model.NewBoolVar(f"done_{task.task_id}")
-
-    def add_constraints(self):
-        memory_used = [self.model.NewIntVar(0, self.memory_capacity, f"memory_{t}") for t in range(self.time_horizon)]
-        battery_used = [self.model.NewIntVar(0, self.battery_capacity, f"battery_{t}") for t in range(self.time_horizon)]
-
-        for t in range(1, self.time_horizon):
-            self.model.Add(memory_used[t] == memory_used[t-1])
-            self.model.Add(battery_used[t] == battery_used[t-1])
-
-        for task in self.tasks:
-            start_var = self.task_starts[task.task_id]
-            done_var = self.task_done[task.task_id]
-
-            zone = next((z for z in self.zones if z.name == task.location), None)
-            if zone:
-                self.model.Add(start_var >= zone.visibility_window[0]).OnlyEnforceIf(done_var)
-                self.model.Add(start_var + task.duration <= zone.visibility_window[1]).OnlyEnforceIf(done_var)
-
-            if task.task_type == TaskType.IMAGE_CAPTURE:
-                self.model.Add(memory_used[start_var] + task.memory_required <= self.memory_capacity).OnlyEnforceIf(done_var)
-                self.model.Add(battery_used[start_var] + task.battery_required <= self.battery_capacity).OnlyEnforceIf(done_var)
-
-                # Calibration obligatoire avant la capture
-                has_calibration = any(t.task_type == TaskType.LENS_CALIBRATION for t in self.tasks if t.task_id < task.task_id)
-                if has_calibration:
-                    calibration_task = next(t for t in self.tasks if t.task_type == TaskType.LENS_CALIBRATION and t.task_id < task.task_id)
-                    self.model.Add(start_var >= self.task_starts[calibration_task.task_id] + calibration_task.duration).OnlyEnforceIf(done_var)
-
-            if task.task_type == TaskType.DATA_TRANSMISSION:
-                self.model.Add(memory_used[start_var] == 0).OnlyEnforceIf(done_var)
-                self.model.Add(battery_used[start_var] + task.battery_required <= self.battery_capacity).OnlyEnforceIf(done_var)
-
-    def set_objective(self):
-        self.model.Maximize(sum(task.priority * self.task_done[task.task_id] for task in self.tasks))
+        self.execution_log = []  # Journal des tâches effectuées
 
     def solve(self):
-        self.define_variables()
-        self.add_constraints()
-        self.set_objective()
+        # Create variables for task start times and completion
+        for task_id, task in self.images_to_capture.items():
+            start_var = self.model.NewIntVar(0, self.track.duration, f'start_{task_id}')
+            done_var = self.model.NewBoolVar(f'done_{task_id}')
+            self.task_starts[task_id] = start_var
+            self.task_done[task_id] = done_var
+            self.tasks.append((task, start_var, done_var))
+
+        # Add constraints for visibility windows
+        for task_id, task in self.images_to_capture.items():
+            zone = self.track.get_zone_by_name(task.location)
+            if zone:
+                start, end = zone.visibility_window
+                self.model.Add(self.task_starts[task_id] >= start).OnlyEnforceIf(self.task_done[task_id])
+                self.model.Add(self.task_starts[task_id] + task.duration <= end).OnlyEnforceIf(self.task_done[task_id])
+
+        # Add constraints for satellite memory and battery
+        for task, start_var, done_var in self.tasks:
+            self.model.Add(self.satellite.memory_used + task.memory_required <= self.satellite.memory_capacity).OnlyEnforceIf(done_var)
+            self.model.Add(self.satellite.battery_level >= task.battery_required).OnlyEnforceIf(done_var)
+
+        # Add precedence constraints (tasks must not overlap)
+        for i, (task1, start_var1, done_var1) in enumerate(self.tasks):
+            for j, (task2, start_var2, done_var2) in enumerate(self.tasks):
+                if i != j:
+                    self.model.Add(start_var1 + task1.duration <= start_var2).OnlyEnforceIf([done_var1, done_var2])
+                    self.model.Add(start_var2 + task2.duration <= start_var1).OnlyEnforceIf([done_var2, done_var1])
+
+        # Objective: Maximize priority of completed tasks
+        self.model.Maximize(
+            sum(task.priority * done_var for task, _, done_var in self.tasks)
+        )
+
+        # Solve the model
         status = self.solver.Solve(self.model)
+
         if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
-            print("Solution trouvée !")
-            for task in self.tasks:
-                if self.solver.Value(self.task_done[task.task_id]):
-                    print(f"Tâche {task.task_id} ({task.task_type.value}) exécutée à {self.solver.Value(self.task_starts[task.task_id])}")
+            print("Solution found!")
+            for task, start_var, done_var in self.tasks:
+                if self.solver.Value(done_var):
+                    start_time = self.solver.Value(start_var)
+                    self.execution_log.append({
+                        "task_id": task.task_id,
+                        "type": task.task_type.value,
+                        "location": task.location,
+                        "start_time": start_time
+                    })
+                    print(f"Task {task.task_id} starts at {start_time}")
         else:
-            print("Pas de solution trouvée.")
+            print("No solution found.")
 
-# === Définition des tâches et zones ===
+    def print_execution_log(self):
+        print("\n **Journal des tâches exécutées :**")
+        for log in self.execution_log:
+            print(f"[{log['start_time']}s] {log['type']} à {log['location']} (ID: {log['task_id']})")
 
+
+# Satellite :
+satellite = Satellite(name="Sat-1", memory_capacity=100, battery_level=100)
+
+# Images à capturer :
+images_to_capture = {
+    "image1": Task(task_id="image1", task_type=TaskType.IMAGE_CAPTURE, duration=5, priority=10, location="Zone A", memory_required=10, battery_required=5),
+    "image2": Task(task_id="image2", task_type=TaskType.IMAGE_CAPTURE, duration=5, priority=20, location="Zone B", memory_required=10, battery_required=5),
+    "image3": Task(task_id="image3", task_type=TaskType.IMAGE_CAPTURE, duration=5, priority=15, location="Zone C", memory_required=10, battery_required=5),
+    "image4": Task(task_id="image4", task_type=TaskType.IMAGE_CAPTURE, duration=5, priority=5, location="Zone D", memory_required=10, battery_required=5),
+    "image5": Task(task_id="image5", task_type=TaskType.IMAGE_CAPTURE, duration=5, priority=25, location="Zone E", memory_required=10, battery_required=5),
+}
+
+# Zones :
 zones = [
-    Zone("Paris", (48.8566, 2.3522), visibility_window=(10, 20), priority=10),
-    Zone("Tokyo", (35.682839, 139.759455), visibility_window=(25, 35), priority=15, has_ground_station=True),
+    Zone(name="Zone A", coordinates=(10, 20), visibility_window=(0, 30), has_ground_station=True),
+    Zone(name="Zone B", coordinates=(15, 25), visibility_window=(5, 35), has_ground_station=False),
+    Zone(name="Zone C", coordinates=(20, 30), visibility_window=(10, 40), has_ground_station=True),
+    Zone(name="Zone D", coordinates=(25, 35), visibility_window=(15, 45), has_ground_station=False),
+    Zone(name="Zone E", coordinates=(30, 40), visibility_window=(20, 50), has_ground_station=True),
 ]
 
-tasks = [
-    Task(0, TaskType.LENS_CALIBRATION, duration=2, priority=0),
-    Task(1, TaskType.IMAGE_CAPTURE, duration=5, priority=10, location="Paris", memory_required=5, battery_required=10),
-    Task(2, TaskType.IMAGE_CAPTURE, duration=4, priority=12, location="Tokyo", memory_required=6, battery_required=8),
-    Task(3, TaskType.DATA_TRANSMISSION, duration=3, priority=0, location="Tokyo", battery_required=5),
-]
+# Track :
+track = Track(start_time=0, duration=60, zones=zones)
 
-scheduler = SatelliteScheduler(tasks, zones, memory_capacity=10, battery_capacity=50, time_horizon=40)
+scheduler = SatelliteScheduler(satellite, images_to_capture, track)
 scheduler.solve()
+scheduler.print_execution_log()
+
