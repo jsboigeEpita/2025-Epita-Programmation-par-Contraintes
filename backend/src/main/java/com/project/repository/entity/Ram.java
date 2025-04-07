@@ -15,6 +15,8 @@ public class Ram extends PanacheMongoEntity {
 	public String speed;
 	@BsonProperty("Price / GB")
 	public String costGB;
+	@BsonProperty("Modules")
+	public String modules;
 	@BsonProperty("Color")
 	public String Color;
 	@BsonProperty("First Word Latency")

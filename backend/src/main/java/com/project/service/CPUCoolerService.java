@@ -58,7 +58,6 @@ public class CPUCoolerService
 
 		ProductConfig productConfig = getOrCreate(sessionId);
 
-		MotherboardContract motherboardContract = productConfig.motherboard;
 		PowerSupplyContract powerSupplyContract = productConfig.powerSupply;
 
 
