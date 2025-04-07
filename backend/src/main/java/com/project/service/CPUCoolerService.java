@@ -8,6 +8,7 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.IntVar;
 import org.jboss.logging.Logger;
 
+import com.project.controller.contracts.CPUCoolerContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.converter.SocketMbToCpu;
@@ -39,7 +40,18 @@ public class CPUCoolerService
 		return productConfig;
 	}
 
+	public void addCpuCooler(String sessionId, CPUCoolerContract cpuCooler) {
+		ProductConfig productConfig = getOrCreate(sessionId);
+		if (productConfig.cpuCooler != null) {
+			productConfig.PowerConsumption -=  productConfig.cpuCooler.getPowerConsumption();
+			productConfig.price -= Float.parseFloat(productConfig.cpuCooler.getPrice().replace('$', ' ').trim());
+		}
+		productConfig.cpuCooler = cpuCooler;
+		productConfig.PowerConsumption +=  productConfig.cpuCooler.getPowerConsumption();
+		productConfig.price += Float.parseFloat(productConfig.cpuCooler.getPrice().replace('$', ' ').trim());
 
+		productConfigRepository.persistOrUpdate(productConfig);
+	}
 
 	private static final Logger logger = Logger.getLogger(CPUCoolerService.class);
 
@@ -51,7 +63,7 @@ public class CPUCoolerService
 	CpuCoolerRepository cpuCoolerRepository;
 
 
-	public List<CpuCooler> filterCpus(String sessionId)
+	public List<CpuCooler> filterCpusCoolers(String sessionId)
 	{
 		Model model = new Model("Cpu Compatibility");
 		List<CpuCooler> allCpus = cpuCoolerRepository.listAll();

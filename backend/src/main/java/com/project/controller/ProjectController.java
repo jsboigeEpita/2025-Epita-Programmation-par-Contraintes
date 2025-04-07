@@ -16,11 +16,17 @@ import com.project.controller.contracts.MemoryContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.controller.contracts.VideoCardContract;
+import com.project.repository.CpuCoolerRepository;
+import com.project.repository.entity.CpuCooler;
+import com.project.service.CPUCoolerService;
+import com.project.service.CPUService;
+import com.project.service.MemoryService;
 import com.project.service.MotherboardService;
 import com.project.service.ProjectService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
@@ -41,6 +47,15 @@ public class ProjectController {
     @Inject
     MotherboardService motherboardService;
 
+    @Inject
+    CPUService cpuService;
+
+    @Inject
+    CPUCoolerService cpuCoolerService;
+
+    @Inject
+    MemoryService memoryService;
+
 
     private final Logger logger = Logger.getLogger(ProjectController.class);
 
@@ -57,23 +72,55 @@ public class ProjectController {
         {
             case "motherboard":
                 return Response.ok(motherboardService.filterMotherboard(sessionId)).build();
+            case "cpu":
+                return Response.ok(cpuService.filterCpus(sessionId)).build();
+            case "cpu-cooler":
+                return Response.ok(cpuCoolerService.filterCpusCoolers(sessionId)).build();
+            case "memory":
+                return Response.ok(memoryService.filterRam(sessionId)).build();
         }
         return Response.ok().build();
     }
 
     @POST
-    @Path("{components}")
-    public Response postComponents(@PathParam("components") String component, Object componentContract, @CookieParam("SessionId") String sessionId)
+    @Path("motherboard")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postMotherBoard(MotherboardContract motherboardContract, @CookieParam("SessionId") String sessionId)
     {
-        switch (component)
-        {
-            case "motherboard":
-                MotherboardContract motherboard = (MotherboardContract) componentContract;
-                motherboardService.addMotherboard(sessionId, motherboard);
-                return Response.ok().build();
-        }
+        motherboardService.addMotherboard(sessionId, motherboardContract);
         return Response.ok().build();
     }
+
+
+    @POST
+    @Path("cpu")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postCpu(CPUContract cpuContract, @CookieParam("SessionId") String sessionId)
+    {
+        cpuService.addCpu(sessionId, cpuContract);
+        return Response.ok().build();
+    }
+
+
+    @POST
+    @Path("cpu-cooler")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postCpuCooler(CPUCoolerContract cpuCoolerContract, @CookieParam("SessionId") String sessionId)
+    {
+        cpuCoolerService.addCpuCooler(sessionId, cpuCoolerContract);
+        return Response.ok().build();
+    }
+
+
+    @POST
+    @Path("ram")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postRam(MemoryContract ramContract, @CookieParam("SessionId") String sessionId)
+    {
+        memoryService.addMemory(sessionId, ramContract);
+        return Response.ok().build();
+    }
+
 
     @GET
     @Path("/")

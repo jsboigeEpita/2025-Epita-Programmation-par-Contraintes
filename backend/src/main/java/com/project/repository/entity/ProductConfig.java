@@ -34,7 +34,7 @@ public class ProductConfig extends PanacheMongoEntity {
     public VideoCardContract videoCard;
 
     public int PowerConsumption;
-    public int price;
+    public float price;
 
 
     public ProductConfig() {}

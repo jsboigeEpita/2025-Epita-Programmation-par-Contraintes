@@ -8,6 +8,7 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.IntVar;
 import org.jboss.logging.Logger;
 
+import com.project.controller.contracts.CPUContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.converter.SocketMbToCpu;
@@ -38,6 +39,18 @@ public class CPUService
 		return productConfig;
 	}
 
+	public void addCpu(String sessionId, CPUContract cpu) {
+		ProductConfig productConfig = getOrCreate(sessionId);
+		if (productConfig.cpu != null) {
+			productConfig.PowerConsumption -=  productConfig.cpu.getPowerConsumption();
+			productConfig.price -= Float.parseFloat(productConfig.cpu.getPrice().replace('$', ' ').trim());
+		}
+		productConfig.cpu = cpu;
+		productConfig.PowerConsumption +=  productConfig.cpu.getPowerConsumption();
+		productConfig.price += Float.parseFloat(productConfig.cpu.getPrice().replace('$', ' ').trim());
+
+		productConfigRepository.persistOrUpdate(productConfig);
+	}
 
 
 	private static final Logger logger = Logger.getLogger(CPUService.class);

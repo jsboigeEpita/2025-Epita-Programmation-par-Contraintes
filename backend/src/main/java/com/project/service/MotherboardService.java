@@ -66,15 +66,19 @@ public class MotherboardService {
 	MotherboardsRepository motherboardsRepository;
 
 
+
+
 	public void addMotherboard(String sessionId, MotherboardContract motherboard) {
 		ProductConfig productConfig = getOrCreate(sessionId);
 		if (productConfig.motherboard != null) {
 			productConfig.PowerConsumption -=  productConfig.motherboard.powerConsumption;
+			productConfig.price -= Float.parseFloat(productConfig.motherboard.price.replace('$', ' ').trim());
 		}
 		productConfig.motherboard = motherboard;
 		productConfig.PowerConsumption +=  productConfig.motherboard.powerConsumption;
+		productConfig.price += Float.parseFloat(productConfig.motherboard.price.replace('$', ' ').trim());
 
-		productConfigRepository.persist(productConfig);
+		productConfigRepository.persistOrUpdate(productConfig);
 	}
 
 

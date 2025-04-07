@@ -9,6 +9,8 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
 import org.jboss.logging.Logger;
 
+import com.project.controller.contracts.CPUContract;
+import com.project.controller.contracts.MemoryContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.converter.SockerMbToRam;
 import com.project.repository.ProductConfigRepository;
@@ -36,6 +38,21 @@ public class MemoryService
 		}
 		return productConfig;
 	}
+
+	public void addMemory(String sessionId, MemoryContract ram) {
+		ProductConfig productConfig = getOrCreate(sessionId);
+		if (productConfig.memory != null) {
+			productConfig.PowerConsumption -=  productConfig.memory.getPowerConsumption();
+			productConfig.price -= Float.parseFloat(productConfig.memory.getPrice().replace('$', ' ').trim());
+		}
+		productConfig.memory = ram;
+		productConfig.PowerConsumption +=  productConfig.memory.getPowerConsumption();
+		productConfig.price += Float.parseFloat(productConfig.memory.getPrice().replace('$', ' ').trim());
+
+		productConfigRepository.persistOrUpdate(productConfig);
+	}
+
+
 
 	private static final Logger logger = Logger.getLogger(MemoryService.class);
 
