@@ -1,139 +1,208 @@
 using UnityEngine;
-using Google.OrTools.LinearSolver;
 using Google.OrTools.Sat;
+using System.Collections.Generic;
+using System.Linq;
 using System;
 
 public class OrToolsTest : MonoBehaviour
 {
-    public class VarArraySolutionPrinter : CpSolverSolutionCallback
+    private class AssignedTask : IComparable
     {
-        public VarArraySolutionPrinter(IntVar[] variables)
+        public int jobID;
+        public int taskID;
+        public int start;
+        public int duration;
+
+        public AssignedTask(int jobID, int taskID, int start, int duration)
         {
-            variables_ = variables;
+            this.jobID = jobID;
+            this.taskID = taskID;
+            this.start = start;
+            this.duration = duration;
         }
 
-        public override void OnSolutionCallback()
+        public int CompareTo(object obj)
         {
+            if (obj == null)
+                return 1;
+
+            AssignedTask otherTask = obj as AssignedTask;
+            if (otherTask != null)
             {
-                Console.WriteLine(String.Format("Solution #{0}: time = {1:F2} s", solution_count_, WallTime()));
-                foreach (IntVar v in variables_)
-                {
-                    Console.WriteLine(String.Format("  {0} = {1}", v.ToString(), Value(v)));
-                }
-                solution_count_++;
-            }
-        }
-
-        public int SolutionCount()
-        {
-            return solution_count_;
-        }
-
-        private int solution_count_;
-        private IntVar[] variables_;
-    }
-
-    void Start()
-    {
-        /*CpModel model = new CpModel();
-
-        Solver solver = Solver.CreateSolver("GLOP");
-        if (solver is null)
-        {
-            Debug.Log("Could not create solver GLOP");
-            return;
-        }
-
-        // Create the variables x and y.
-        Variable x = solver.MakeNumVar(0.0, 1.0, "x");
-        Variable y = solver.MakeNumVar(0.0, 2.0, "y");
-
-        Debug.Log("Number of variables = " + solver.NumVariables());
-
-        // Create a linear constraint, x + y <= 2.
-        Google.OrTools.LinearSolver.Constraint constraint = solver.MakeConstraint(double.NegativeInfinity, 2.0, "constraint");
-        constraint.SetCoefficient(x, 1);
-        constraint.SetCoefficient(y, 1);
-
-        Debug.Log("Number of constraints = " + solver.NumConstraints());
-
-        // Create the objective function, 3 * x + y.
-        Objective objective = solver.Objective();
-        objective.SetCoefficient(x, 3);
-        objective.SetCoefficient(y, 1);
-        objective.SetMaximization();
-
-        Debug.Log("Solving with " + solver.ToString());
-        Solver.ResultStatus resultStatus = solver.Solve();
-        Debug.Log("Status: " + resultStatus);
-        if (resultStatus != Solver.ResultStatus.OPTIMAL)
-        {
-            Debug.Log("The problem does not have an optimal solution!");
-            if (resultStatus == Solver.ResultStatus.FEASIBLE)
-            {
-                Debug.Log("A potentially suboptimal solution was found");
+                if (this.start != otherTask.start)
+                    return this.start.CompareTo(otherTask.start);
+                else
+                    return this.duration.CompareTo(otherTask.duration);
             }
             else
+                throw new ArgumentException("Object is not a Temperature");
+        }
+    }
+
+    public void Start()
+    {
+        var allJobs =
+            new[] {
+                new[] {
+                    // job0
+                    new { machine = 0, duration = 3 }, // task0
+                    new { machine = 1, duration = 2 }, // task1
+                    new { machine = 2, duration = 2 }, // task2
+                }
+                    .ToList(),
+                new[] {
+                    // job1
+                    new { machine = 0, duration = 2 }, // task0
+                    new { machine = 2, duration = 1 }, // task1
+                    new { machine = 1, duration = 4 }, // task2
+                }
+                    .ToList(),
+                new[] {
+                    // job2
+                    new { machine = 1, duration = 4 }, // task0
+                    new { machine = 2, duration = 3 }, // task1
+                }
+                    .ToList(),
+            }
+                .ToList();
+
+        int numMachines = 0;
+        foreach (var job in allJobs)
+        {
+            foreach (var task in job)
             {
-                Debug.Log("The solver could not solve the problem.");
-                return;
+                numMachines = Math.Max(numMachines, 1 + task.machine);
             }
         }
+        int[] allMachines = Enumerable.Range(0, numMachines).ToArray();
 
-        Debug.Log("Solution:");
-        Debug.Log("Objective value = " + solver.Objective().Value());
-        Debug.Log("x = " + x.SolutionValue());
-        Debug.Log("y = " + y.SolutionValue());*//*
+        // Computes horizon dynamically as the sum of all durations.
+        int horizon = 0;
+        foreach (var job in allJobs)
+        {
+            foreach (var task in job)
+            {
+                horizon += task.duration;
+            }
+        }
 
         // Creates the model.
         CpModel model = new CpModel();
 
-        // Creates the variables.
-        int num_vals = 3;
+        Dictionary<Tuple<int, int>, Tuple<IntVar, IntVar, IntervalVar>> allTasks =
+            new Dictionary<Tuple<int, int>, Tuple<IntVar, IntVar, IntervalVar>>(); // (start, end, duration)
+        Dictionary<int, List<IntervalVar>> machineToIntervals = new Dictionary<int, List<IntervalVar>>();
+        for (int jobID = 0; jobID < allJobs.Count(); ++jobID)
+        {
+            var job = allJobs[jobID];
+            for (int taskID = 0; taskID < job.Count(); ++taskID)
+            {
+                var task = job[taskID];
+                String suffix = $"_{jobID}_{taskID}";
+                IntVar start = model.NewIntVar(0, horizon, "start" + suffix);
+                IntVar end = model.NewIntVar(0, horizon, "end" + suffix);
+                IntervalVar interval = model.NewIntervalVar(start, task.duration, end, "interval" + suffix);
+                var key = Tuple.Create(jobID, taskID);
+                allTasks[key] = Tuple.Create(start, end, interval);
+                if (!machineToIntervals.ContainsKey(task.machine))
+                {
+                    machineToIntervals.Add(task.machine, new List<IntervalVar>());
+                }
+                machineToIntervals[task.machine].Add(interval);
+            }
+        }
 
-        IntVar x = model.NewIntVar(0, num_vals - 1, "x");
-        IntVar y = model.NewIntVar(0, num_vals - 1, "y");
-        IntVar z = model.NewIntVar(0, num_vals - 1, "z");
+        // Create and add disjunctive constraints.
+        foreach (int machine in allMachines)
+        {
+            model.AddNoOverlap(machineToIntervals[machine]);
+        }
 
-        // Creates the constraints.
-        model.Add(x != y);
+        // Precedences inside a job.
+        for (int jobID = 0; jobID < allJobs.Count(); ++jobID)
+        {
+            var job = allJobs[jobID];
+            for (int taskID = 0; taskID < job.Count() - 1; ++taskID)
+            {
+                var key = Tuple.Create(jobID, taskID);
+                var nextKey = Tuple.Create(jobID, taskID + 1);
+                model.Add(allTasks[nextKey].Item1 >= allTasks[key].Item2);
+            }
+        }
 
-        // Creates a solver and solves the model.
+        // Makespan objective.
+        IntVar objVar = model.NewIntVar(0, horizon, "makespan");
+
+        List<IntVar> ends = new List<IntVar>();
+        for (int jobID = 0; jobID < allJobs.Count(); ++jobID)
+        {
+            var job = allJobs[jobID];
+            var key = Tuple.Create(jobID, job.Count() - 1);
+            ends.Add(allTasks[key].Item2);
+        }
+        model.AddMaxEquality(objVar, ends);
+        model.Minimize(objVar);
+
+        // Solve
         CpSolver solver = new CpSolver();
         CpSolverStatus status = solver.Solve(model);
+        Debug.Log($"Solve status: {status}");
 
         if (status == CpSolverStatus.Optimal || status == CpSolverStatus.Feasible)
         {
-            Debug.Log("x = " + solver.Value(x));
-            Debug.Log("y = " + solver.Value(y));
-            Debug.Log("z = " + solver.Value(z));
+            Debug.Log("Solution:");
+
+            Dictionary<int, List<AssignedTask>> assignedJobs = new Dictionary<int, List<AssignedTask>>();
+            for (int jobID = 0; jobID < allJobs.Count(); ++jobID)
+            {
+                var job = allJobs[jobID];
+                for (int taskID = 0; taskID < job.Count(); ++taskID)
+                {
+                    var task = job[taskID];
+                    var key = Tuple.Create(jobID, taskID);
+                    int start = (int)solver.Value(allTasks[key].Item1);
+                    if (!assignedJobs.ContainsKey(task.machine))
+                    {
+                        assignedJobs.Add(task.machine, new List<AssignedTask>());
+                    }
+                    assignedJobs[task.machine].Add(new AssignedTask(jobID, taskID, start, task.duration));
+                }
+            }
+
+            // Create per machine output lines.
+            String output = "";
+            foreach (int machine in allMachines)
+            {
+                // Sort by starting time.
+                assignedJobs[machine].Sort();
+                String solLineTasks = $"Machine {machine}: ";
+                String solLine = "           ";
+
+                foreach (var assignedTask in assignedJobs[machine])
+                {
+                    String name = $"job_{assignedTask.jobID}_task_{assignedTask.taskID}";
+                    // Add spaces to output to align columns.
+                    solLineTasks += $"{name,-15}";
+
+                    String solTmp = $"[{assignedTask.start},{assignedTask.start + assignedTask.duration}]";
+                    // Add spaces to output to align columns.
+                    solLine += $"{solTmp,-15}";
+                }
+                output += solLineTasks + "\n";
+                output += solLine + "\n";
+            }
+            // Finally print the solution found.
+            Debug.Log($"Optimal Schedule Length: {solver.ObjectiveValue}");
+            Debug.Log($"\n{output}");
         }
         else
         {
             Debug.Log("No solution found.");
-        }*/
+        }
 
-        // Creates the model.
-        CpModel model = new CpModel();
-
-        // Creates the variables.
-        int num_vals = 3;
-
-        IntVar x = model.NewIntVar(0, num_vals - 1, "x");
-        IntVar y = model.NewIntVar(0, num_vals - 1, "y");
-        IntVar z = model.NewIntVar(0, num_vals - 1, "z");
-
-        // Adds a different constraint.
-        model.Add(x != y);
-
-        // Creates a solver and solves the model.
-        CpSolver solver = new CpSolver();
-        VarArraySolutionPrinter cb = new VarArraySolutionPrinter(new IntVar[] { x, y, z });
-        // Search for all solutions.
-        solver.StringParameters = "enumerate_all_solutions:true";
-        // And solve.
-        solver.SolveWithSolutionCallback(model, cb);
-
-        Debug.Log($"Number of solutions found: {cb.SolutionCount()}");
+        Debug.Log("Statistics");
+        Debug.Log($"  conflicts: {solver.NumConflicts()}");
+        Debug.Log($"  branches : {solver.NumBranches()}");
+        Debug.Log($"  wall time: {solver.WallTime()}s");
     }
 }
