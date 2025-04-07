@@ -2,8 +2,18 @@ using UnityEngine;
 
 public class RobotManager : MonoBehaviour
 {
+    [Header("Setup")]
+    [SerializeField]
+    private Colors colors;
+
     [Header("Settings")]
     public Transform storeTransform;
+    [SerializeField]
+    private float emptyMass = 3f;
+    [SerializeField]
+    private float loadedMass = 10f;
+    [SerializeField]
+    private bool colorRandomly = true;
 
     [Header("Wheel Colliders")]
     [SerializeField]
@@ -26,6 +36,8 @@ public class RobotManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField]
     private bool drawDirection = false;
+    [SerializeField]
+    private bool removeItem = false;
 
     [HideInInspector]
     public Vector2 control;
@@ -33,7 +45,20 @@ public class RobotManager : MonoBehaviour
     [Header("Monitors")]
     public Item currentItem;
     [SerializeField]
-    public Vector3Int gridPosition { get { return Wharehouse.convertPos2Grid(transform.position); } }
+    public Vector3Int gridPosition { get { return Warehouse.convertPos2Grid(transform.position); } }
+
+    private Rigidbody robotRigidbody;
+
+    private void Awake()
+    {
+        robotRigidbody = GetComponent<Rigidbody>();
+
+        robotRigidbody.automaticCenterOfMass = false;
+        robotRigidbody.centerOfMass = Vector3.zero;
+
+        if (colorRandomly)
+            this.gameObject.GetComponentInChildren<MeshRenderer>().sharedMaterial = colors.colors[Random.Range(0, colors.colors.Count)];
+    }
 
     private void FixedUpdate()
     {
@@ -48,6 +73,11 @@ public class RobotManager : MonoBehaviour
 
         UpdateWheelPose(leftWheelCollider, leftWheelMesh);
         UpdateWheelPose(rightWheelCollider, rightWheelMesh);
+
+        if (currentItem == null)
+            robotRigidbody.mass = emptyMass;
+        else
+            robotRigidbody.mass = loadedMass;
     }
 
     private void Update()
@@ -55,6 +85,13 @@ public class RobotManager : MonoBehaviour
         if (drawDirection)
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * control.x + Vector3.right * control.y) * 10, Color.green);
+        }
+
+        if (removeItem)
+        {
+            Destroy(currentItem.gameObject);
+            currentItem = null;
+            removeItem = false;
         }
     }
 

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wharehouse : MonoBehaviour
+public class Warehouse : MonoBehaviour
 {
-    public static int gridScale = 5;
+    public static int gridScale = 10;
 
     public static Vector3Int convertPos2Grid(Vector3 position)
     {
@@ -17,47 +17,19 @@ public class Wharehouse : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField]
-    private bool enableInstantiation = true;
-    [SerializeField]
     private bool enableGridDebug = true;
 
-    [Header("Spawners")]
+    [Header("Situation")]
     [SerializeField]
-    private Transform sourceSpawner;
+    private List<GameObject> sources;
     [SerializeField]
-    private Transform robotSpawner;
+    private List<GameObject> robots;
     [SerializeField]
-    private Transform shelfSpawner;
+    private List<GameObject> shelves;
     [SerializeField]
-    private Transform packerSpawner;
+    private List<GameObject> packers;
     [SerializeField]
-    private Transform outputSpawner;
-
-    [Header("Prefabs")]
-    [SerializeField]
-    private GameObject sourceGameObject;
-    [SerializeField]
-    private GameObject robotGameObject;
-    [SerializeField]
-    private GameObject shelfGameObject;
-    [SerializeField]
-    private GameObject packerGameObject;
-    [SerializeField]
-    private GameObject outputGameObject;
-
-    [Header("Placement Settings")]
-    [SerializeField]
-    private float spacing;
-    [SerializeField]
-    private Vector2Int sourceDispatch;
-    [SerializeField]
-    private Vector2Int robotDispatch;
-    [SerializeField]
-    private Vector2Int shelfDispatch;
-    [SerializeField]
-    private Vector2Int packerDispatch;
-    [SerializeField]
-    private Vector2Int outputDispatch;
+    private List<GameObject> outputs;
 
     [Header("Grid Space Settings")]
     [SerializeField]
@@ -86,13 +58,10 @@ public class Wharehouse : MonoBehaviour
     private Vector2Int outputVolumeOffset;
 
 
-    private Transform[] spawners;
-    private GameObject[] prefabs;
-    private Vector2Int[] dispatches;
     private Vector2Int[] volumes;
     private Vector2Int[] volumeOffsets;
 
-    public List<GameObject>[] pointsOfInterest;
+    private List<GameObject>[] pointsOfInterest;
 
     private Vector2Int gridSize;
     private bool[][] grid;
@@ -100,29 +69,13 @@ public class Wharehouse : MonoBehaviour
 
     public void Awake()
     {
-        spawners = new Transform[]
+        pointsOfInterest = new List<GameObject>[]
         {
-            sourceSpawner,
-            robotSpawner,
-            shelfSpawner,
-            packerSpawner,
-            outputSpawner,
-        };
-
-        prefabs = new GameObject[] {
-            sourceGameObject,
-            robotGameObject,
-            shelfGameObject,
-            packerGameObject,
-            outputGameObject,
-        };
-
-        dispatches = new Vector2Int[] { 
-            sourceDispatch,
-            robotDispatch,
-            shelfDispatch,
-            packerDispatch,
-            outputDispatch,
+            sources,
+            robots,
+            shelves,
+            packers,
+            outputs,
         };
 
         volumes = new Vector2Int[] {
@@ -153,16 +106,19 @@ public class Wharehouse : MonoBehaviour
                 grid[x][y] = false;
                 for (int i = 0; i < volumes.Length; i++)
                 {
-                    Vector3Int gridPos = convertPos2Grid(spawners[i].position);
-                    Vector2Int volume = volumes[i] - Vector2Int.one;
-
-                    for (int vx = gridPos.x - volume.x + volumeOffsets[i].x; vx < gridPos.x + volume.x + volumeOffsets[i].x; vx++)
+                    foreach (GameObject p in pointsOfInterest[i])
                     {
-                        for (int vy = gridPos.z - volume.y + volumeOffsets[i].y; vy < gridPos.z + volume.y + volumeOffsets[i].y; vy++)
+                        Vector3Int gridPos = convertPos2Grid(p.transform.position);
+                        Vector2Int volume = volumes[i] - Vector2Int.one;
+
+                        for (int vx = gridPos.x - volume.x + volumeOffsets[i].x; vx < gridPos.x + volume.x + volumeOffsets[i].x; vx++)
                         {
-                            if (vx == x && vy == y)
+                            for (int vy = gridPos.z - volume.y + volumeOffsets[i].y; vy < gridPos.z + volume.y + volumeOffsets[i].y; vy++)
                             {
-                                grid[x][y] = true;
+                                if (vx == x && vy == y)
+                                {
+                                    grid[x][y] = true;
+                                }
                             }
                         }
                     }
@@ -173,22 +129,6 @@ public class Wharehouse : MonoBehaviour
 
     public void Start()
     {
-        if (enableInstantiation)
-        {
-            for (int i = 0; i < prefabs.Length; i++)
-            {
-                for (int x = 0; x < dispatches[i].x; x++)
-                {
-                    for (int y = 0; y < dispatches[i].y; y++)
-                    {
-                        GameObject instanciated = GameObject.Instantiate(prefabs[i], spawners[i]);
-                        instanciated.transform.localPosition = new Vector3(x, 0, y) * spacing;
-                        pointsOfInterest[i].Add(instanciated);
-                    }
-                }
-            }
-        }
-
         if (enableGridDebug)
         {
             for (int x = 0; x < gridSize.x; x++)

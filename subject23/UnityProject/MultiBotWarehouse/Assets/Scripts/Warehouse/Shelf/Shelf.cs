@@ -1,11 +1,4 @@
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class Shelf : MonoBehaviour
 {
@@ -13,14 +6,16 @@ public class Shelf : MonoBehaviour
 
     private Vector3 storePosition;
     private string itemName;
+    private float furnitureScale;
 
-    public void Initialize(Vector3 storePosition, string itemName)
+    public void Initialize(Vector3 storePosition, string itemName, float furnitureScale)
     {
         this.storePosition = storePosition;
         this.itemName = itemName;
+        this.furnitureScale = furnitureScale;
     }
 
-    public void takeFromRobot(RobotManager robotManager)
+    public void TakeFromRobot(RobotManager robotManager)
     {
         if (!robotManager.currentItem.gameObject.name.Contains(itemName))
         {
@@ -32,15 +27,15 @@ public class Shelf : MonoBehaviour
         robotManager.currentItem = null;
 
         currentItem.transform.SetParent(this.transform);
-        currentItem.transform.localPosition = storePosition + Vector3.up * currentItem.itemCollider.bounds.size.y / 2;
+        currentItem.transform.localPosition = storePosition;
     }
 
-    public void putOnRobot(RobotManager robotManager)
+    public void PutOnRobot(RobotManager robotManager)
     {
         robotManager.currentItem = currentItem;
         currentItem = null;
 
         robotManager.currentItem.transform.SetParent(robotManager.storeTransform);
-        robotManager.currentItem.transform.localPosition = Vector3.up * robotManager.currentItem.itemCollider.bounds.size.y / 2;
+        robotManager.currentItem.transform.localPosition = Vector3.zero;
     }
 }

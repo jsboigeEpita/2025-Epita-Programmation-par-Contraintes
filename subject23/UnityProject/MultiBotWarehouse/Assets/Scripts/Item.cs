@@ -2,17 +2,11 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public enum Type
-    {
-        Wood
-    }
-
-    public Type type;
-    public Collider itemCollider;
+    public BoxCollider itemCollider;
 
     public void Awake()
     {
-        itemCollider = GetComponent<Collider>();
+        itemCollider = GetComponent<BoxCollider>();
         if (itemCollider == null)
         {
             Debug.LogError(this.name + " has no collider.");

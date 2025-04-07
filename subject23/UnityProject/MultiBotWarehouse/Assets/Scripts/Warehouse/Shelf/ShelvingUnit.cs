@@ -6,6 +6,14 @@ using static RuntimeStructure;
 
 public class ShelvingUnit : MonoBehaviour
 {
+    [Header("Setup")]
+    [SerializeField]
+    private GameObject supportGameObject;
+    [SerializeField]
+    private Material structureMaterial;
+    [SerializeField]
+    private Material shelfMaterial;
+
     [Header("Settings")]
     [SerializeField]
     private int levelCount = 4;
@@ -23,14 +31,9 @@ public class ShelvingUnit : MonoBehaviour
     private float speed = 2f;
 
     [Header("References")]
+    public GameObject itemGameObject;
     [SerializeField]
-    private GameObject itemGameObject;
-    [SerializeField]
-    private GameObject supportGameObject;
-    [SerializeField]
-    private Material structureMaterial;
-    [SerializeField]
-    private Material shelfMaterial;
+    private float itemScale = 2f;
 
     [Header("Buttons")]
     [SerializeField]
@@ -39,12 +42,13 @@ public class ShelvingUnit : MonoBehaviour
     public List<Shelf> shelves { get; private set; }
     public Shelf currentShelf { get { return shelves[(shelves.Count - currentShelfOffset) % shelves.Count]; } }
     public List<Item> items { get { return shelves.Select(shelf => shelf.currentItem).ToList(); } }
+    public Transform deliveryPoint;
 
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
 
-    private Collider itemCollider;
+    private BoxCollider itemCollider;
 
     private List<Vector3> platformMaxXPositions;
     private List<Vector3> platformMinXPositions;
@@ -67,7 +71,7 @@ public class ShelvingUnit : MonoBehaviour
         if (meshCollider == null)
             Debug.LogError(this.name + ": meshCollider is null.");
 
-        itemCollider = itemGameObject.GetComponent<Collider>();
+        itemCollider = itemGameObject.GetComponent<BoxCollider>();
         if (itemCollider == null)
             Debug.LogError(this.name + "/" + itemCollider.name + ": itemCollider is null.");
         #endregion
@@ -78,7 +82,7 @@ public class ShelvingUnit : MonoBehaviour
 
     private void GenerateMesh()
     {
-        Vector3 itemBounds = itemCollider.bounds.size;
+        Vector3 itemBounds = itemCollider.size * itemScale;
 
         Mesh mesh = new Mesh();
 
@@ -214,12 +218,14 @@ public class ShelvingUnit : MonoBehaviour
         #region Delivery Point
         BoxCollider boxTrigger = this.gameObject.AddComponent<BoxCollider>();
         boxTrigger.isTrigger = true;
-        boxTrigger.center = new Vector3(0, (itemCollider.bounds.size.y + heightSpacing) / 2, maxZ + spacing * 4);
-        boxTrigger.size = new Vector3(itemCollider.bounds.size.y + spacing, itemCollider.bounds.size.y + heightSpacing, itemCollider.bounds.size.y + spacing);
+        boxTrigger.center = new Vector3(0, (itemBounds.y + heightSpacing) / 2, maxZ + spacing * 4);
+        boxTrigger.size = new Vector3(itemBounds.y + spacing, itemBounds.y + heightSpacing, itemBounds.y + spacing);
 
         GameObject support = GameObject.Instantiate(supportGameObject);
         support.transform.SetParent(this.transform);
-        support.transform.position = new Vector3(0, 0, maxZ + spacing * 4);
+        support.transform.localPosition = new Vector3(0, 0, maxZ + spacing * 4);
+
+        deliveryPoint = support.transform;
         #endregion
 
         mesh.vertices = vertices.ToArray();
@@ -306,37 +312,8 @@ public class ShelvingUnit : MonoBehaviour
         boxCollider.size = new Vector3(shapeX.Max() - shapeX.Min(), shapeY.Max() - shapeY.Min(), shapeZ.Max() - shapeZ.Min());
 
         Shelf shelf = child.AddComponent<Shelf>();
-        shelf.Initialize(Vector3.up * platformThickness / 2 - Vector3.right * (shapeX.Max() - shapeX.Min()) / 2, itemGameObject.name);
+        shelf.Initialize(Vector3.up * platformThickness / 2 - Vector3.right * (shapeX.Max() - shapeX.Min()) / 2, itemGameObject.name, itemScale);
 
         shelves.Add(shelf);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Robot")
-        {
-            RobotManager robotManager = other.gameObject.GetComponentInParent<RobotManager>();
-
-            if (robotManager.currentItem == null)
-            {
-                if (currentShelf.currentItem == null)
-                {
-                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " without any objects.");
-                    return;
-                }
-
-                currentShelf.putOnRobot(robotManager);
-            }
-            else if (robotManager.currentItem != null)
-            {
-                if (currentShelf.currentItem != null)
-                {
-                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an object but an object was already here.");
-                    return;
-                }
-
-                currentShelf.takeFromRobot(robotManager);
-            }
-        }
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5080801955719393521}
   - component: {fileID: 2998887012084893898}
   - component: {fileID: 1664321055795291396}
+  - component: {fileID: 4769693209368097100}
   - component: {fileID: 8239818643648753151}
   m_Layer: 0
   m_Name: Shelf
@@ -138,6 +139,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4769693209368097100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9138200529292452579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b39d3ca6ecd4394795be32014769465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  furnitures: {fileID: 11400000, guid: cda07a7c9251a3545a57bd033d3aa866, type: 2}
+  furnitureIndex: 0
+  furniturePrefab: {fileID: 0}
 --- !u!114 &8239818643648753151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,15 +166,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbff1e602ac7a554f907d416f87f79a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelCount: 4
-  spacing: 1
-  heightSpacing: 3
-  pillarSize: 0.2
-  platformThickness: 0.1
-  spaceFromGround: 1
-  speed: 2
-  itemGameObject: {fileID: 0}
   supportGameObject: {fileID: 9188002757923775012, guid: b58603dacc1dcd842b94a1d3a9c6029f, type: 3}
   structureMaterial: {fileID: 2100000, guid: 7e8abf5abab0c3541939e7c954fbfe73, type: 2}
   shelfMaterial: {fileID: 2100000, guid: 074acf99813e7ac4397a8d0e89c97e52, type: 2}
+  levelCount: 4
+  spacing: 3
+  heightSpacing: 4
+  pillarSize: 0.4
+  platformThickness: 0.2
+  spaceFromGround: 1
+  speed: 2
+  itemGameObject: {fileID: 0}
+  itemScale: 2.25
   rotateButton: 0
+  deliveryPoint: {fileID: 0}
