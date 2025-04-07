@@ -16,6 +16,7 @@ import com.project.controller.contracts.MemoryContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.controller.contracts.VideoCardContract;
+import com.project.service.MotherboardService;
 import com.project.service.ProjectService;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -38,7 +39,7 @@ import org.jboss.logging.Logger;
 public class ProjectController {
 
     @Inject
-    ProjectService projectService;
+    MotherboardService motherboardService;
 
 
     private final Logger logger = Logger.getLogger(ProjectController.class);
@@ -55,19 +56,20 @@ public class ProjectController {
         switch (component)
         {
             case "motherboard":
-                return Response.ok(projectService.filterMotherboard(sessionId)).build();
+                return Response.ok(motherboardService.filterMotherboard(sessionId)).build();
         }
         return Response.ok().build();
     }
 
     @POST
     @Path("{components}")
-    public Response postComponents(@PathParam("components") String component, Object componentContract)
+    public Response postComponents(@PathParam("components") String component, Object componentContract, @CookieParam("SessionId") String sessionId)
     {
         switch (component)
         {
             case "motherboard":
                 MotherboardContract motherboard = (MotherboardContract) componentContract;
+                motherboardService.addMotherboard(sessionId, motherboard);
                 return Response.ok().build();
         }
         return Response.ok().build();

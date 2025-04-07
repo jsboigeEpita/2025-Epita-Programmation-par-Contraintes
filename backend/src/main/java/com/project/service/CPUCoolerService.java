@@ -11,6 +11,7 @@ import org.jboss.logging.Logger;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.converter.SocketMbToCpu;
+import com.project.repository.CpuCoolerRepository;
 import com.project.repository.CpuRepository;
 import com.project.repository.ProductConfigRepository;
 import com.project.repository.entity.Cpu;
@@ -47,7 +48,7 @@ public class CPUCoolerService
 	SocketMbToCpu mbCpuConverter;
 	
 	@Inject
-	CpuCooler cpuCoolerRepository;
+	CpuCoolerRepository cpuCoolerRepository;
 
 
 	public List<CpuCooler> filterCpus(String sessionId)

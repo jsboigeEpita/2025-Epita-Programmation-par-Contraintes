@@ -13,7 +13,7 @@ import com.project.controller.contracts.VideoCardContract;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 
-@MongoEntity(collection = "product-config")
+@MongoEntity(collection = "product_config")
 public class ProductConfig extends PanacheMongoEntity {
 
     public ObjectId id;

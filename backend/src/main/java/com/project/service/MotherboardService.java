@@ -15,6 +15,7 @@ import org.chocosolver.solver.variables.IntVar;
 import com.project.controller.contracts.CPUContract;
 import com.project.controller.contracts.CaseContract;
 import com.project.controller.contracts.MemoryContract;
+import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.converter.SockerMbToRam;
 import com.project.converter.SocketMbToCpu;
@@ -64,6 +65,21 @@ public class MotherboardService {
 	@Inject
 	MotherboardsRepository motherboardsRepository;
 
+
+	public void addMotherboard(String sessionId, MotherboardContract motherboard) {
+		ProductConfig productConfig = getOrCreate(sessionId);
+		if (productConfig.motherboard != null) {
+			productConfig.PowerConsumption -=  productConfig.motherboard.powerConsumption;
+		}
+		productConfig.motherboard = motherboard;
+		productConfig.PowerConsumption +=  productConfig.motherboard.powerConsumption;
+
+		productConfigRepository.persist(productConfig);
+	}
+
+
+
+
 	public List<Motherboard> filterMotherboard(String sessionId) {
         
     	Model model = new Model("Motherboard Compatibility Check");
@@ -76,6 +92,10 @@ public class MotherboardService {
 
 		CPUContract cpu = productConfig.cpu;
 		MemoryContract ram = productConfig.memory;
+
+
+		logger.info("CPU: " + cpu);
+		logger.info("RAM: " + ram);
 
 		int ramSlots = 0;
 		int ramQuantity = 0;
@@ -105,7 +125,6 @@ public class MotherboardService {
 
 
         IntVar[] motherboardVars = new IntVar[allMotherboards.size()];
-        logger.info("Cpu: " + cpu.getMicroarchitecture());
 
         for (int i = 0; i < allMotherboards.size(); i++) {
 			Motherboard mb = allMotherboards.get(i);
