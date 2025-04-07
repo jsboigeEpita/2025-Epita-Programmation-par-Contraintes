@@ -2,6 +2,9 @@ const fs = require('fs');
 
 // var cases = cat("/docker-entrypoint-initdb.d/case_data.json");
 
+db = db.getSiblingDB('ppc');
+
+
 db.cases.insertMany(JSON.parse(fs.readFileSync("/docker-entrypoint-initdb.d/case_data.json")));
 db.cpus.insertMany(JSON.parse(fs.readFileSync("/docker-entrypoint-initdb.d/cpu_data.json")));
 db.cpu_coolers.insertMany(JSON.parse(fs.readFileSync("/docker-entrypoint-initdb.d/cpu-cooler_data.json")));
