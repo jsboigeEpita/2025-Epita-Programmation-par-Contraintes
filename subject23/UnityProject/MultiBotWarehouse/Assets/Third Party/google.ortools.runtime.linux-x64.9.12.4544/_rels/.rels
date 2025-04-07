@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/Google.OrTools.runtime.linux-x64.nuspec" Id="RB74CE1778B8339D0" />
+  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/d190a24b8c8242019da754be680a40ca.psmdcp" Id="R1EDC0FFEAAF2AF4E" />
+</Relationships>
