@@ -30,6 +30,7 @@ public class Cpu extends PanacheMongoEntity {
 
     @BsonProperty("Integrated Graphics")
     public String integratedGraphics;
+    
     @BsonProperty("Power Consumption")
     public int powerConsumption;
 }
