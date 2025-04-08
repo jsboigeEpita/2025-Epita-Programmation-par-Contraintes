@@ -271,8 +271,11 @@ def cli():
                     
                     # Add system message at the beginning
                     messages = [
-                        {"role": "system", "content": "You are a helpful assistant specializing in satellite observations and Earth monitoring. Provide informative responses about satellite capabilities, Earth observation, and related topics. Keep your responses conversational and engaging."}
+                        {"role": "system", "content": "You are a helpful assistant specializing in satellite observations and Earth monitoring. Provide informative responses about satellite capabilities, Earth observation, and related topics. Keep your responses conversational and engaging. Adapt the language of you ranszer depending on the language of the question."},
+                        {"role": "user", "content": user_text}
                     ]
+
+
                     
                     response = llm.chat.completions.create(
                         model=model,
