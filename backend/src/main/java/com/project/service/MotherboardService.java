@@ -1,10 +1,7 @@
 package com.project.service;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
@@ -21,12 +18,10 @@ import com.project.converter.SockerMbToRam;
 import com.project.converter.SocketMbToCpu;
 import com.project.repository.MotherboardsRepository;
 import com.project.repository.ProductConfigRepository;
-import com.project.repository.entity.Cpu;
 import com.project.repository.entity.Motherboard;
 import com.project.repository.entity.ProductConfig;
 
 import org.jboss.logging.Logger;
-import org.kie.internal.runtime.manager.context.CaseContext;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

@@ -2,15 +2,12 @@ package com.project.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.IntVar;
 import org.jboss.logging.Logger;
 
 
-import com.project.controller.contracts.CPUContract;
 import com.project.controller.contracts.MemoryContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.converter.SockerMbToRam;

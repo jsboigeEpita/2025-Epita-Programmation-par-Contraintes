@@ -15,7 +15,6 @@ import com.project.converter.SocketMbToCpu;
 import com.project.repository.CpuRepository;
 import com.project.repository.ProductConfigRepository;
 import com.project.repository.entity.Cpu;
-import com.project.repository.entity.Motherboard;
 import com.project.repository.entity.ProductConfig;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -65,6 +64,7 @@ public class CPUService
 
 	public List<Cpu> filterCpus(String sessionId)
 	{
+		logger.info("SessionId: " + sessionId);
 		Model model = new Model("Cpu Compatibility");
 		List<Cpu> allCpus = cpuRepository.listAll();
 		List<Cpu> compatibleMotherboards = new ArrayList<>();

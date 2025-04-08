@@ -3,7 +3,6 @@ package com.project.repository.entity;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
@@ -37,6 +36,14 @@ public class CpuCooler extends PanacheMongoEntity {
         this.radiatorSize = radiatorSize;
         this.powerConsumption = powerConsumption;
     }
+
+    public ObjectId getId() {
+        return id;
+    }
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
 
     public String getName() {
         return name;

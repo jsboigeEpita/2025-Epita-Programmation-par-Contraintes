@@ -1,6 +1,5 @@
 package com.project.repository;
 
-import com.project.repository.entity.Motherboard;
 import com.project.repository.entity.ProductConfig;
 
 import io.quarkus.mongodb.panache.PanacheMongoRepository;

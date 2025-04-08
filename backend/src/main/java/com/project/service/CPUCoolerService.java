@@ -9,13 +9,10 @@ import org.chocosolver.solver.variables.IntVar;
 import org.jboss.logging.Logger;
 
 import com.project.controller.contracts.CPUCoolerContract;
-import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
 import com.project.converter.SocketMbToCpu;
 import com.project.repository.CpuCoolerRepository;
-import com.project.repository.CpuRepository;
 import com.project.repository.ProductConfigRepository;
-import com.project.repository.entity.Cpu;
 import com.project.repository.entity.CpuCooler;
 import com.project.repository.entity.ProductConfig;
 
@@ -65,6 +62,9 @@ public class CPUCoolerService
 
 	public List<CpuCooler> filterCpusCoolers(String sessionId)
 	{
+
+		logger.info("SessionId: " + sessionId);
+
 		Model model = new Model("Cpu Compatibility");
 		List<CpuCooler> allCpus = cpuCoolerRepository.listAll();
 		List<CpuCooler> compatibleCpuCoolers = new ArrayList<>();
