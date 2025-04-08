@@ -56,15 +56,17 @@ def solve_sudoku_constraint(grid):
     
     # Résolution du problème
     solution = problem.getSolution()
-    
-    if solution is None:
-        return None
+    return solution
+
+    #if solution is None:
+    #    return None
+
     
     # Reconstruction de la grille résolue
-    solved_grid = [[0 for _ in range(9)] for _ in range(9)]
-    for i in range(9):
-        for j in range(9):
-            solved_grid[i][j] = solution[f'cell_{i}_{j}']
-    
-    return solved_grid
+    #solved_grid = [[0 for _ in range(9)] for _ in range(9)]
+    #for i in range(9):
+    #    for j in range(9):
+    #        solved_grid[i][j] = solution[f'cell_{i}_{j}']
+    #
+    #return solved_grid
 
