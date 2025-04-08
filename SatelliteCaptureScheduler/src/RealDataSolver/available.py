@@ -96,7 +96,7 @@ def all_availability(begin, end, satellites, tasks, min_elevation_angle=10, time
         for i, rotated_task_point in enumerate(rotated_task_points):
             currentTime = begin
             while currentTime < end:
-                available = check_satellite_see_point(currentTime, end, satellite, tasks, min_elevation_angle, time_step)
+                available = check_satellite_see_point(currentTime, end, satellite, tasks, i, min_elevation_angle, time_step)
                 if available[0]:
                     availability.append(available[1])
                     if labels[i] in availabilityDico:

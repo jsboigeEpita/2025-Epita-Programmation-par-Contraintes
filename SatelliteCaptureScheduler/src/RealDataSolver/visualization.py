@@ -37,7 +37,7 @@ def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, labels=["
         t_full_orbit = np.linspace(0, 2 * np.pi * np.sqrt(A[i]**3 / MU), 50)
         trajectories.append(np.array([new_satellite.position_at(t)[:3] for t in t_full_orbit]))
     
-    all_availability(0, 86400, satellites, satellite_imaging)
+    all_availability(0, 8640, satellites, satellite_imaging)
     
     def update_frame(frame):
         ax.clear()

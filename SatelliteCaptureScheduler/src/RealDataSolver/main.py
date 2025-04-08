@@ -30,4 +30,4 @@ LABELS = [
 ]
 
 
-animate_orbit(speed=50, number_of_satellites=2, number_of_tasks=30, labels=LABELS, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
+animate_orbit(speed=50, number_of_satellites=1, number_of_tasks=30, labels=LABELS, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
