@@ -108,15 +108,22 @@ public class MotherboardService {
 		if (ram != null)
 		{
 			String[] ramData = ram.getModules().split(" x ");
+			logger.info("RAM Data: " + ramData[0]);
+			logger.info("RAM Data: " + ramData[1]);
+			
 			ramSlots = Integer.parseInt(ramData[0]);
 			
-			Pattern pattern = Pattern.compile("(\\\\d+)([a-zA-Z]+)");
-			Matcher matcher = pattern.matcher(ramData[1]);
-
-			ramQuantity = Integer.parseInt(matcher.group(1));
-			ramMemoryType = matcher.group(2);
-
-			ramSpeed = ram.getSpeed().split(" ")[0];	
+			if (ramData[1].contains("GB"))
+			{
+				ramMemoryType = "GB";
+				ramQuantity = Integer.parseInt(ramData[1].replace("GB", ""));
+			}
+			else if (ramData[1].contains("MB"))
+			{
+				ramMemoryType = "MB";
+				ramQuantity = Integer.parseInt(ramData[1].replace("MB", ""));
+			}
+			ramSpeed = ram.getSpeed().split("-")[0];	
 		}
 		CaseContract cases = productConfig.pcCase;
 		PowerSupplyContract powerSupply = productConfig.powerSupply;
@@ -124,7 +131,7 @@ public class MotherboardService {
 		int wattage = 0;
 		if (powerSupply != null)
 		{
-			wattage = Integer.parseInt(powerSupply.getWattage().split(" ")[0]);
+			wattage = Integer.parseInt(powerSupply.getWattage().split(" ")[0]) - (productConfig.motherboard != null ? productConfig.motherboard.powerConsumption : 0);
 		}
 
 

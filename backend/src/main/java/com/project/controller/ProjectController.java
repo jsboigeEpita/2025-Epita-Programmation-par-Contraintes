@@ -28,6 +28,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -43,6 +44,9 @@ import org.jboss.logging.Logger;
 @ApplicationScoped
 @Path("/api")
 public class ProjectController {
+
+    @Inject
+    ProjectService projectService;
 
     @Inject
     MotherboardService motherboardService;
@@ -76,10 +80,27 @@ public class ProjectController {
                 return Response.ok(cpuService.filterCpus(sessionId)).build();
             case "cpu-cooler":
                 return Response.ok(cpuCoolerService.filterCpusCoolers(sessionId)).build();
-            case "memory":
+            case "ram":
                 return Response.ok(memoryService.filterRam(sessionId)).build();
         }
         return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("{component}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteComponents(@PathParam("component") String component, @CookieParam("SessionId") String sessionId)
+    {
+        logger.info("SessionId: " + sessionId);
+        logger.info("Component: " + component);
+        return Response.status(projectService.removeComponents(sessionId, component)).build();
+    }
+    @GET
+    @Path("config")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getConfig(@CookieParam("SessionId") String sessionId)
+    {
+        return Response.ok(projectService.getProductConfig(sessionId)).build();
     }
 
     @POST
@@ -120,6 +141,7 @@ public class ProjectController {
         memoryService.addMemory(sessionId, ramContract);
         return Response.ok().build();
     }
+
 
 
     @GET

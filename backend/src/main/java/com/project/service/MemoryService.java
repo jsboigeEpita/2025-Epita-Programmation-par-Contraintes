@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.IntVar;
 import org.jboss.logging.Logger;
+
 
 import com.project.controller.contracts.CPUContract;
 import com.project.controller.contracts.MemoryContract;
@@ -79,7 +80,9 @@ public class MemoryService
 		String MbMemoryType = "";
 		int MbMemorySlot = 0;
 
-		if (mb == null)
+		logger.info("Motherboard: " + mb);
+
+		if (mb != null)
 		{
 			MbMemoryMax = Integer.parseInt(mb.maxMemory.split(" ")[0]);
 			MbMemoryType = mb.maxMemory.split(" ")[1];
@@ -90,7 +93,7 @@ public class MemoryService
         IntVar[] ramVars = new IntVar[allRam.size()];
 
 
-		for (int i = 0; i < compatibleRams.size(); i++)
+		for (int i = 0; i < allRam.size(); i++)
 		{
 			Ram ram = allRam.get(i);
 			boolean isCompatible = true;
@@ -99,24 +102,48 @@ public class MemoryService
 			{
 				String[] ramData = ram.modules.split(" x ");
 				int ramSlots = Integer.parseInt(ramData[0]);
-				
-				Pattern pattern = Pattern.compile("(\\\\d+)([a-zA-Z]+)");
-				Matcher matcher = pattern.matcher(ramData[1]);
+				try
+				{
 
-				int ramQuantity = Integer.parseInt(matcher.group(1));
-				String ramMemoryType = matcher.group(2);
+					String ramMemoryType = "";
+					int ramQuantity = 0;
+					if (ramData[1].contains("GB"))
+					{
+						ramMemoryType = "GB";
+						ramQuantity = Integer.parseInt(ramData[1].replace("GB", ""));
+					}
+					else if (ramData[1].contains("MB"))
+					{
+						ramMemoryType = "MB";
+						ramQuantity = Integer.parseInt(ramData[1].replace("MB", ""));
+					}
 
-				String ramSpeed = ram.speed.split(" ")[0];
-				
-				isCompatible &= socketMbToRamConverter.socketMemoryMap.get(mb.socketCpu).contains(ramSpeed);
-				isCompatible &= ramMemoryType.equals(MbMemoryType);
-				isCompatible &= MbMemorySlot >= ramSlots;
-				isCompatible &= MbMemoryMax >= ramQuantity * ramSlots;
+					String ramSpeed = ram.speed.split("-")[0];	
+					
+					
+					isCompatible &= socketMbToRamConverter.socketMemoryMap.get(mb.socketCpu).contains(ramSpeed);
+					isCompatible &= ramMemoryType.equals(MbMemoryType);
+					isCompatible &= MbMemorySlot >= ramSlots;
+					isCompatible &= MbMemoryMax >= ramQuantity * ramSlots;
+				}
+				catch (Exception e)
+				{
+					isCompatible = false;
+				}
 			}
 
-			ramVars[i] = model.intVar("mb_" + i, isCompatible ? 1 : 0);
+			ramVars[i] = model.intVar("ram_" + i, isCompatible ? 1 : 0);
 		}
-		
+
+        Solver solver = model.getSolver();
+
+        if (solver.solve()) {
+            for (int i = 0; i < ramVars.length; i++) {
+                if (ramVars[i].getValue() == 1) {
+                    compatibleRams.add(allRam.get(i));
+                }
+            }
+        }		
 
 
 		return compatibleRams;

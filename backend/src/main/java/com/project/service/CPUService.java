@@ -80,7 +80,7 @@ public class CPUService
 		int wattage = 0;
 		if (powerSupplyContract != null)
 		{
-			wattage = Integer.parseInt(powerSupplyContract.getWattage().split(" ")[0]);
+			wattage = Integer.parseInt(powerSupplyContract.getWattage().split(" ")[0]) - (productConfig.cpu != null ? productConfig.cpu.getPowerConsumption() : 0);
 		}
 
 		for (int i = 0; i < allCpus.size(); i++)
