@@ -7,7 +7,6 @@ ROW_COUNT = 6
 COLUMN_COUNT = 7
 WINDOW_LENGTH = 4
 
-
 # Get the score for a given board state
 def score_position(board_state, piece):
     score = 0
@@ -46,7 +45,6 @@ def score_position(board_state, piece):
 
     return score
 
-
 # Evaluate a 4 tile window and return a score
 def evaluate_window(window, piece):
     score = 0
@@ -63,7 +61,6 @@ def evaluate_window(window, piece):
         score -= 4
 
     return score
-
 
 def minimax(board, depth, alpha, beta, maximizing_player, ai_piece):
     board_state = board.get_board()
@@ -143,13 +140,17 @@ def minimax(board, depth, alpha, beta, maximizing_player, ai_piece):
 
         return min_eval, best_col
 
-
 def get_move(board, piece, depth=4):
     state = ConnectFourBoard()
     state.board = np.copy(board)
     _, col = minimax(state, depth, -math.inf, math.inf, True, piece)
-    return col
+    
+    # Fallback if negamax returns None unexpectedly
+    if col is None:
+         valid_locations = state.get_valid_locations()
+         return random.choice(valid_locations) if valid_locations else None
 
+    return col
 
 def name():
     return "Minimax AI"

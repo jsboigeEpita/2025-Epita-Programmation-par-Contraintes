@@ -20,14 +20,14 @@ class GameGUI:
     """
     Class to handle the graphical user interface for Connect Four
     """
-    
-    def __init__(self):
+    def __init__(self, player1_name="Player 1", player2_name="Player 2"):
         """
         Initialize the GUI
         """
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.font = pygame.font.SysFont("monospace", 45)
+        self.player_names = [player1_name, player2_name]
     
     def draw_board(self, board_state):
         """
@@ -87,6 +87,7 @@ class GameGUI:
         pygame.display.update(pygame.Rect(0, 0, WIDTH, SQUARESIZE))
         
         while y_pos < final_y:
+            pygame.event.pump() # To avoid annoying "Application not responding" messages
             # First, redraw the entire board to clear any visual artifacts
             self.draw_board(temp_board)
             
@@ -97,7 +98,7 @@ class GameGUI:
             pygame.display.update()
             
             # Wait a bit
-            pygame.time.wait(10)
+            pygame.time.Clock().tick(60)
             
             # Move piece down
             y_pos += speed
@@ -121,8 +122,9 @@ class GameGUI:
         
         # Draw player indicator
         color = RED if turn == 0 else YELLOW
-        text = self.font.render(f"Player {1 if turn == 0 else 2}'s turn", 1, color)
-        self.screen.blit(text, (WIDTH/2 - text.get_width()/2, SQUARESIZE/2 - text.get_height()/2))
+        name = self.player_names[turn]
+        text = self.font.render(f"{name}'s turn", True, color)
+        self.screen.blit(text, (WIDTH / 2 - text.get_width() / 2, SQUARESIZE / 2 - text.get_height() / 2))
         
         # Update only the top part of the screen
         pygame.display.update(pygame.Rect(0, 0, WIDTH, SQUARESIZE))
@@ -156,8 +158,10 @@ class GameGUI:
         - player: int - The winning player (1 or 2)
         """
         pygame.draw.rect(self.screen, BLACK, (0, 0, WIDTH, SQUARESIZE))
-        label = self.font.render(f"Player {player} wins!", 1, RED if player == 1 else YELLOW)
-        self.screen.blit(label, (40, 10))
+        name = self.player_names[player - 1]
+        color = RED if player == 1 else YELLOW
+        label = self.font.render(f"{name} (Player {player}) wins!", True, color)
+        self.screen.blit(label, (WIDTH / 2 - label.get_width() / 2, SQUARESIZE / 2 - label.get_height() / 2))
         pygame.display.update()
     
     def show_tie(self):
@@ -165,6 +169,6 @@ class GameGUI:
         Display the tie game message
         """
         pygame.draw.rect(self.screen, BLACK, (0, 0, WIDTH, SQUARESIZE))
-        label = self.font.render("Game Tie!", 1, BLUE)
-        self.screen.blit(label, (40, 10))
+        label = self.font.render("It's a tie!", True, BLUE)
+        self.screen.blit(label, (WIDTH / 2 - label.get_width() / 2, SQUARESIZE / 2 - label.get_height() / 2))
         pygame.display.update()
