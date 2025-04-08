@@ -6,11 +6,15 @@ from dotenv import load_dotenv
 import os
 import json
 import sys
+import io
+import codecs
 
-# Load environment variables from .env file
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+    sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+
 load_dotenv()
 
-# Retrieve the API key and other configurations from the environment
 model = os.getenv("MODEL_NAME")
 api_key = os.getenv("OPENAI_API_KEY")
 base_url = os.getenv("OPENAI_API_BASE")
@@ -23,7 +27,6 @@ if missing_vars:
     print("Please add them to your .env file")
     sys.exit(1)
 
-# Initialize the OpenAI client
 llm = OpenAI(
     base_url=base_url,
     api_key=api_key
@@ -54,7 +57,7 @@ def parse_user_request(user_text):
             functions=[
                 {
                     "name": "extract_observation_requests",
-                    "description": "Extract locations, priorities, and area sizes from user input. Please try to be as specific as possible about the location points.",
+                    "description": "Extract locations, priorities (1 to 5, 5 being urgent), and area sizes from user input. Please try to be as specific as possible about the location points.",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -87,7 +90,6 @@ def generate_solver_input(locations):
     """Generate input for the solver by adding GPS coordinates to locations."""
     enriched_locations = []
     for loc in locations:
-        # Set default values if missing
         if "priority" not in loc:
             loc["priority"] = 3  # Medium priority by default
         if "area_size_km2" not in loc:
@@ -117,15 +119,10 @@ def simulate_solver(input_data):
             })
             continue
             
-        # Calculate simulated photo size based on area size and priority
         area_size = req.get("area_size_km2", 1.0)
         priority = req.get("priority", 3)
-        
-        # Higher priority gets more detailed photos (larger size)
         photo_size = round(area_size * (1.5 - priority * 0.1), 1)
         photo_size = max(0.5, min(photo_size, 5.0))  # Limit between 0.5 and 5.0 GB
-        
-        # Photo duration depends on area size
         duration = int(30 + area_size * 15)  # Between 30s and several minutes
         
         output["observations"].append({
@@ -182,7 +179,6 @@ def detect_intent_with_llm(user_text):
         
         if response.choices and response.choices[0].message:
             intent_text = response.choices[0].message.content.strip().lower()
-            # Extract just the intent name from the response
             if "observation_request" in intent_text:
                 return "observation_request"
             elif "status_check" in intent_text:
@@ -201,17 +197,21 @@ def cli():
     click.secho("🛰️ Satellite Observation Scheduler CLI 🛰️", fg="green", bold=True)
     click.secho("Enter observation requests or ask questions about satellite capabilities.", fg="blue")
     
-    # Track conversation history for context
     conversation_history = []
 
     while True:
         click.echo("\n" + "=" * 50)
         click.secho("[1] Enter a new observation request or ask a question", fg="cyan")
         click.secho("[2] Exit", fg="cyan")
-        choice = click.prompt("Choose an option", type=int, default=1, show_default=True, show_choices=True)
+        
+        # Modification: utiliser click.prompt avec prompt_suffix pour contrôler la mise en forme
+        choice = click.prompt("Choose an option", type=int, default=1, show_default=False, 
+                             prompt_suffix=': ', show_choices=False)
 
         if choice == 1:
-            user_text = click.prompt("\nEnter your observation request or question")
+            # Modification: utiliser prompt_suffix pour assurer que l'input est sur la même ligne
+            user_text = click.prompt("\nEnter your observation request or question", 
+                                   prompt_suffix=': ')
             click.echo("\nProcessing input...")
             
             # Add user message to conversation history
@@ -240,13 +240,13 @@ def cli():
 
                     # Display results
                     click.secho("\n📋 Extracted Observation Requests:", fg="green", bold=True)
-                    click.echo(yaml.dump(parsed_data, default_flow_style=False))
+                    click.echo(yaml.dump(parsed_data, default_flow_style=False, allow_unicode=True))
 
                     click.secho("\n🗺️ Enriched Requests with Coordinates:", fg="green", bold=True)
-                    click.echo(yaml.dump(solver_input, default_flow_style=False))
+                    click.echo(yaml.dump(solver_input, default_flow_style=False, allow_unicode=True))
 
                     click.secho("\n📊 Scheduled Observations:", fg="green", bold=True)
-                    click.echo(yaml.dump(solver_output, default_flow_style=False))
+                    click.echo(yaml.dump(solver_output, default_flow_style=False, allow_unicode=True))
 
                     click.secho("\n📝 Summary:", fg="green", bold=True)
                     click.echo(summary)
@@ -268,10 +268,10 @@ def cli():
                 
             else:  # general_question
                 try:
-                    
                     # Add system message at the beginning
                     messages = [
-                        {"role": "system", "content": "You are a helpful assistant specializing in satellite observations and Earth monitoring. Provide informative responses about satellite capabilities, Earth observation, and related topics. Keep your responses conversational and engaging."}
+                        {"role": "system", "content": "You are a helpful assistant specializing in satellite observations and Earth monitoring. Provide informative responses about satellite capabilities, Earth observation, and related topics. Keep your responses conversational and engaging. Adapt the language of your answer depending on the language of the question."},
+                        {"role": "user", "content": user_text}
                     ]
                     
                     response = llm.chat.completions.create(

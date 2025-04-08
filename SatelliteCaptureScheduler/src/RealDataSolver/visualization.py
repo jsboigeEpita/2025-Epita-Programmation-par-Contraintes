@@ -4,9 +4,9 @@ from matplotlib.animation import FuncAnimation
 from satellite import Satellite
 #from imagingTaskGeneration import generate_random_points
 from imagingTaskGeneration import ImagingTask
-from available import can_image_points
+from available import can_image_points, all_availability
 
-def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, MU=398600.4418, 
+def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, labels=["Tokyo"], MU=398600.4418, 
                  A=[7000], EC=[0.01], IC=[45], OMEGA=[60], W=[30], R=6371, NUM_FRAMES=1000,
                  min_elevation_angle=10):
     fig = plt.figure(figsize=(10, 8))
@@ -25,7 +25,7 @@ def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, MU=398600
     z_earth = R * np.cos(v)
     
     # creating imaging points
-    satellite_imaging = ImagingTask(num_points=number_of_tasks, radius=R)
+    satellite_imaging = ImagingTask(num_points=number_of_tasks, labels=labels, radius=R)
     
     # creating satellites
     satellites = []
@@ -37,23 +37,12 @@ def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, MU=398600
         t_full_orbit = np.linspace(0, 2 * np.pi * np.sqrt(A[i]**3 / MU), 50)
         trajectories.append(np.array([new_satellite.position_at(t)[:3] for t in t_full_orbit]))
     
-    # get time windows
-    """
-     for satellite in satellites:
-        for point in satellite_imaging:
-            return False
-        begin = 0
-        end = 86400
-    """
-   
-        
+    all_availability(0, 8640, satellites, satellite_imaging)
     
     def update_frame(frame):
         ax.clear()
-        
         # Earth
         ax.plot_surface(x_earth, y_earth, z_earth, color='blue', alpha=0.3)
-        
         # Current time
         t = t_initial + frame * speed
         
@@ -119,6 +108,7 @@ def animate_orbit(speed=1, number_of_satellites=1, number_of_tasks=10, MU=398600
         ax.legend(handles=[scatter1, scatter2, scatter3, line1, line2], loc='upper right')
         
         return ax
+
     
     ani = FuncAnimation(fig, update_frame, frames=NUM_FRAMES, interval=50, blit=False)
     

@@ -20,5 +20,14 @@ OMEGA = [60, 125, 200]
 W = [30, 35, 40]
 R = 6371
 NUM_FRAMES = 1000
+LABELS = [
+    "Tokyo", "New York", "London", "Paris", "Berlin",
+    "Sydney", "Rome", "Madrid", "Toronto", "Mexico City",
+    "Rio de Janeiro", "Cape Town", "Mumbai", "Bangkok", "Seoul",
+    "Dubai", "Istanbul", "Moscow", "Beijing", "Shanghai",
+    "Singapore", "Hong Kong", "Amsterdam", "Vienna", "Buenos Aires",
+    "Cairo", "Johannesburg", "Lisbon", "Stockholm", "Helsinki"
+]
 
-animate_orbit(speed=50, number_of_satellites=3, number_of_tasks=30, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
+
+animate_orbit(speed=50, number_of_satellites=1, number_of_tasks=30, labels=LABELS, MU=MU, A=A, EC=EC, IC=IC, OMEGA=OMEGA, W=W, R=R, NUM_FRAMES=NUM_FRAMES)
