@@ -218,12 +218,12 @@ public class ShelvingUnit : MonoBehaviour
         #region Delivery Point
         BoxCollider boxTrigger = this.gameObject.AddComponent<BoxCollider>();
         boxTrigger.isTrigger = true;
-        boxTrigger.center = new Vector3(0, (itemBounds.y + heightSpacing) / 2, maxZ + spacing * 4);
+        boxTrigger.center = new Vector3(0, (itemBounds.y + heightSpacing) / 2, 20);
         boxTrigger.size = new Vector3(itemBounds.y + spacing, itemBounds.y + heightSpacing, itemBounds.y + spacing);
 
         GameObject support = GameObject.Instantiate(supportGameObject);
         support.transform.SetParent(this.transform);
-        support.transform.localPosition = new Vector3(0, 0, maxZ + spacing * 4);
+        support.transform.localPosition = new Vector3(0, 0, 20);
 
         deliveryPoint = support.transform;
         #endregion

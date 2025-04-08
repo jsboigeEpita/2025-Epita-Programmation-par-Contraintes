@@ -89,8 +89,7 @@ public class RobotManager : MonoBehaviour
 
         if (removeItem)
         {
-            Destroy(currentItem.gameObject);
-            currentItem = null;
+            RemoveItem();
             removeItem = false;
         }
     }
@@ -102,5 +101,11 @@ public class RobotManager : MonoBehaviour
         collider.GetWorldPose(out pos, out quat);
         wheelTransform.position = pos;
         wheelTransform.rotation = quat * Quaternion.AngleAxis(90, Vector3.up);
+    }
+
+    public void RemoveItem()
+    {
+        Destroy(currentItem.gameObject);
+        currentItem = null;
     }
 }

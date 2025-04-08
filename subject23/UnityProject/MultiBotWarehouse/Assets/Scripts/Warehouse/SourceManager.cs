@@ -9,9 +9,12 @@ public class SourceManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField]
-    private float furnitureDisplayScale;
+    private float displayFurnitureScale;
     [SerializeField]
     private float displayRotationSpeed;
+    [SerializeField]
+    private Vector3 displayOffset;
+
     [SerializeField]
     private float furnitureScale;
     [SerializeField]
@@ -35,11 +38,12 @@ public class SourceManager : MonoBehaviour
         furniture = GameObject.Instantiate(furniturePrefab, this.transform);
         Collider furnitureCollider = furniture.GetComponent<Collider>();
         furnitureCollider.enabled = false;
-        furniture.transform.localPosition = offset;
-        furniture.transform.localScale = Vector3.one * furnitureDisplayScale;
+        furniture.transform.localPosition = displayOffset;
+        furniture.transform.localScale = Vector3.one * displayFurnitureScale;
 
         StartCoroutine(RotateFurnitureDisplay(Vector3.up, displayRotationSpeed));
     }
+
     private IEnumerator RotateFurnitureDisplay(Vector3 axis, float speed)
     {
         while (true)
@@ -53,7 +57,7 @@ public class SourceManager : MonoBehaviour
     {
         robotManager.currentItem = GameObject.Instantiate(furniturePrefab).AddComponent<Item>();
         robotManager.currentItem.transform.SetParent(robotManager.storeTransform);
-        robotManager.currentItem.transform.localPosition = Vector3.zero;
+        robotManager.currentItem.transform.localPosition = offset;
         robotManager.currentItem.transform.localScale = Vector3.one * furnitureScale;
     }
 

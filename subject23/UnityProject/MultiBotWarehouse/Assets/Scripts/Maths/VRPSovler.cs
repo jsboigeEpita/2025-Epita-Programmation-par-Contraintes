@@ -1,94 +1,61 @@
 ﻿using Google.OrTools.Sat;
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class VRPSolver : MonoBehaviour
 {
-    struct Task
+    public struct Task
     {
-        public int startLocationIndex;
-        public int endLocationIndex;
-
-        public Task( int startLocationIndex, int endLocationIndex)
+        public enum TaskType
         {
-            this.startLocationIndex = startLocationIndex;
-            this.endLocationIndex = endLocationIndex;
+            Other
         }
+
+        public int startLocationId;
+        public int endLocationId;
+        public int precedence;
     }
 
-    public List<List<KeyValuePair<int, long>>> getPaths(List<int> tasksIds)
+    public List<List<int>> Do(int numRobots, int numLocations, (int, int, int)[] tasks, int[][] travelTimes, int[][] serviceTimes, long horizon = 100000000000)
     {
         CpModel model = new CpModel();
 
-        // Example data
-        int numRobots = 2;
-        int numLocations = 6;
-        int horizon = 10000000; // maximum overall timeline length (here a large value to fulfill all tasks)
-                                // Duration for each task (including service time, or service+travel if you wish)
+        int numTasks = tasks.Length;
 
-        Task workbenchToDelivery = new Task(4, 5);
-        Task AToWorkbench = new Task(0, 3);
-        Task BToWorkbench = new Task(1, 3);
-        Task CToWorkbench = new Task(2, 3);
-
-        Task[] differentTasks = new Task[] { workbenchToDelivery, AToWorkbench, BToWorkbench, CToWorkbench };
-        int numDifferentTasks = differentTasks.Length;
-
-        int[][] locationsTravelTimes = new int[][] { 
-        /*A*/   new int[] { 0,  2,  4, 21, 22, 31},
-        /*B*/   new int[] { 2,  0,  2, 11, 12, 21},
-        /*C*/   new int[] { 4,  2,  0,  3,  4, 13},
-        /*W1*/  new int[] {21, 11,  3,  0,  1, 11},
-        /*W2*/  new int[] {22, 12,  4,  1,  0, 10},
-        /*L*/   new int[] {31, 21, 13, 11, 10,  0}
-        };
-
-        int[] taskIds = new int[] { 0, 1, 2, 2, 3, 3, 3 };
-        int numTasksTotal = taskIds.Length;
-
-        List<int> durations = new List<int>();
-        foreach (int taskId in taskIds)
+        int[] travelDurations = new int[numTasks];
+        for (int i = 0; i < numTasks; i++)
         {
-            Task currentTask = differentTasks[taskId];
-            durations.Add(locationsTravelTimes[currentTask.startLocationIndex][currentTask.endLocationIndex]);
+            travelDurations[i] = travelTimes[tasks[i].Item1][tasks[i].Item2];
         }
-        //int[] durations = { 10, 21, 11, 11, 3, 3, 3 };
 
-
-        // Values if tasks are assigned or not
-        IntVar[][] isAssigned = new IntVar[numTasksTotal][];
-
-        // Create arrays for start times, end times, and interval variables.
-        IntVar[] startVars = new IntVar[numTasksTotal];
-        IntVar[] endVars = new IntVar[numTasksTotal];
-        IntervalVar[] taskIntervals = new IntervalVar[numTasksTotal];
-
-        for (int i = 0; i < numTasksTotal; i++)
+        int[] serviceDurations = new int[numTasks];
+        for (int i = 0; i < numTasks; i++)
         {
-            // Start times can range from 0 to horizon.
+            serviceDurations[i] = serviceTimes[tasks[i].Item1][tasks[i].Item2];
+        }
+
+        IntVar[] startVars = new IntVar[numTasks];
+        IntVar[] endVars = new IntVar[numTasks];
+        IntervalVar[] taskIntervals = new IntervalVar[numTasks];
+
+        for (int i = 0; i < numTasks; i++)
+        {
             startVars[i] = model.NewIntVar(0, horizon, $"start_{i}");
-            // End time is determined by the start plus duration.
             endVars[i] = model.NewIntVar(0, horizon, $"end_{i}");
-            // Create interval variable for the task.
-            taskIntervals[i] = model.NewIntervalVar(startVars[i], durations[i], endVars[i], $"Task_{i}");
+            taskIntervals[i] = model.NewIntervalVar(startVars[i], travelDurations[i] + serviceDurations[i], endVars[i], $"interval_{i}");
         }
 
-        // TODO: add travel times even if the task aren't dependent
-        // Assume travelTime is defined as a matrix with travelTime[i][j] for tasks i to j.
-        int workbenchCraftTime = 32;
-
-        // All of our subtasks must be fullfiled before that whe can deliver the final package
-        for (int task = 1; task < numTasksTotal; task++)
+        for (int task = 1; task < numTasks; task++)
         {
-            model.Add(startVars[0] >= endVars[task] + workbenchCraftTime);
+            model.Add(startVars[startVars.Length - 1] >= endVars[task] + workbenchCraftTime);
         }
 
         // for each task, one optional interval per robot.
         IntervalVar[][] robotTaskIntervals = new IntervalVar[numTasksTotal][];
+
+        // Values if tasks are assigned or not
+        IntVar[][] isAssigned = new IntVar[numTasksTotal][];
 
         for (int i = 0; i < numTasksTotal; i++)
         {
@@ -118,14 +85,7 @@ public class VRPSolver : MonoBehaviour
 
         for (int i = 0; i < numTasksTotal; i++)
         {
-            IntVar[] assignments = new IntVar[numRobots];
-            for (int r = 0; r < numRobots; r++)
-            {
-                // Assuming each optional interval has an associated Boolean variable.
-                // Here we extract them or maintain a separate data structure.
-                assignments[r] = isAssigned[i][r];
-            }
-            model.Add(LinearExpr.Sum(assignments) == 1);
+            model.Add(LinearExpr.Sum(isAssigned[i]) == 1);
         }
 
         IntVar makespan = model.NewIntVar(0, horizon, "makespan");
@@ -154,10 +114,12 @@ public class VRPSolver : MonoBehaviour
 
 
                     // 4. Contraintes de transition
-                    model.Add(startVars[j] >= endVars[i] + locationsTravelTimes[differentTasks[taskIds[i]].endLocationIndex][differentTasks[taskIds[j]].startLocationIndex])
+                    model.Add(startVars[j] >= endVars[i]
+                        + locationsTravelTimes[differentTasks[tasksIds[i]].endLocationIndex][differentTasks[tasksIds[j]].startLocationIndex])
                          .OnlyEnforceIf(iBeforeJ);
 
-                    model.Add(startVars[i] >= endVars[j] + locationsTravelTimes[differentTasks[taskIds[j]].endLocationIndex][differentTasks[taskIds[i]].startLocationIndex])
+                    model.Add(startVars[i] >= endVars[j]
+                        + locationsTravelTimes[differentTasks[tasksIds[j]].endLocationIndex][differentTasks[tasksIds[i]].startLocationIndex])
                          .OnlyEnforceIf(jBeforeI);
                 }
             }
@@ -174,18 +136,24 @@ public class VRPSolver : MonoBehaviour
 
         if (status == CpSolverStatus.Optimal || status == CpSolverStatus.Feasible)
         {
-            List<List<KeyValuePair<int, long>>> results = new List<List<KeyValuePair<int, long>>> ();
+            Debug.Log("Found a solution with status: " + status.ToString());
+
+            List<List<int>> results = new List<List<int>>(numRobots);
             for (int r = 0; r < numRobots; r++)
             {
-                results.Add(new List<KeyValuePair<int, long>> ());
+                var tempResult = new List<KeyValuePair<int, long>>(numTasksTotal);
                 for (int i = 0; i < numTasksTotal; i++)
                 {
                     if (solver.BooleanValue(isAssigned[i][r]))
                     {
-                        results[r].Add(new KeyValuePair<int, long>(i, solver.Value(startVars[i])));
+                        tempResult.Add(new KeyValuePair<int, long>(i, solver.Value(startVars[i])));
                     }
                 }
+                tempResult.Sort((ele1, ele2) => ele1.Value.CompareTo(ele2.Value));
+                results[r] = tempResult.Select(ele => ele.Key).ToList();
             }
+
+            Debug.Log(results.ToString());
             return results;
         }
         else

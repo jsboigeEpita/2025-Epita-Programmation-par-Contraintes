@@ -47,10 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   furnitures: {fileID: 11400000, guid: cda07a7c9251a3545a57bd033d3aa866, type: 2}
-  furnitureDisplayScale: 1
+  displayFurnitureScale: 1
   displayRotationSpeed: 3
+  displayOffset: {x: 0, y: 5, z: 0}
   furnitureScale: 2.25
-  offset: {x: 0, y: 5, z: 0}
+  offset: {x: 0, y: 0, z: 0}
   furnitureIndex: 0
   furniturePrefab: {fileID: 0}
 --- !u!65 &6466185630470527936

@@ -482,7 +482,7 @@ MonoBehaviour:
   colors: {fileID: 11400000, guid: 993d5c9f94f674446aaadaf0e231caf6, type: 2}
   storeTransform: {fileID: 1759002598498681516}
   emptyMass: 3
-  loadedMass: 10
+  loadedMass: 5
   colorRandomly: 1
   leftWheelCollider: {fileID: 2452746299646156702}
   rightWheelCollider: {fileID: 1353604652925091820}
@@ -491,6 +491,7 @@ MonoBehaviour:
   motorForce: 21
   turnForce: 11
   drawDirection: 1
+  removeItem: 0
   control: {x: 0, y: 0}
   currentItem: {fileID: 0}
 --- !u!114 &8400805103940708064
