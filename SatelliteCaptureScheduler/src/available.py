@@ -85,28 +85,49 @@ def check_satellite_see_point(t, end, satellite, tasks, taskNumber, min_elevatio
     return (is_visible, time_window, toAddToCounter)
 
 def all_availability(begin, end, satellites, tasks, min_elevation_angle=10, time_step=10):
+    """
+    Calculate all availability windows for imaging tasks.
+    
+    Returns:
+    - Dictionary mapping location labels to lists of time windows
+    - Each time window is [start_time, end_time]
+    """
     availability = []
     labels = tasks.getLabels()
 
     availabilityDico = {}
-    for satellite in satellites:
-        print("----------CHANGING SATELLITE----------")
-        currentTime = begin
-        rotated_task_points = tasks.rotate_earth(currentTime)
-        for i, rotated_task_point in enumerate(rotated_task_points):
+    for sat_idx, satellite in enumerate(satellites):
+        print(f"----------SATELLITE {sat_idx + 1}----------")
+        
+        for i, label in enumerate(labels):
             currentTime = begin
             while currentTime < end:
                 available = check_satellite_see_point(currentTime, end, satellite, tasks, i, min_elevation_angle, time_step)
                 if available[0]:
-                    availability.append(available[1])
-                    if labels[i] in availabilityDico:
-                        availabilityDico[labels[i]].append(available[1])
+                    time_window = available[1]
+                    
+                    # Add time window with metadata
+                    window_data = {
+                        "satellite": sat_idx,
+                        "location_index": i,
+                        "location": label,
+                        "start_time": time_window[0],
+                        "end_time": time_window[1]
+                    }
+                    availability.append(window_data)
+                    
+                    # Group by location
+                    if label in availabilityDico:
+                        availabilityDico[label].append(time_window)
                     else:
-                        availabilityDico[labels[i]] = [available[1]]
+                        availabilityDico[label] = [time_window]
 
                     currentTime += available[2]
                 else:
                     currentTime += time_step
-    print(availabilityDico)
-    print("Keys in availabilityDico:", list(availabilityDico.keys()))
-    return availability
+                    
+    print("Available time windows by location:")
+    for location, windows in availabilityDico.items():
+        print(f"{location}: {len(windows)} windows")
+    
+    return availabilityDico  # Return the mapping from location to time windows
