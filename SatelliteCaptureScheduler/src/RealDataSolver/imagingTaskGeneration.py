@@ -1,10 +1,14 @@
 import numpy as np
 
 class ImagingTask:
-    def __init__(self, num_points, radius):
+    def __init__(self, num_points, labels, radius):
         self.points = self.generate_random_points(num_points, radius)
+        self.labels = labels
         self.earth_radius = radius
 
+    def getLabels(self):
+        return self.labels
+    
     def generate_random_points(self, num_points, radius):
         """
         Generate random points on the Earth's surface
