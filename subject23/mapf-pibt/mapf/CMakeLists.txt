@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 project(lib-mapf)
-add_library(lib-mapf STATIC)
+add_library(lib-mapf SHARED)
 if( CPU STREQUAL "M1" )
     message("Configuring grid-pathfinding for M1 Mac.")
-    target_compile_options(lib-mapf PUBLIC -std=c++20 -O3 -Wall -mtune=native -mcpu=apple-m1)
+    target_compile_options(lib-mapf PUBLIC 
+        -std=c++20 -O3 -Wall -Wl,--out-implib,libshared_lib.a -mtune=native -mcpu=apple-m1)
 else()
-    target_compile_options(lib-mapf PUBLIC -std=c++20 -O3 -Wall -mtune=native -march=native)
+    target_compile_options(lib-mapf PUBLIC 
+        -std=c++20 -O3 -Wall -Wl,--out-implib,libshared_lib.a -mtune=native -march=native)
 endif()
 target_include_directories(lib-mapf INTERFACE ./include)
 

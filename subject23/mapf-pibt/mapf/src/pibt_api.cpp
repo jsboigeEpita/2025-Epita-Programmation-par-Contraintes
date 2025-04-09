@@ -10,8 +10,7 @@ Pibt_api::Pibt_api(Problem* _P)
     solver_name = Pibt_api::SOLVER_NAME;
 }
 
-std::vector<std::tuple<int, Pos>>
-Pibt_api::get_next_step(AgentsInfo& agents_info)
+std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
 {
     // compare priority of agents
     auto compare = [](Agent* a, const Agent* b) {
@@ -31,10 +30,10 @@ Pibt_api::get_next_step(AgentsInfo& agents_info)
     // initialize problem
     for (int i = 0; i < agents_info.size(); ++i)
     {
-        Node* s = agents_info[i]->init;
-        Node* g = agents_info[i]->goal;
+        Node* s = agents_info[i].init;
+        Node* g = agents_info[i].goal;
         Agent* a = nullptr;
-        auto agent = current_agents_.find(agents_info[i]->id);
+        auto agent = current_agents_.find(agents_info[i].id);
         if (agent != current_agents_.end())
         {
             a = &agent->second;
@@ -71,10 +70,11 @@ Pibt_api::get_next_step(AgentsInfo& agents_info)
         decided.push_back(a);
     }
     // now all next location are in agent
-    std::vector<std::tuple<int, Pos>> res{};
+    std::vector<cIdPos> res{};
     for (const auto agent : decided)
     {
-        res.push_back(std::tuple{ agent->id, agent->v_next->pos });
+        res.push_back(cIdPos{ agent->id,
+                              { agent->v_next->pos.x, agent->v_next->pos.y } });
     }
 
     return res;

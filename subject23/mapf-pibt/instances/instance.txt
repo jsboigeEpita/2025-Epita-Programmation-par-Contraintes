@@ -1,0 +1,6 @@
+map_file=map_packer.map
+agents=0
+seed=0
+random_problem=0
+max_timestep=5000000
+max_comp_time=30000000

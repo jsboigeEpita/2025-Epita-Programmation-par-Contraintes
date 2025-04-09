@@ -2,12 +2,27 @@
 
 #include <map>
 
+#include "../include/api.hpp"
 #include "node.hpp"
 #include "pos.hpp"
 #include "problem.hpp"
+#include "singleton.hh"
 #include "solver.hpp"
-class Pibt_api : public Solver
+
+struct AgentInfo
 {
+    int id;
+    Node* init;
+    Node* goal;
+};
+
+class Pibt_api
+    : public Solver
+    , public Singleton<Pibt_api>
+{
+public:
+    static const std::string SOLVER_NAME;
+
 private:
     // PIBT agent
     struct Agent
@@ -39,19 +54,20 @@ private:
 
     // main
     // void run();
-    struct AgentInfo
-    {
-        int id;
-        Node* init;
-        Node* goal;
-    };
-    using AgentsInfo = std::vector<struct AgentInfo*>;
+    using AgentsInfo = std::vector<struct AgentInfo>;
     std::map<int, Agent> current_agents_{}; // to save the current state of each
 
-    std::vector<std::tuple<int, Pos>> get_next_step(AgentsInfo& agents_info);
-
 public:
+    Node* getNode(int x, int y)
+    {
+        return G->getNode(x, y);
+    }
+    std::vector<cIdPos> get_next_step(AgentsInfo& agents_info);
+    Pibt_api(std::string instance_file)
+        : Pibt_api{ new Problem(instance_file) } {};
     Pibt_api(Problem* _P);
     ~Pibt_api()
-    {}
+    {
+        delete P;
+    }
 };
