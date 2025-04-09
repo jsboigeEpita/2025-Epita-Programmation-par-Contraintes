@@ -63,7 +63,7 @@ public class ProjectService {
                     productConfig.memory = null;
                 }
                 break;
-            case "gpu":
+            case "videocard":
                 if (productConfig.videoCard != null)
                 {
                     productConfig.price -= Float.parseFloat(productConfig.videoCard.getPrice().replace('$', ' ').trim());
@@ -78,14 +78,14 @@ public class ProjectService {
                     productConfig.pcCase = null;
                 }   
                 break;
-            case "powerSupply":
+            case "powersupply":
                 if (productConfig.powerSupply != null)
                 {
                     productConfig.price -= Float.parseFloat(productConfig.powerSupply.getPrice().replace('$', ' ').trim());
                     productConfig.powerSupply = null;
                 }   
                 break;
-            case "cpuCooler":
+            case "cpu-cooler":
                 if (productConfig.cpuCooler != null)
                 {
                     productConfig.price -= Float.parseFloat(productConfig.cpuCooler.getPrice().replace('$', ' ').trim());
@@ -93,9 +93,14 @@ public class ProjectService {
                     productConfig.cpuCooler = null;
                 }
                 break;
-            // case "storage":
-                // productConfig. = null;
-                // break;
+            case "storage":
+                if (productConfig.storageDevice != null)
+                {
+                    productConfig.price -= Float.parseFloat(productConfig.storageDevice.getPrice().replace('$', ' ').trim());
+                    productConfig.PowerConsumption -= productConfig.cpuCooler.getPowerConsumption();
+                    productConfig.storageDevice = null;
+                }
+                break;
             default:
                 return 400;
         
