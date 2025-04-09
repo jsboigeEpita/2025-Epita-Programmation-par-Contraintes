@@ -97,7 +97,7 @@ public class ProjectController {
             case "storage":
                 return Response.ok(storageDeviceService.filteStorageDevices(sessionId)).build();
         }
-        return Response.ok().build();
+        return Response.status(404).build();
     }
 
     @DELETE

@@ -1,9 +1,5 @@
 package com.project.controller.contracts;
 
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class MotherboardContract {
     public String name;
     public String price;

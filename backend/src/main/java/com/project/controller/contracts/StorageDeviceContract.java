@@ -4,27 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StorageDeviceContract {
     private String manufacturer;
-
-    @JsonProperty("Model name")
     private String modelName;
-
-    @JsonProperty("Interface")
     private String interfaceType;
-
-    @JsonProperty("Form factor")
     private String formFactor;
-
-    @JsonProperty("Storage type")
     private String storageType;
     private String capacity;
-
-    @JsonProperty("Read speed (MB/s)")
     private String readSpeed;
-
-    @JsonProperty("Write speed (MB/s)")
     private String writeSpeed;
-
-    @JsonProperty("Price (USD)")
     private String price;
 
     public StorageDeviceContract() {

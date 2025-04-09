@@ -1,13 +1,11 @@
 package com.project.controller.contracts;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PowerSupplyContract {
     private String name;
     private String price;
     private String type;
 
-    @JsonProperty("Efficiency Rating")
     private String efficiencyRating;
     private String wattage;
     private String modular;

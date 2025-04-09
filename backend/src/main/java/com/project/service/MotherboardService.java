@@ -153,10 +153,10 @@ public class MotherboardService {
 			}
 			if (isCompatible && cases != null)
 			{
-				String[] keyWordsCase = cases.getType().split(" ");
-				for (String keyWord : keyWordsCase)
+				String[] keyWordsMotherBoard = mb.formFactor.split(" ");
+				for (String keyWord : keyWordsMotherBoard)
 				{
-					isCompatible &= mb.formFactor.toLowerCase().contains(keyWord.toLowerCase());
+					isCompatible &= cases.getType().toLowerCase().contains(keyWord.toLowerCase());
 				}
 			}
 			if (isCompatible && powerSupply != null)

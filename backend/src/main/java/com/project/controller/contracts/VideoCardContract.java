@@ -7,16 +7,10 @@ public class VideoCardContract {
     private String price;
     private String chipset;
     private String memory;
-
-    @JsonProperty("Core Clock")
     private String coreClock;
-
-    @JsonProperty("Boost Clock")
     private String boostClock;
     private String color;
     private String length;
-
-    @JsonProperty("Power Consumption")
     private int powerConsumption;
 
     public VideoCardContract() {

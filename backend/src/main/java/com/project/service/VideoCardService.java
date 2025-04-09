@@ -49,7 +49,7 @@ public class VideoCardService
 
     public void addVideoCard(String sessionId, VideoCardContract videoCard) {
 		ProductConfig productConfig = getOrCreate(sessionId);
-		if (productConfig.memory != null) {
+		if (productConfig.videoCard != null) {
 			productConfig.PowerConsumption -= productConfig.videoCard.getPowerConsumption();
 			productConfig.price -= Float.parseFloat(productConfig.videoCard.getPrice().replace('$', ' ').trim());
 		}

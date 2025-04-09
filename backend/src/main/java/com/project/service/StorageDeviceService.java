@@ -25,6 +25,8 @@ import com.project.repository.entity.StorageDevice;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
+import org.jboss.logging.Logger;;
+
 @ApplicationScoped
 public class StorageDeviceService
 {
@@ -33,6 +35,8 @@ public class StorageDeviceService
 
     @Inject
     StorageDeviceRepository storageDeviceRepository;
+
+    private static final Logger logger = Logger.getLogger(StorageDeviceService.class);
 
 	private ProductConfig getOrCreate(String sessionId)
 	{
@@ -59,6 +63,9 @@ public class StorageDeviceService
         List<StorageDevice> allCases = storageDeviceRepository.listAll();
         List<StorageDevice> compatibleStorageDevice = new ArrayList<>();
 
+        
+        logger.info(allCases.size());
+
         ProductConfig productConfig = getOrCreate(sessionId);
         
         IntVar[] storageDeviceVars = new IntVar[allCases.size()];
@@ -77,6 +84,6 @@ public class StorageDeviceService
             }
         }
 
-        return compatibleStorageDevice;
+        return allCases;
     }
 }
