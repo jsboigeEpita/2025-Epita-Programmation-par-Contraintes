@@ -1,17 +1,26 @@
-import { useState, useEffect } from 'react';
-import { Settings, Play, Pause, RotateCcw, Plus, Minus, List, Target, MapPin } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Settings, Play, Pause, RotateCcw, Plus, Minus, List, Target, MapPin, FastForward, Rewind } from 'lucide-react';
 
 const RobotSimulation = () => {
-  // États
+  // États principaux
   const [gridSize, setGridSize] = useState({ x: 5, y: 5 });
   const [robotCount, setRobotCount] = useState(3);
   const [grid, setGrid] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   const [showSettings, setShowSettings] = useState(true);
   const [tasks, setTasks] = useState([]);
-  const [activeTab, setActiveTab] = useState('settings'); // 'settings' ou 'tasks'
+  const [activeTab, setActiveTab] = useState('settings');
   const [newTask, setNewTask] = useState({ x1: 0, y1: 0, x2: 0, y2: 0 });
-
+  
+  // États pour l'animation
+  const [robotPaths, setRobotPaths] = useState([]);
+  const [robotPositions, setRobotPositions] = useState([]);
+  const [animationStep, setAnimationStep] = useState(0);
+  const [maxSteps, setMaxSteps] = useState(0);
+  const [animationSpeed, setAnimationSpeed] = useState(1000); // ms entre chaque pas
+  const [isAnimating, setIsAnimating] = useState(false);
+  const animationRef = useRef(null);
+  
   // Conversion des notations en emoji
   const cellToEmoji = {
     '@': '🤖', // Robot
@@ -20,66 +29,290 @@ const RobotSimulation = () => {
     ' ': '⬜' // Cellule vide
   };
 
-  // Simuler la récupération des données du backend
+  // Effet pour gérer l'animation des robots
   useEffect(() => {
-    if (isRunning) {
-      fetchGridFromBackend();
-      const interval = setInterval(fetchGridFromBackend, 1500);
-      return () => clearInterval(interval);
+    if (isAnimating && animationStep < maxSteps) {
+      animationRef.current = setTimeout(() => {
+        setAnimationStep(prev => prev + 1);
+      }, animationSpeed);
+      
+      return () => {
+        if (animationRef.current) {
+          clearTimeout(animationRef.current);
+        }
+      };
+    } else if (animationStep >= maxSteps) {
+      setIsAnimating(false);
     }
-  }, [isRunning, gridSize, robotCount]);
+  }, [isAnimating, animationStep, maxSteps, animationSpeed]);
 
-  // Fonctions de manipulation du backend
-  const fetchGridFromBackend = () => {
-    // Simulation d'une réponse du backend
-    // Dans une application réelle, ceci serait un appel API à votre backend Python
-    const mockGrid = generateMockGrid(gridSize.x, gridSize.y, robotCount);
-    setGrid(mockGrid);
+  // Effet pour mettre à jour les positions des robots à chaque étape d'animation
+  useEffect(() => {
+    if (robotPaths.length > 0 && animationStep <= maxSteps) {
+      const newPositions = robotPaths.map(path => {
+        // Si nous sommes au-delà de la longueur du chemin, utiliser la dernière position
+        if (animationStep >= path.length) {
+          return path[path.length - 1];
+        }
+        return path[animationStep];
+      });
+      
+      setRobotPositions(newPositions);
+      
+      // Mettre à jour la grille avec les nouvelles positions des robots
+      updateGridWithRobotPositions(newPositions);
+    }
+  }, [robotPaths, animationStep, maxSteps]);
+
+  // Fonction pour mettre à jour la grille avec les positions actuelles des robots
+  const updateGridWithRobotPositions = (positions) => {
+    // Créer une nouvelle grille vide
+    const newGrid = Array(gridSize.y).fill().map(() => Array(gridSize.x).fill(' '));
+    
+    // Ajouter les racks (position fixe simulée)
+    const rackCount = Math.min(3, Math.floor(gridSize.x * gridSize.y * 0.1));
+    const rackPositions = [];
+    for (let i = 0; i < rackCount; i++) {
+      const x = (i * 2) % gridSize.x;
+      const y = Math.floor((i * 2) / gridSize.x) * 2;
+      if (y < gridSize.y) {
+        newGrid[y][x] = 'R';
+        rackPositions.push({ x, y });
+      }
+    }
+    
+    // Ajouter des stations de charge (position fixe simulée)
+    const chargeCount = Math.min(2, Math.floor(gridSize.x * gridSize.y * 0.05));
+    const chargeStations = [];
+    for (let i = 0; i < chargeCount; i++) {
+      const x = (i * 3 + 1) % gridSize.x;
+      const y = Math.floor((i * 3 + 1) / gridSize.x) * 3;
+      if (y < gridSize.y && newGrid[y][x] === ' ') {
+        newGrid[y][x] = 'C';
+        chargeStations.push({ x, y });
+      }
+    }
+    
+    // Ajouter les robots à leurs positions actuelles
+    // IMPORTANT: Le robot a priorité sur la station de charge pour l'affichage
+    positions.forEach(pos => {
+      if (pos && pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y) {
+        // Même si la position est occupée par une station de charge, on met le robot
+        // Les stations seront mémorisées séparément
+        if (newGrid[pos.y][pos.x] !== 'R') {
+          // Sauvegarder l'information si c'était une station de charge
+          pos.wasChargingStation = newGrid[pos.y][pos.x] === 'C';
+          // Remplacer par le robot
+          newGrid[pos.y][pos.x] = '@';
+        }
+      }
+    });
+    
+    setGrid(newGrid);
+    
+    // Conserver la liste des stations de charge pour référence
+    return chargeStations;
   };
 
-  const generateMockGrid = (x, y, robots) => {
-    const newGrid = Array(y).fill().map(() => Array(x).fill(' '));
+  // Simuler la récupération des données du backend
+  const fetchGridFromBackend = async () => {
+    try {
+      // Dans une application réelle, ceci serait un appel API à votre backend Python
+      console.log("Envoi des données au backend:", {
+        gridSize,
+        robotCount,
+        tasks: tasks.map(task => ({
+          xStart: task.x1,
+          yStart: task.y1,
+          xEnd: task.x2,
+          yEnd: task.y2
+        }))
+      });
+      
+      // Simulation d'une réponse du backend
+      // En réalité, vous remplaceriez ceci par un fetch() vers votre API
+      
+      // Simuler un délai de réseau
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simuler la création de chemins pour chaque robot
+      const mockPaths = [];
+      
+      // Créer une grille simulée pour placer les stations de charge
+      const simulatedGrid = Array(gridSize.y).fill().map(() => Array(gridSize.x).fill(' '));
+      const chargeCount = Math.min(2, Math.floor(gridSize.x * gridSize.y * 0.05));
+      for (let i = 0; i < chargeCount; i++) {
+        const cx = (i * 3 + 1) % gridSize.x;
+        const cy = Math.floor((i * 3 + 1) / gridSize.x) * 3;
+        if (cy < gridSize.y) {
+          simulatedGrid[cy][cx] = 'C';
+        }
+      }
+      
+      // Pour chaque robot, créer un chemin basé sur les tâches disponibles
+      for (let i = 0; i < robotCount; i++) {
+        // Attribuer une tâche à ce robot (simulation simplifiée)
+        const task = tasks[i % tasks.length];
+        
+        // Créer un chemin entre le point de départ et d'arrivée
+        const path = createPathBetweenPoints(
+          { x: task.x1, y: task.y1 },
+          { x: task.x2, y: task.y2 }
+        );
+        
+        // Pour chaque position du chemin, vérifier si c'est une station de charge
+        for (let j = 0; j < path.length; j++) {
+          const pos = path[j];
+          if (simulatedGrid[pos.y] && simulatedGrid[pos.y][pos.x] === 'C') {
+            path[j].wasChargingStation = true;
+          }
+        }
+        
+        mockPaths.push(path);
+      }
+      
+      // Trouver le nombre maximal d'étapes parmi tous les chemins
+      const maxPathLength = Math.max(...mockPaths.map(path => path.length));
+      setMaxSteps(maxPathLength);
+      
+      // Définir les positions initiales des robots
+      const initialPositions = mockPaths.map(path => path[0]);
+      setRobotPositions(initialPositions);
+      
+      // Mettre à jour la grille avec les positions initiales
+      updateGridWithRobotPositions(initialPositions);
+      
+      // Stocker les chemins pour l'animation
+      setRobotPaths(mockPaths);
+      
+      console.log("Chemins des robots générés:", mockPaths);
+      
+      return mockPaths;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+      return [];
+    }
+  };
+
+  // Créer un chemin entre deux points (algorithme simple pour la simulation)
+  const createPathBetweenPoints = (start, end) => {
+    const path = [{ ...start }];
+    let current = { ...start };
     
-    // Ajouter des racks (entre 2 et 5)
-    const rackCount = Math.floor(Math.random() * 4) + 2;
-    for (let i = 0; i < rackCount; i++) {
-      const rx = Math.floor(Math.random() * x);
-      const ry = Math.floor(Math.random() * y);
-      if (newGrid[ry][rx] === ' ') newGrid[ry][rx] = 'R';
+    // Algorithme simple: d'abord se déplacer horizontalement, puis verticalement
+    while (current.x !== end.x || current.y !== end.y) {
+      // Créer un nouvel objet pour éviter les références partagées
+      const next = { ...current };
+      
+      if (next.x < end.x) {
+        next.x += 1;
+      } else if (next.x > end.x) {
+        next.x -= 1;
+      } else if (next.y < end.y) {
+        next.y += 1;
+      } else if (next.y > end.y) {
+        next.y -= 1;
+      }
+      
+      // Vérifier si cette position est une station de charge dans la grille simulée
+      next.wasChargingStation = checkIfPositionIsChargingStation(next.x, next.y);
+      
+      path.push(next);
+      current = next;
     }
     
-    // Ajouter des stations de charge (entre 1 et 3)
-    const chargeCount = Math.floor(Math.random() * 3) + 1;
+    return path;
+  };
+  
+  // Fonction pour vérifier si une position correspond à une station de charge
+  // Dans une implémentation réelle, cette information viendrait du backend
+  const checkIfPositionIsChargingStation = (x, y) => {
+    // Simulation simplifiée: les stations de charge sont placées à des positions spécifiques
+    const chargeCount = Math.min(2, Math.floor(gridSize.x * gridSize.y * 0.05));
     for (let i = 0; i < chargeCount; i++) {
-      const cx = Math.floor(Math.random() * x);
-      const cy = Math.floor(Math.random() * y);
-      if (newGrid[cy][cx] === ' ') newGrid[cy][cx] = 'C';
+      const cx = (i * 3 + 1) % gridSize.x;
+      const cy = Math.floor((i * 3 + 1) / gridSize.x) * 3;
+      if (cx === x && cy === y) {
+        return true;
+      }
     }
-    
-    // Ajouter des robots
-    for (let i = 0; i < robots; i++) {
-      const rx = Math.floor(Math.random() * x);
-      const ry = Math.floor(Math.random() * y);
-      if (newGrid[ry][rx] === ' ') newGrid[ry][rx] = '@';
+    return false;
+  };
+
+  // Contrôles d'animation
+  const startAnimation = () => {
+    setAnimationStep(0);
+    setIsAnimating(true);
+  };
+
+  const pauseAnimation = () => {
+    setIsAnimating(false);
+  };
+
+  const resumeAnimation = () => {
+    if (animationStep < maxSteps) {
+      setIsAnimating(true);
     }
-    
-    return newGrid;
+  };
+
+  const resetAnimation = () => {
+    setIsAnimating(false);
+    setAnimationStep(0);
+    if (robotPaths.length > 0) {
+      const initialPositions = robotPaths.map(path => path[0]);
+      setRobotPositions(initialPositions);
+      updateGridWithRobotPositions(initialPositions);
+    }
+  };
+
+  const stepForward = () => {
+    if (animationStep < maxSteps) {
+      setAnimationStep(prev => prev + 1);
+    }
+  };
+
+  const stepBackward = () => {
+    if (animationStep > 0) {
+      setAnimationStep(prev => prev - 1);
+    }
+  };
+
+  const changeAnimationSpeed = (faster) => {
+    if (faster) {
+      setAnimationSpeed(prev => Math.max(100, prev - 200));
+    } else {
+      setAnimationSpeed(prev => Math.min(2000, prev + 200));
+    }
   };
 
   // Fonctions de contrôle de simulation
-  const startSimulation = () => {
+  const startSimulation = async () => {
     setShowSettings(false);
     setIsRunning(true);
+    
+    // Récupérer les données du backend et préparer l'animation
+    await fetchGridFromBackend();
+    
+    // Démarrer automatiquement l'animation après avoir reçu les données
+    setTimeout(() => {
+      startAnimation();
+    }, 500);
   };
 
   const stopSimulation = () => {
     setIsRunning(false);
+    pauseAnimation();
   };
 
   const resetSimulation = () => {
     stopSimulation();
     setShowSettings(true);
     setGrid([]);
+    setRobotPaths([]);
+    setRobotPositions([]);
+    setMaxSteps(0);
+    setAnimationStep(0);
+    setIsAnimating(false);
   };
 
   // Gestion des paramètres
@@ -425,6 +658,71 @@ const RobotSimulation = () => {
                 </div>
               </div>
               
+              {/* Contrôles d'animation */}
+              <div className="mb-6 flex items-center justify-center space-x-3 bg-gray-100 p-3 rounded-lg w-full max-w-md">
+                <button 
+                  onClick={stepBackward}
+                  className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all duration-200"
+                  disabled={animationStep === 0}
+                >
+                  <Rewind size={16} />
+                </button>
+                
+                {isAnimating ? (
+                  <button 
+                    onClick={pauseAnimation}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all duration-200 flex items-center"
+                  >
+                    <Pause size={16} className="mr-1" /> Pause
+                  </button>
+                ) : (
+                  <button 
+                    onClick={resumeAnimation}
+                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all duration-200 flex items-center"
+                    disabled={animationStep >= maxSteps}
+                  >
+                    <Play size={16} className="mr-1" /> Lire
+                  </button>
+                )}
+                
+                <button 
+                  onClick={resetAnimation}
+                  className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all duration-200"
+                >
+                  <RotateCcw size={16} />
+                </button>
+                
+                <button 
+                  onClick={stepForward}
+                  className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all duration-200"
+                  disabled={animationStep >= maxSteps}
+                >
+                  <FastForward size={16} />
+                </button>
+                
+                <div className="mx-2 text-gray-600">
+                  <span className="text-sm">{animationStep}/{maxSteps}</span>
+                </div>
+                
+                <div className="flex items-center">
+                  <button 
+                    onClick={() => changeAnimationSpeed(false)}
+                    className="p-1 bg-gray-200 hover:bg-gray-300 rounded-l-lg transition-all duration-200"
+                  >
+                    <Minus size={12} />
+                  </button>
+                  <div className="px-2 text-xs bg-gray-200">
+                    Vitesse
+                  </div>
+                  <button 
+                    onClick={() => changeAnimationSpeed(true)}
+                    className="p-1 bg-gray-200 hover:bg-gray-300 rounded-r-lg transition-all duration-200"
+                  >
+                    <Plus size={12} />
+                  </button>
+                </div>
+              </div>
+              
               <div className="grid gap-1 bg-gray-100 p-4 rounded-lg">
                 {grid.map((row, y) => (
                   <div key={y} className="flex">
@@ -433,16 +731,62 @@ const RobotSimulation = () => {
                       const isStartPoint = tasks.some(t => t.x1 === x && t.y1 === y);
                       const isEndPoint = tasks.some(t => t.x2 === x && t.y2 === y);
                       
+                      // Vérifier si cette cellule est sur un chemin de robot (pour visualiser la trajectoire)
+                      const isOnPath = robotPaths.some((path, robotIndex) => {
+                        // Ne pas inclure la position actuelle du robot dans la visualisation du chemin
+                        const robotPosition = robotPositions[robotIndex];
+                        if (robotPosition && robotPosition.x === x && robotPosition.y === y) {
+                          return false;
+                        }
+                        
+                        // Vérifier si cette cellule est dans le chemin futur du robot (après sa position actuelle)
+                        const pathPosition = path.findIndex(pos => pos.x === x && pos.y === y);
+                        return pathPosition > -1 && pathPosition > path.findIndex(pos => 
+                          robotPosition && pos.x === robotPosition.x && pos.y === robotPosition.y
+                        );
+                      });
+                      
+                      // Déterminer quel robot est à cette position
+                      const robotIndex = robotPositions.findIndex(pos => pos && pos.x === x && pos.y === y);
+                      
                       return (
                         <div 
                           key={`${x}-${y}`} 
-                          className="w-12 h-12 flex items-center justify-center border border-gray-200 bg-white rounded transition-all duration-300 hover:bg-indigo-50 relative"
+                          className={`w-12 h-12 flex items-center justify-center border border-gray-200 rounded transition-all duration-300 relative ${
+                            isOnPath ? 'bg-indigo-50' : 'bg-white'
+                          } ${
+                            isOnPath ? 'hover:bg-indigo-100' : 'hover:bg-indigo-50'
+                          }`}
                           style={{
                             transform: cell === '@' ? 'scale(1.05)' : 'scale(1)',
                             boxShadow: cell === '@' ? '0 0 8px rgba(99, 102, 241, 0.5)' : 'none'
                           }}
                         >
-                          <div className="text-2xl" style={{ animation: cell === '@' ? 'pulse 2s infinite' : 'none' }}>
+                          {/* Effet spécial lorsqu'un robot est sur une station de charge - PLACÉ EN PREMIER POUR ÊTRE DERRIÈRE */}
+                          {cell === '@' && 
+                           robotPositions.some((pos, idx) => 
+                             pos && pos.x === x && pos.y === y && pos.wasChargingStation
+                           ) && (
+                            <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 1 }}>
+                              <div className="w-10 h-10 rounded-full bg-yellow-100 animate-pulse opacity-60"></div>
+                              <div className="absolute w-8 h-8 rounded-full bg-yellow-200 animate-ping opacity-40"></div>
+                              {/* Afficher l'emoji de station de charge sous le robot */}
+                              <div className="text-xl opacity-40" style={{ zIndex: 2 }}>
+                                🔋
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* EMOJI DU ROBOT - PLACÉ APRÈS POUR ÊTRE AU-DESSUS DE L'EFFET */}
+                          <div 
+                            className="text-2xl relative" 
+                            style={{ 
+                              animation: cell === '@' ? 'pulse 2s infinite' : 'none',
+                              color: cell === '@' && robotIndex > -1 ? 
+                                ['#e63946', '#2a9d8f', '#f4a261', '#6d6875', '#588157'][robotIndex % 5] : 'inherit',
+                              zIndex: 5 // Garantit que l'emoji est au-dessus de l'effet de charge
+                            }}
+                          >
                             {cellToEmoji[cell]}
                           </div>
                           
@@ -477,6 +821,7 @@ const RobotSimulation = () => {
                 <p>Nombre de robots: <span className="font-semibold">{robotCount}</span></p>
                 <p>Taille de la grille: <span className="font-semibold">{gridSize.x} x {gridSize.y}</span></p>
                 <p>Nombre de tâches: <span className="font-semibold">{tasks.length}</span></p>
+                <p>Étape d'animation: <span className="font-semibold">{animationStep}/{maxSteps}</span></p>
               </div>
             </div>
           )}
