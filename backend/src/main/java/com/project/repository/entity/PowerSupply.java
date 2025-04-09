@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 
-@MongoEntity(collection = "powersupply")
+@MongoEntity(collection = "power_supplys")
 public class PowerSupply extends PanacheMongoEntity {
 
     public ObjectId id;
