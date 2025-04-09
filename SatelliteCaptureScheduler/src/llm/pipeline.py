@@ -2,13 +2,13 @@ import codecs
 import json
 import os
 import sys
-
 import click
 import requests
 import yaml
 from dotenv import load_dotenv
 from openai import OpenAI
-from satellite_integration import run_satellite_scheduler
+
+from integration.scheduler_interface import run_satellite_scheduler
 
 if sys.stdout.encoding != "utf-8":
     sys.stdout = codecs.getwriter("utf-8")(sys.stdout.buffer, "strict")
@@ -24,9 +24,7 @@ base_url = os.getenv("OPENAI_API_BASE")
 required_env_vars = ["MODEL_NAME", "OPENAI_API_KEY", "OPENAI_API_BASE"]
 missing_vars = [var for var in required_env_vars if not os.getenv(var)]
 if missing_vars:
-    print(
-        f"Error: Missing required environment variables: {', '.join(missing_vars)}"
-    )
+    print(f"Error: Missing required environment variables: {', '.join(missing_vars)}")
     print("Please add them to your .env file")
     sys.exit(1)
 
@@ -37,17 +35,13 @@ def get_gps_coordinates(location):
     """Get GPS coordinates for a location using OpenStreetMap Nominatim API."""
     try:
         url = f"https://nominatim.openstreetmap.org/search?q={location}&format=json"
-        response = requests.get(
-            url, headers={"User-Agent": "satellite-scheduler"}
-        )
+        response = requests.get(url, headers={"User-Agent": "satellite-scheduler"})
         response.raise_for_status()  # Raise exception for bad responses
         data = response.json()
         if data:
             return float(data[0]["lat"]), float(data[0]["lon"])
         else:
-            print(
-                f"Warning: Could not find coordinates for location: {location}"
-            )
+            print(f"Warning: Could not find coordinates for location: {location}")
             return None
     except Exception as e:
         print(f"Error getting GPS coordinates for {location}: {str(e)}")
@@ -145,12 +139,8 @@ def simulate_solver(input_data):
             area_size = req.get("area_size_km2", 1.0)
             priority = req.get("priority", 3)
             photo_size = round(area_size * (1.5 - priority * 0.1), 1)
-            photo_size = max(
-                0.5, min(photo_size, 5.0)
-            )  # Limit between 0.5 and 5.0 GB
-            duration = int(
-                30 + area_size * 15
-            )  # Between 30s and several minutes
+            photo_size = max(0.5, min(photo_size, 5.0))  # Limit between 0.5 and 5.0 GB
+            duration = int(30 + area_size * 15)  # Between 30s and several minutes
 
             output["observations"].append(
                 {
@@ -235,9 +225,7 @@ def detect_intent_with_llm(user_text):
 @click.command()
 def cli():
     """Interactive CLI for Satellite Observation Scheduling"""
-    click.secho(
-        "🛰️ Satellite Observation Scheduler CLI 🛰️", fg="green", bold=True
-    )
+    click.secho("🛰️ Satellite Observation Scheduler CLI 🛰️", fg="green", bold=True)
     click.secho(
         "Enter observation requests or ask questions about satellite capabilities.",
         fg="blue",
@@ -247,9 +235,7 @@ def cli():
 
     while True:
         click.echo("\n" + "=" * 50)
-        click.secho(
-            "[1] Enter a new observation request or ask a question", fg="cyan"
-        )
+        click.secho("[1] Enter a new observation request or ask a question", fg="cyan")
         click.secho("[2] Exit", fg="cyan")
 
         # Modification: utiliser click.prompt avec prompt_suffix pour contrôler la mise en forme
@@ -291,9 +277,7 @@ def cli():
                         continue
 
                     # Generate solver input and run simulation
-                    solver_input = generate_solver_input(
-                        parsed_data["requests"]
-                    )
+                    solver_input = generate_solver_input(parsed_data["requests"])
                     solver_output = simulate_solver(solver_input)
 
                     # Get a description of the output
@@ -326,9 +310,7 @@ def cli():
                         )
                     )
 
-                    click.secho(
-                        "\n📊 Scheduled Observations:", fg="green", bold=True
-                    )
+                    click.secho("\n📊 Scheduled Observations:", fg="green", bold=True)
                     click.echo(
                         yaml.dump(
                             solver_output,
@@ -349,9 +331,7 @@ def cli():
                     )
 
                 except Exception as e:
-                    error_msg = (
-                        f"\nError processing observation request: {str(e)}"
-                    )
+                    error_msg = f"\nError processing observation request: {str(e)}"
                     click.secho(error_msg, fg="red")
                     conversation_history.append(
                         {"role": "assistant", "content": error_msg}
@@ -384,9 +364,7 @@ def cli():
                     )
 
                     assistant_response = response.choices[0].message.content
-                    click.secho(
-                        "\n🤖 Assistant's Response:", fg="green", bold=True
-                    )
+                    click.secho("\n🤖 Assistant's Response:", fg="green", bold=True)
                     click.echo(assistant_response)
 
                     # Add response to conversation history

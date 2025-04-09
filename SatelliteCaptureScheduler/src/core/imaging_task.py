@@ -1,6 +1,8 @@
 import numpy as np
 
+
 class ImagingTask:
+
     def __init__(self, labels, radius, points):
         self.points = points
         self.labels = labels
@@ -8,7 +10,7 @@ class ImagingTask:
 
     def getLabels(self):
         return self.labels
-    
+
     def generate_random_points(self, radius):
         """
         Generate random points on the Earth's surface
@@ -22,7 +24,7 @@ class ImagingTask:
             z = radius * np.cos(v)
             points.append((x, y, z))
         return points
-    
+
     def rotate_earth(self, t, period=86400):
         """
         Rotate points on Earth based on time t (in seconds).
@@ -37,16 +39,18 @@ class ImagingTask:
         """
         # Earth's angular velocity (radians per second)
         omega = (2 * np.pi) / period
-        
+
         # Rotation angle for the given time
         theta = omega * t  # Rotation angle in radians
 
         # Rotation matrix around the Z-axis (Earth's rotational axis)
-        R = np.array([
-            [np.cos(theta), -np.sin(theta), 0],
-            [np.sin(theta),  np.cos(theta), 0],
-            [0,             0,             1]
-        ])
+        R = np.array(
+            [
+                [np.cos(theta), -np.sin(theta), 0],
+                [np.sin(theta), np.cos(theta), 0],
+                [0, 0, 1],
+            ]
+        )
 
         # Rotate each point
         rotated_points = [tuple(R @ np.array(p)) for p in self.points]
