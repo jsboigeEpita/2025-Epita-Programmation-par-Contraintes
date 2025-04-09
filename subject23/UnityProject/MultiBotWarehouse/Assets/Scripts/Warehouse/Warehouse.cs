@@ -88,8 +88,7 @@ public class Warehouse : MonoBehaviour
 
                 foreach (bool[] row in grid)
                 {
-                    string line = string.Join("", row.Select(ele => ele ? "." : "@").ToList());
-                    writer.WriteLine(line);
+                    writer.WriteLine(string.Join("", row.Select(ele => ele ? "." : "@").ToList()));
                 }
             }
 
