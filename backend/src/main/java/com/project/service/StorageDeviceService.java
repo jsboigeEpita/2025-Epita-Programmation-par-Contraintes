@@ -6,19 +6,10 @@ import java.util.List;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.IntVar;
-import org.jboss.logging.Logger;
 
-import com.project.controller.contracts.CPUCoolerContract;
-import com.project.controller.contracts.MotherboardContract;
-import com.project.controller.contracts.PowerSupplyContract;
 import com.project.controller.contracts.StorageDeviceContract;
-import com.project.converter.SocketMbToCpu;
-import com.project.repository.CpuCoolerRepository;
-import com.project.repository.CpuRepository;
 import com.project.repository.ProductConfigRepository;
 import com.project.repository.StorageDeviceRepository;
-import com.project.repository.entity.Cpu;
-import com.project.repository.entity.CpuCooler;
 import com.project.repository.entity.ProductConfig;
 import com.project.repository.entity.StorageDevice;
 
