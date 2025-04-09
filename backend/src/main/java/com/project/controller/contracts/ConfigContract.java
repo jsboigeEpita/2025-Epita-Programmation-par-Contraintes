@@ -17,9 +17,11 @@ public class ConfigContract {
     
     private VideoCardContract videoCard;
 
+    private StorageDeviceContract storageDevice;
+
     public ConfigContract() {}
 
-    public ConfigContract(CaseContract pcCase, CPUContract cpu, CPUCoolerContract cpuCooler, MemoryContract memory, MotherboardContract motherboard, PowerSupplyContract powerSupply, VideoCardContract videoCard) {
+    public ConfigContract(CaseContract pcCase, CPUContract cpu, CPUCoolerContract cpuCooler, MemoryContract memory, MotherboardContract motherboard, PowerSupplyContract powerSupply, VideoCardContract videoCard, StorageDeviceContract storageDevice) {
         this.pcCase = pcCase;
         this.cpu = cpu;
         this.cpuCooler = cpuCooler;
@@ -27,6 +29,7 @@ public class ConfigContract {
         this.motherboard = motherboard;
         this.powerSupply = powerSupply;
         this.videoCard = videoCard;
+        this.storageDevice = storageDevice;
     }
 
     public CaseContract getCase() {
@@ -83,5 +86,13 @@ public class ConfigContract {
 
     public void setVideoCard(VideoCardContract videoCard) {
         this.videoCard = videoCard;
+    }
+
+    public StorageDeviceContract getStorageDevice() {
+        return storageDevice;
+    }
+
+    public void setStorageDevice(StorageDeviceContract storageDevice) {
+        this.storageDevice = storageDevice;
     }
 }

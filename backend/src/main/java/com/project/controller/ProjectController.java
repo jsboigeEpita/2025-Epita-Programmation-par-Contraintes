@@ -1,14 +1,24 @@
 package com.project.controller;
 
+import org.jboss.logging.Logger;
+
 import com.project.controller.contracts.CPUContract;
 import com.project.controller.contracts.CPUCoolerContract; 
+import com.project.controller.contracts.CaseContract;
 import com.project.controller.contracts.MemoryContract;
 import com.project.controller.contracts.MotherboardContract;
+import com.project.controller.contracts.PowerSupplyContract;
+import com.project.controller.contracts.StorageDeviceContract;
+import com.project.controller.contracts.VideoCardContract;
 import com.project.service.CPUCoolerService;
 import com.project.service.CPUService;
+import com.project.service.CaseService;
 import com.project.service.MemoryService;
 import com.project.service.MotherboardService;
+import com.project.service.PowerSupplyService;
 import com.project.service.ProjectService;
+import com.project.service.StorageDeviceService;
+import com.project.service.VideoCardService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -23,7 +33,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.jboss.logging.Logger;
 
 
 @ApplicationScoped
@@ -44,6 +53,18 @@ public class ProjectController {
 
     @Inject
     MemoryService memoryService;
+
+    @Inject
+    VideoCardService videoCardService;
+
+    @Inject
+    PowerSupplyService powerSupplyService;
+
+    @Inject
+    CaseService caseService;
+
+    @Inject
+    StorageDeviceService storageDeviceService;
 
 
     private final Logger logger = Logger.getLogger(ProjectController.class);
@@ -67,6 +88,14 @@ public class ProjectController {
                 return Response.ok(cpuCoolerService.filterCpusCoolers(sessionId)).build();
             case "ram":
                 return Response.ok(memoryService.filterRam(sessionId)).build();
+            case "videocard":
+                return Response.ok(videoCardService.filteVideoCards(sessionId)).build();
+            case "powersupply":
+                return Response.ok(powerSupplyService.filterPowerSupply(sessionId)).build();
+            case "case":
+                return Response.ok(caseService.filterCases(sessionId)).build();
+            case "storage":
+                return Response.ok(storageDeviceService.filteStorageDevices(sessionId)).build();
         }
         return Response.ok().build();
     }
@@ -127,6 +156,41 @@ public class ProjectController {
         return Response.ok().build();
     }
 
+    @POST
+    @Path("videocard")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postVideoCard(VideoCardContract videoCardContract, @CookieParam("SessionId") String sessionId)
+    {
+        videoCardService.addVideoCard(sessionId, videoCardContract);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("powersupply")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postPowerSupply(PowerSupplyContract powerSupplyContract, @CookieParam("SessionId") String sessionId)
+    {
+        powerSupplyService.addPowerSupply(sessionId, powerSupplyContract);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("case")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postCase(CaseContract caseContract, @CookieParam("SessionId") String sessionId)
+    {
+        caseService.addCase(sessionId, caseContract);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("storage")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postStorage(StorageDeviceContract storageDeviceContract, @CookieParam("SessionId") String sessionId)
+    {
+        storageDeviceService.addStorageDevice(sessionId, storageDeviceContract);
+        return Response.ok().build();
+    }
 
 
     @GET

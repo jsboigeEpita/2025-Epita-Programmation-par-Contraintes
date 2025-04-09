@@ -8,6 +8,7 @@ import com.project.controller.contracts.CaseContract;
 import com.project.controller.contracts.MemoryContract;
 import com.project.controller.contracts.MotherboardContract;
 import com.project.controller.contracts.PowerSupplyContract;
+import com.project.controller.contracts.StorageDeviceContract;
 import com.project.controller.contracts.VideoCardContract;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
@@ -33,6 +34,8 @@ public class ProductConfig extends PanacheMongoEntity {
     
     public VideoCardContract videoCard;
 
+    public StorageDeviceContract storageDevice;
+
     public int PowerConsumption;
     public float price;
 
@@ -42,7 +45,7 @@ public class ProductConfig extends PanacheMongoEntity {
 
     public ProductConfig(String sessionId, CaseContract pcCase, CPUContract cpu, CPUCoolerContract cpuCooler,
             MemoryContract memory, MotherboardContract motherboard, PowerSupplyContract powerSupply,
-            VideoCardContract videoCard) {
+            VideoCardContract videoCard, StorageDeviceContract storageDevice) {
         this.sessionId = sessionId;
         this.pcCase = pcCase;
         this.cpu = cpu;
@@ -51,5 +54,6 @@ public class ProductConfig extends PanacheMongoEntity {
         this.motherboard = motherboard;
         this.powerSupply = powerSupply;
         this.videoCard = videoCard;
+        this.storageDevice = storageDevice;
     }
 }
