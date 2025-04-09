@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class VRPSolver : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Job
+    {
+
+    }
+
+    [System.Serializable]
     public struct Task
     {
         public enum TaskType
@@ -17,7 +24,7 @@ public class VRPSolver : MonoBehaviour
         public int precedence;
     }
 
-    public List<List<int>> Do(int numRobots, int numLocations, (int, int, int)[] tasks, int[][] travelTimes, int[][] serviceTimes, long horizon = 100000000000)
+    public List<List<int>> Do(int numRobots, int numLocations, (int, int, int)[] tasks, int[][] travelTimes, int[][] serviceTimes, long horizon = int.MaxValue)
     {
         CpModel model = new CpModel();
 
@@ -45,7 +52,7 @@ public class VRPSolver : MonoBehaviour
             endVars[i] = model.NewIntVar(0, horizon, $"end_{i}");
             taskIntervals[i] = model.NewIntervalVar(startVars[i], travelDurations[i] + serviceDurations[i], endVars[i], $"interval_{i}");
         }
-
+        /*
         for (int task = 1; task < numTasks; task++)
         {
             model.Add(startVars[startVars.Length - 1] >= endVars[task] + workbenchCraftTime);
@@ -160,6 +167,8 @@ public class VRPSolver : MonoBehaviour
         {
             Debug.Log("No solution found.");
             return null;
-        }
+        }*/
+
+        return null;
     }
 }

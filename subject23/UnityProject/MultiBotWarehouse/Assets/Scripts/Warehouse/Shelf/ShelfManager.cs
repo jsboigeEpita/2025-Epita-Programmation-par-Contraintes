@@ -45,8 +45,10 @@ public class ShelfManager : MonoBehaviour
                     Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an object but an object was already here.");
                     return;
                 }
-
-                shelvingUnit.currentShelf.TakeFromRobot(robotManager);
+                if (robotManager.currentItem.itemIndexes == null)
+                    shelvingUnit.currentShelf.TakeFromRobot(robotManager);
+                else
+                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with a box.");
             }
         }
     }

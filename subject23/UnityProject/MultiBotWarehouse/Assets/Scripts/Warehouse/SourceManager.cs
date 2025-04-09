@@ -56,6 +56,7 @@ public class SourceManager : MonoBehaviour
     public void PutOnRobot(RobotManager robotManager)
     {
         robotManager.currentItem = GameObject.Instantiate(furniturePrefab).AddComponent<Item>();
+        robotManager.currentItem.itemIndex = furnitureIndex;
         robotManager.currentItem.transform.SetParent(robotManager.storeTransform);
         robotManager.currentItem.transform.localPosition = offset;
         robotManager.currentItem.transform.localScale = Vector3.one * furnitureScale;
