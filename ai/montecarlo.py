@@ -97,7 +97,6 @@ def _mcts_simulate(node: MCTSNode, ai_original_piece: int):
     """
     Phase 3: Simulate a playout from the given node's state using an improved policy.
     Policy: 1. Win if possible, 2. Block opponent win if necessary, 3. Random.
-    Returns result relative to the original AI player (+1 AI win, -1 AI loss, 0 draw).
     """
     if node.is_terminal():
         winner = node.state.winner
