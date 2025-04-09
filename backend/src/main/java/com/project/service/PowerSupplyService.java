@@ -50,11 +50,8 @@ public class PowerSupplyService
         List<PowerSupply> allCases = powerSupplyRepository.listAll();
         List<PowerSupply> compatiblePowerSupplys = new ArrayList<>();
 
-        System.out.println("All Cases: " + allCases.size());
-
         ProductConfig productConfig = getOrCreate(sessionId);
         int powerConsumption = productConfig.PowerConsumption;
-        System.out.println("Power Consumption: " + powerConsumption);
         
         IntVar[] powerSupplyVars = new IntVar[allCases.size()];
 
