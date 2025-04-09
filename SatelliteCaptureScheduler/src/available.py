@@ -97,8 +97,6 @@ def all_availability(begin, end, satellites, tasks, min_elevation_angle=10, time
 
     availabilityDico = {}
     for sat_idx, satellite in enumerate(satellites):
-        print(f"----------SATELLITE {sat_idx + 1}----------")
-        
         for i, label in enumerate(labels):
             currentTime = begin
             while currentTime < end:
@@ -126,8 +124,4 @@ def all_availability(begin, end, satellites, tasks, min_elevation_angle=10, time
                 else:
                     currentTime += time_step
                     
-    print("Available time windows by location:")
-    for location, windows in availabilityDico.items():
-        print(f"{location}: {len(windows)} windows")
-    
     return availabilityDico  # Return the mapping from location to time windows

@@ -1,10 +1,10 @@
-import json
 import numpy as np
-from datetime import datetime, timedelta
 from satellite import Satellite
 from imagingTaskGeneration import ImagingTask
 from available import all_availability
 from satellite_solver import satellite_solver, cp_model
+import yaml
+import os
 
 def convert_to_solver_input(enriched_locations):
     """
@@ -15,7 +15,6 @@ def convert_to_solver_input(enriched_locations):
     # Using some typical orbital parameters for Earth observation satellites
     MU = 398600.4418  # Earth's gravitational parameter (km^3/s^2)
     satellites = [
-        Satellite(MU, 7000, 0.0001, 98.5, 120, 45),   # Sun-synchronous orbit
         Satellite(MU, 6800, 0.0001, 51.6, 80, 30)     # ISS-like orbit
     ]
     
@@ -42,8 +41,7 @@ def convert_to_solver_input(enriched_locations):
         return []
     
     # Create imaging task object
-    imaging_task = ImagingTask(len(points), labels, 6378)
-    imaging_task.points = points  # Override random points with our actual points
+    imaging_task = ImagingTask(labels, 6378, points)
     
     # Define time range (24 hours)
     begin_time = 0
@@ -75,7 +73,18 @@ def convert_to_solver_input(enriched_locations):
                 "area_size_km2": loc.get("area_size_km2", 1.0),
                 "time_window_sec": time_window
             })
+    # Save the solver requests to a YAML file
     
+    # Create a directory for outputs if it doesn't exist
+    output_dir = "output"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Save to YAML file
+    yaml_file_path = os.path.join(output_dir, "solver_input.yaml")
+    with open(yaml_file_path, "w") as yaml_file:
+        yaml.dump(solver_requests, yaml_file, default_flow_style=False)
+    
+    print(f"Solver input saved to {yaml_file_path}")
     return solver_requests
 
 def run_satellite_scheduler(enriched_locations):
@@ -131,5 +140,13 @@ def run_satellite_scheduler(enriched_locations):
     
     formatted_results["total_memory_used_gb"] = total_memory
     formatted_results["memory_capacity_gb"] = satellite["memory_capacity_gb"]
+    # Save the formatted results to a YAML file
+    output_dir = "output"
+    os.makedirs(output_dir, exist_ok=True)
     
+    yaml_file_path = os.path.join(output_dir, "scheduler_results.yaml")
+    with open(yaml_file_path, "w") as yaml_file:
+        yaml.dump(formatted_results, yaml_file, default_flow_style=False)
+    
+    print(f"Scheduler results saved to {yaml_file_path}")
     return formatted_results

@@ -28,5 +28,3 @@ def generateTimeWindow(number_of_satellites=1, number_of_tasks=30, labels=LABELS
     windows = all_availability(0, 8640, satellites, satellite_imaging)
     
     return windows
-
-print(generateTimeWindow())

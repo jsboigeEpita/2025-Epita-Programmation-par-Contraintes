@@ -1,13 +1,11 @@
 import numpy as np
 
-class Satellite:
-    def __init__(self, MU, A, EC, IC, OMEGA, W):
-        self.MU = MU
-        self.A = A
-        self.EC = EC
-        self.IC = np.radians(IC)
-        self.OMEGA = np.radians(OMEGA)
-        self.W = np.radians(W)
+    # Create satellites
+    # Using some typical orbital parameters for Earth observation satellites
+    MU = 398600.4418  # Earth's gravitational parameter (km^3/s^2)
+    satellites = [
+        Satellite(MU, 6800, 0.0001, 51.6, 80, 30)     # ISS-like orbit
+    ]
 
     def position_at(self, t):
         """
