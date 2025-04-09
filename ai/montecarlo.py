@@ -94,22 +94,61 @@ def _mcts_expand(node: MCTSNode):
      return node
 
 def _mcts_simulate(node: MCTSNode, ai_original_piece: int):
-    """ Phase 3: Simulate random playout. Return result relative to AI player. """
+    """
+    Phase 3: Simulate a playout from the given node's state using an improved policy.
+    Policy: 1. Win if possible, 2. Block opponent win if necessary, 3. Random.
+    Returns result relative to the original AI player (+1 AI win, -1 AI loss, 0 draw).
+    """
     if node.is_terminal():
         winner = node.state.winner
     else:
+        # Simulate from a copy of the node's state
         temp_board = ConnectFourBoard()
         temp_board.board = np.copy(node.state.get_board())
-        current_sim_player = node.player_turn
+        current_sim_player = node.player_turn # Player whose turn it is at this node
 
         while not temp_board.game_over:
             valid_moves = temp_board.get_valid_locations()
-            if not valid_moves: break
-            move = random.choice(valid_moves)
+            if not valid_moves: break # Should be caught by game_over, but safety
+
+            move = -1 # Reset move choice
+            opponent_sim_player = 3 - current_sim_player
+
+            # Priority 1: Check for winning move for current_sim_player
+            for col in valid_moves:
+                row = temp_board.get_next_open_row(col)
+                if row != -1:
+                    # Temporarily place piece to check for win
+                    temp_board.board[row][col] = current_sim_player
+                    if temp_board.is_winning_move(current_sim_player):
+                        move = col
+                        temp_board.board[row][col] = EMPTY
+                        break
+                    temp_board.board[row][col] = EMPTY
+
+            # Priority 2: If no winning move, check for blocking move
+            if move == -1:
+                for col in valid_moves:
+                    row = temp_board.get_next_open_row(col)
+                    if row != -1:
+                        temp_board.board[row][col] = opponent_sim_player
+                        if temp_board.is_winning_move(opponent_sim_player):
+                            move = col # Must block this column
+                            temp_board.board[row][col] = EMPTY
+                            break
+                        temp_board.board[row][col] = EMPTY
+
+            # Priority 3: If no win or block, choose randomly
+            if move == -1:
+                move = random.choice(valid_moves)
+
+            # Perform the chosen move on the simulation board
             temp_board.drop_piece(move, current_sim_player)
             current_sim_player = 3 - current_sim_player
+
         winner = temp_board.winner
 
+    # Determine result relative to the original AI player
     if winner == ai_original_piece: return 1.0
     elif winner == (3 - ai_original_piece): return -1.0
     else: return 0.0
@@ -122,7 +161,7 @@ def _mcts_backpropagate(node: MCTSNode, result: float):
         current_node.value += result # Accumulate result relative to AI
         current_node = current_node.parent
 
-def get_move(board, piece, iterations=50000):
+def get_move(board, piece, iterations=2000):
     start_time = time.time()
 
     root_state = ConnectFourBoard()
