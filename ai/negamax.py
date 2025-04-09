@@ -60,9 +60,9 @@ def negamax(board, depth, alpha, beta, player_piece, ai_original_piece):
         if is_terminal:
             winner = board.winner
             if winner == ai_original_piece:
-                return (1000000 + depth * 100, None)
+                return (1000000 + depth, None)
             elif winner == (3 - ai_original_piece):
-                return (-1000000 - depth * 100, None)
+                return (-1000000 - depth, None)
             else: # Draw
                 return (0, None)
         else: # Depth is zero
