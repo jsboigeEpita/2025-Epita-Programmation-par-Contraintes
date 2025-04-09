@@ -105,4 +105,4 @@ def get_move(board, piece, depth=4):
 
 def name():
     """Returns the name of this AI algorithm."""
-    return "Negamax AI"
+    return "Negamax"

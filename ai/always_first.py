@@ -23,4 +23,4 @@ def name():
     """
     Returns the name of this AI algorithm
     """
-    return "Always First AI"
+    return "Always First"

@@ -160,4 +160,4 @@ def get_move(board, piece, depth=6):
 
 
 def name():
-    return "Minimax AI"
+    return "Minimax"

@@ -414,16 +414,16 @@ class Game:
             # Add a button for each AI
             for i, ai_name in enumerate(ai_names):
                 text_surface = font.render(ai_name, 1, BLACK)
-                button_rect = pygame.Rect(WIDTH/2 - 200, y_offset + i * 80, 400, 60)
+                button_rect = pygame.Rect(WIDTH/2 - 150, y_offset + i * 50, 300, 40)
                 ai_buttons.append((button_rect, ai_name))
                 
                 pygame.draw.rect(screen, YELLOW, button_rect, border_radius=10)
                 screen.blit(text_surface, (button_rect.centerx - text_surface.get_width()/2, 
                                          button_rect.centery - text_surface.get_height()/2))
             
-            # Add back button
+            # Add back button - adjust position to match the new AI button sizes
             back_text = font.render("Back", 1, BLACK)
-            back_rect = pygame.Rect(WIDTH/2 - 200, y_offset + len(ai_names) * 80, 400, 60)
+            back_rect = pygame.Rect(WIDTH/2 - 125, y_offset + len(ai_names) * 50 + 20, 250, 40)
             ai_buttons.append((back_rect, "back"))
             
             pygame.draw.rect(screen, (100, 100, 255), back_rect, border_radius=10)

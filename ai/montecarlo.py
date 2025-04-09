@@ -200,4 +200,4 @@ def get_move(board, piece, iterations=2000):
 
 def name():
     """ Returns the name of this AI algorithm. """
-    return "MonteCarlo AI"
+    return "MonteCarlo"

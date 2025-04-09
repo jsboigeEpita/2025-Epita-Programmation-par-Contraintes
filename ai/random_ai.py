@@ -30,4 +30,4 @@ def name():
     """
     Returns the name of this AI algorithm
     """
-    return "Random AI"
+    return "Random"
