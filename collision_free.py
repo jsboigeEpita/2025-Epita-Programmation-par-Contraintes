@@ -46,10 +46,6 @@ class PathFinder:
                 
         return neighbors
     
-    def heuristic(self, a: Tuple[int, int], b: Tuple[int, int]) -> float:
-        """Manhattan distance heuristic"""
-        return abs(a[0] - b[0]) + abs(a[1] - b[1])
-    
     def find_path(self, start: Tuple[int, int], goal: Tuple[int, int]) -> Optional[List[Tuple[int, int]]]:
         """Find a path from start to goal using A* algorithm"""
         if not self.is_valid_position(*start) or not self.is_valid_position(*goal):
@@ -63,7 +59,7 @@ class PathFinder:
         # Priority queue for open set
         open_set = []
         # Start with the start position
-        heapq.heappush(open_set, (0, start))
+        heapq.heappush(open_set, start)
         
         # For each node, which node it came from
         came_from = {}
@@ -71,15 +67,12 @@ class PathFinder:
         # For each node, the cost of getting from start to that node
         g_score = {start: 0}
         
-        # For each node, the total cost of getting from start to goal through that node
-        f_score = {start: self.heuristic(start, goal)}
-        
         # Set of positions in the open set
         open_set_hash = {start}
         
         while open_set:
-            # Get the position with the lowest f_score
-            current_f, current = heapq.heappop(open_set)
+            # Get the position
+            current = heapq.heappop(open_set)
             open_set_hash.remove(current)
             
             # If we've reached the goal, reconstruct the path
@@ -109,37 +102,19 @@ class PathFinder:
                     # Update our path
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g_score
-                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
                     
                     if neighbor not in open_set_hash:
-                        heapq.heappush(open_set, (f_score[neighbor], neighbor))
+                        heapq.heappush(open_set, neighbor)
                         open_set_hash.add(neighbor)
         
         # No path found
         self.distance_cache[cache_key] = {'path': None, 'distance': float('inf')}
         return None
     
-    def get_path_distance(self, start: Tuple[int, int], goal: Tuple[int, int]) -> float:
-        """Get the distance of the shortest path between two points, adjusted for obstacles"""
-        # Check cache first
-        cache_key = (start, goal)
-        if cache_key in self.distance_cache:
-            return self.distance_cache[cache_key]['distance']
-        
-        # Find the path
-        path = self.find_path(start, goal)
-        if path:
-            distance = len(path) - 1  # Subtract 1 because path includes start
-            self.distance_cache[cache_key] = {'path': path, 'distance': distance}
-            return distance
-        
-        # No path found
-        self.distance_cache[cache_key] = {'path': None, 'distance': float('inf')}
-        return float('inf')
-    
     def find_optimal_goal_assignment(self, robots: List[Robot], goals: List[Goal]) -> Dict[int, List[Tuple[int, List[Tuple[int, int]]]]]:
         """
         Find the optimal assignment of goals to robots to minimize total time
+        This solution is based on the Multiple Travelling Salesman Problem
         Returns: Dictionary mapping robot ID to list of (goal_id, path) tuples
         """
         # Make a copy of robots so we can update their positions during calculation
@@ -606,6 +581,98 @@ class PathFinder:
         
         return result
 
+    def visualize_detailed_schedule(self, execution_plan, robots, time_resolution=0.5):
+        """
+        Create a more detailed visualization showing robot positions over time
+        
+        Args:
+            execution_plan: The execution plan from execute_assignments
+            robots: List of Robot objects
+            time_resolution: Time step for visualization (smaller = more detail)
+        
+        Returns:
+            String representation of the detailed schedule
+        """
+        if not execution_plan:
+            return "No execution plan provided."
+        
+        # Find the maximum time
+        max_time = 0
+        for robot_id, steps in execution_plan.items():
+            robot_total_time = sum(step['time'] for step in steps)
+            max_time = max(max_time, robot_total_time)
+        
+        # Round up max_time
+        max_time = int(max_time) + 1
+        
+        # Create a timeline of positions for each robot
+        robot_timelines = {}
+        robot_map = {robot.id: robot for robot in robots}
+        
+        for robot_id, steps in execution_plan.items():
+            if not robot_id in robot_map:
+                continue
+                
+            robot = robot_map[robot_id]
+            timeline = {}
+            
+            # Start with the robot's initial position
+            current_position = robot.current_location
+            current_time = 0
+            
+            for step in steps:
+                path = step['path']
+                time_per_cell = step['time'] / (len(path) - 1) if len(path) > 1 else 0
+                
+                # Add each position along the path
+                for i in range(len(path)):
+                    position_time = current_time + (i * time_per_cell)
+                    timeline[position_time] = path[i]
+                
+                current_time += step['time']
+                current_position = path[-1] if path else current_position
+            
+            robot_timelines[robot_id] = timeline
+        
+        # Create the visualization
+        result = []
+        result.append(f"Detailed Robot Schedule (resolution: {time_resolution} time units)")
+        result.append("=" * 80)
+        
+        # For each time step
+        for t in range(0, int(max_time / time_resolution) + 1):
+            actual_time = t * time_resolution
+            
+            # Collect positions of all robots at this time
+            positions = {}
+            for robot_id, timeline in robot_timelines.items():
+                # Find the closest time point
+                closest_time = None
+                min_diff = float('inf')
+                
+                for time_point in timeline.keys():
+                    diff = abs(time_point - actual_time)
+                    if diff < min_diff:
+                        min_diff = diff
+                        closest_time = time_point
+                
+                if closest_time is not None:
+                    positions[robot_id] = timeline[closest_time]
+            
+            # Create the time step visualization
+            time_display = f"Time {actual_time:.1f}: "
+            robot_positions = []
+            
+            for robot_id in sorted(positions.keys()):
+                pos = positions[robot_id]
+                robot_positions.append(f"R{robot_id}@{pos}")
+            
+            result.append(time_display + ", ".join(robot_positions))
+        
+        result.append("=" * 80)
+        return "\n".join(result)
+
+
 # Example usage
 def example_collision_avoidance():
     # Create a 20x20 grid
@@ -615,18 +682,19 @@ def example_collision_avoidance():
     # Create multiple robots with different speeds
     robots = [
         Robot(id=1, speed=1.0, current_location=(0, 0)),
-        Robot(id=2, speed=1.5, current_location=(1, 0)),
-        Robot(id=3, speed=0.8, current_location=(0, 1)),
-        Robot(id=4, speed=0.5, current_location=(1, 1))
+        Robot(id=2, speed=1.5, current_location=(9, 0)),
+        Robot(id=3, speed=0.8, current_location=(0, 9))
     ]
     
     # Create multiple goals
     goals = [
         Goal(id=1, location=(4, 9)),
-        Goal(id=2, location=(5, 5)),
-        Goal(id=3, location=(7, 8)),
+        Goal(id=2, location=(8, 7)),
+        Goal(id=3, location=(0, 7)),
         Goal(id=4, location=(5, 2)),
-        Goal(id=5, location=(9, 7))
+        Goal(id=5, location=(1, 3)),
+        Goal(id=6, location=(6, 4)),
+        Goal(id=7, location=(9, 3))
     ]
     
     # Find the optimal assignment of goals to robots
@@ -667,6 +735,8 @@ def example_collision_avoidance():
     # Visualize the assignment
     print("\nGrid Visualization (Collision Free):")
     print(pathfinder.visualize_assignment(robots, goals, collision_free_assignment))
+
+    print(pathfinder.visualize_detailed_schedule(execution_plan, robots))
 
 if __name__ == "__main__":
     example_collision_avoidance()
