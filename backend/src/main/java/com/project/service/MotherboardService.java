@@ -83,7 +83,7 @@ public class MotherboardService {
         
     	Model model = new Model("Motherboard Compatibility Check");
         // List<MotherboardContract> compatibleMotherboards = new ArrayList<>();
-        List<Motherboard> allMotherboards = motherboardsRepository.listAll();
+        List<Motherboard> allMotherboards = motherboardsRepository.listAll().stream().filter(c -> c.price.length() != 0).toList();
         List<Motherboard> compatibleMotherboards = new ArrayList<>();
 
 

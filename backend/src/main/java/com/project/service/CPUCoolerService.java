@@ -66,7 +66,7 @@ public class CPUCoolerService
 		logger.info("SessionId: " + sessionId);
 
 		Model model = new Model("Cpu Compatibility");
-		List<CpuCooler> allCpus = cpuCoolerRepository.listAll();
+		List<CpuCooler> allCpus = cpuCoolerRepository.listAll().stream().filter(c -> c.getPrice().length() != 0).toList();
 		List<CpuCooler> compatibleCpuCoolers = new ArrayList<>();
 
 		ProductConfig productConfig = getOrCreate(sessionId);

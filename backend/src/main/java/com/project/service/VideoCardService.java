@@ -55,7 +55,7 @@ public class VideoCardService
     public List<VideoCard> filteVideoCards(String sessionId)
     {
         Model model = new Model("Video Card Compatibility");
-        List<VideoCard> allCases = videoCardRepository.listAll();
+        List<VideoCard> allCases = videoCardRepository.listAll().stream().filter(c -> c.getPrice().length() != 0).toList();
         List<VideoCard> compatibleVideoCard = new ArrayList<>();
 
         System.out.println("All video cards: " + allCases.size());

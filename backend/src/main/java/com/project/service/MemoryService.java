@@ -66,7 +66,7 @@ public class MemoryService
 	public List<Ram> filterRam(String sessionId)
 	{
 		Model model = new Model("Ram Filter");
-		List<Ram> allRam = ramRepository.listAll();
+		List<Ram> allRam = ramRepository.listAll().stream().filter(c -> c.price.length() != 0).toList();
 		List<Ram> compatibleRams = new ArrayList<>();
 
 		ProductConfig productConfig = getOrCreate(sessionId);

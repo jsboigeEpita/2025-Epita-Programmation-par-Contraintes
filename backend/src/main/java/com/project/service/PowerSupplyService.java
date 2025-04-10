@@ -39,7 +39,12 @@ public class PowerSupplyService
 
     public void addPowerSupply(String sessionId, PowerSupplyContract powerSupply) {
 		ProductConfig productConfig = getOrCreate(sessionId);
-		productConfig.powerSupply = powerSupply;
+		if (productConfig.powerSupply != null) {
+            productConfig.price -= Float.parseFloat(productConfig.powerSupply.getPrice().replace('$', ' ').trim());
+        }
+        
+        productConfig.powerSupply = powerSupply;
+        productConfig.price += Float.parseFloat(productConfig.powerSupply.getPrice().replace('$', ' ').trim());
 
 		productConfigRepository.persistOrUpdate(productConfig);
 	}
@@ -47,7 +52,7 @@ public class PowerSupplyService
     public List<PowerSupply> filterPowerSupply(String sessionId)
     {
         Model model = new Model("Power Supply Compatibility");
-        List<PowerSupply> allCases = powerSupplyRepository.listAll();
+        List<PowerSupply> allCases = powerSupplyRepository.listAll().stream().filter(c -> c.getPrice().length() != 0).toList();
         List<PowerSupply> compatiblePowerSupplys = new ArrayList<>();
 
         ProductConfig productConfig = getOrCreate(sessionId);

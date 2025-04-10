@@ -44,7 +44,12 @@ public class CaseService
 
     public void addCase(String sessionId, CaseContract casepc) {
 		ProductConfig productConfig = getOrCreate(sessionId);
-		productConfig.pcCase = casepc;
+        if (productConfig.pcCase != null) {
+			productConfig.price -= Float.parseFloat(productConfig.pcCase.getPrice().replace('$', ' ').trim());
+		}
+        
+        productConfig.pcCase = casepc;
+		productConfig.price += Float.parseFloat(productConfig.pcCase.getPrice().replace('$', ' ').trim());
 
 		productConfigRepository.persistOrUpdate(productConfig);
 	}
@@ -52,7 +57,7 @@ public class CaseService
     public List<Case> filterCases(String sessionId)
     {
         Model model = new Model("Case Compatibility");
-        List<Case> allCases = caseRepository.listAll();
+        List<Case> allCases = caseRepository.listAll().stream().filter(c -> c.getPrice().length() != 0).toList();
         List<Case> compatibleCases = new ArrayList<>();
 
         ProductConfig productConfig = getOrCreate(sessionId);

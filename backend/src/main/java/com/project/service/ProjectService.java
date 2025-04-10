@@ -97,7 +97,6 @@ public class ProjectService {
                 if (productConfig.storageDevice != null)
                 {
                     productConfig.price -= Float.parseFloat(productConfig.storageDevice.getPrice().replace('$', ' ').trim());
-                    productConfig.PowerConsumption -= productConfig.cpuCooler.getPowerConsumption();
                     productConfig.storageDevice = null;
                 }
                 break;

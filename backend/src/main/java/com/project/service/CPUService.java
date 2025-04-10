@@ -66,7 +66,7 @@ public class CPUService
 	{
 		logger.info("SessionId: " + sessionId);
 		Model model = new Model("Cpu Compatibility");
-		List<Cpu> allCpus = cpuRepository.listAll();
+		List<Cpu> allCpus = cpuRepository.listAll().stream().filter(c -> c.price.length() != 0).toList();
 		List<Cpu> compatibleMotherboards = new ArrayList<>();
 
 		ProductConfig productConfig = getOrCreate(sessionId);

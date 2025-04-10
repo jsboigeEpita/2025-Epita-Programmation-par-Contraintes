@@ -43,7 +43,13 @@ public class StorageDeviceService
 
     public void addStorageDevice(String sessionId, StorageDeviceContract storagevideo) {
 		ProductConfig productConfig = getOrCreate(sessionId);
-		productConfig.storageDevice = storagevideo;
+		if (productConfig.storageDevice != null) {
+            productConfig.price -= Float.parseFloat(productConfig.storageDevice.getPrice().replace('$', ' ').trim());
+        }
+    
+        productConfig.storageDevice = storagevideo;
+        productConfig.price += Float.parseFloat(productConfig.storageDevice.getPrice().replace('$', ' ').trim());
+
 
 		productConfigRepository.persistOrUpdate(productConfig);
 	}
@@ -57,7 +63,7 @@ public class StorageDeviceService
         
         logger.info(allCases.size());
 
-        ProductConfig productConfig = getOrCreate(sessionId);
+        // ProductConfig productConfig = getOrCreate(sessionId);
         
         IntVar[] storageDeviceVars = new IntVar[allCases.size()];
 
