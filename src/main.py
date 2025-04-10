@@ -49,24 +49,20 @@ def generate_and_run_testsuite(filename, function_name):
     print()
     logging.info("Starting evaluation...")
     strategies = {
-        # "all_combinations": all_test_cases,
-        "10_sample": initial_test_set,
-        "pairwise": pairwise_test_set,
+        # "All Combinations": all_test_cases,
+        "10_Sample": initial_test_set,
+        "Pairwise": pairwise_test_set,
     }
     for strategy in strategies.keys():
         print(
             "\n======================================================================"
         )
         print(f"\033[94m{strategy} Strategy\033[0m")
-        start_time = time.time()
         test_suite = testsuite.generate_test_suite(
             io_utils.load_function_from_file(filename, function_name),
             strategies[strategy],
         )
         coverage_utils.compute_coverage(test_suite, strategy)
-        print("----------------------------------------------------------------------")
-        end_time = time.time()
-        print(f"Time taken: {end_time - start_time:.3f} seconds")
         print(
             "======================================================================\n\n"
         )
