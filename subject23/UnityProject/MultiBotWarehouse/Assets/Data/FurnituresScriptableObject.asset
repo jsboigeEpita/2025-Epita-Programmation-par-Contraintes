@@ -39,3 +39,29 @@ MonoBehaviour:
   - {fileID: 1355281140056533860, guid: a9b3dec6c36033744a62441b6a92cd76, type: 3}
   - {fileID: 6075769524634383316, guid: 2343b3a108edf9a49b06659f0928a030, type: 3}
   - {fileID: 3400182943182319669, guid: 9ee87d91e053366428e82a8869a714cc, type: 3}
+  names:
+  - Air Hockey
+  - Bathroom Bin
+  - Bed
+  - Office Bin
+  - Camera
+  - Large Closet
+  - Medium Closet
+  - Coffee Machine
+  - Coffee Table
+  - Dresser
+  - Fridge
+  - Kitchen Chair
+  - Kitchen Sink
+  - Kitchen Table
+  - Table Lamp
+  - Lamp
+  - Lounge Chair
+  - Mircowave Oven
+  - Piano
+  - Office Table
+  - Cat Scratcher
+  - Sofa
+  - Toy Car
+  - Chalk Board
+  - Washing Machine

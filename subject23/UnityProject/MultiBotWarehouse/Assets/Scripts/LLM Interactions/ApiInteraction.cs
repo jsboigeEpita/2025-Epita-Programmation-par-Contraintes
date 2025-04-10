@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
-using static ApiInteraction;
 
 public class ApiInteraction : MonoBehaviour
 {
@@ -125,12 +124,15 @@ public class ApiInteraction : MonoBehaviour
         }
     }
 
-    public async IAsyncEnumerable<string> StartConversation(string message, string model, bool enableFunctionCalling, bool verbose = false)
+    public async IAsyncEnumerable<string> StartConversation(string systemMessage, string userMessage, string model, bool enableFunctionCalling, bool verbose = false)
     {
         List<ChatMessage> conversationHistory = new List<ChatMessage>();
 
-        ChatMessage userMessage = new ChatMessage { role = "user", content = message };
-        conversationHistory.Add(userMessage);
+        ChatMessage systemChatMessage = new ChatMessage { role = "system", content = systemMessage };
+        ChatMessage userChatMessage = new ChatMessage { role = "user", content = userMessage };
+        
+        conversationHistory.Add(systemChatMessage);
+        conversationHistory.Add(userChatMessage);
 
         ChatRequest initialRequest = new ChatRequest
         {

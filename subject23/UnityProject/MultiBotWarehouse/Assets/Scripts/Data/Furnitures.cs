@@ -5,4 +5,5 @@ using UnityEngine;
 public class Furnitures : ScriptableObject
 {
     public List<GameObject> furnitures;
+    public List<string> names;
 }
