@@ -2,6 +2,7 @@ import io
 from contextlib import redirect_stdout
 import unittest
 import itertools
+import coverage
 
 
 def generate_all_possible_test_cases(values):
@@ -42,7 +43,6 @@ def generate_test_suite(func, test_cases):
                     result = func(**case)
 
                 self.assertEqual(result, expected)
-                print()
 
             return test
 
