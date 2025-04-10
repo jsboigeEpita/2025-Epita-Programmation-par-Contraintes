@@ -1,126 +1,196 @@
-# Projet d'Ordonnancement de Prises de Vue Satellite par Contraintes
+# Système de Planification et d'Observation Assisté par LLM
 
-## 1. Objectif du Projet
+Ce projet implémente un système intelligent qui utilise un modèle de langage (LLM) pour traiter les demandes utilisateur concernant des observations et planifications, en s'appuyant sur des services de géolocalisation et d'optimisation de fenêtres temporelles.
 
-Concevoir et implémenter une solution d'ordonnancement (scheduling) par contraintes (CSP) pour planifier efficacement les prises de vue et les opérations de communication d'un satellite d'observation de la Terre. L'objectif est de maximiser la somme des priorités des tâches réalisées tout en respectant les contraintes opérationnelles, orbitales et de ressources.
+![Architecture du système](./architecture-diagram.png)
 
-## 2. Contexte et Enjeux
+## Table des matières
+1. [Vue d'ensemble](#vue-densemble)
+2. [Architecture du système](#architecture-du-système)
+3. [Composants](#composants)
+   - [Interface utilisateur (CLI)](#interface-utilisateur-cli)
+   - [Module LLM](#module-llm)
+   - [Détection d'intention](#détection-dintention)
+   - [OpenStreetMapAPI](#openstreetmapapi)
+   - [Time Window Scheduler](#time-window-scheduler)
+   - [Solver](#solver)
+4. [Flux de travail](#flux-de-travail)
+   - [Traitement des demandes d'observation](#traitement-des-demandes-dobservation)
+   - [Traitement des questions générales](#traitement-des-questions-générales)
+5. [Simplifications et limitations](#simplifications-et-limitations)
+6. [Installation et configuration](#installation-et-configuration)
+7. [Utilisation](#utilisation)
+8. [Exemples](#exemples)
 
-Les agences spatiales reçoivent de nombreuses requêtes d'images couvrant des zones géographiques variées. En raison de limitations techniques et opérationnelles, le satellite ne peut réaliser qu'un nombre limité d'observations par orbite. Il est donc crucial de :
+## Vue d'ensemble
 
-- Sélectionner les observations les plus prioritaires.
-- Planifier précisément le début de chaque observation.
-- Optimiser l'utilisation des ressources à bord (mémoire, énergie) et au sol (stations de téléchargement).
-- Respecter les contraintes liées à la visibilité des cibles et aux délais de communication.
+Ce système permet aux utilisateurs de planifier des observations ou de poser des questions générales via une interface en ligne de commande. Selon l'intention détectée, le système peut:
+- Planifier des observations optimales basées sur les coordonnées GPS et les contraintes temporelles
+- Répondre à des questions générales grâce au modèle de langage
 
-## 3. Contraintes du Système
+Le système intègre plusieurs composants spécialisés qui travaillent ensemble pour traiter les requêtes et générer des réponses structurées et facilement compréhensibles.
 
-1. **Position du Satellite** : Le satellite doit être au-dessus de la zone à photographier.
-2. **Calibration de la Lentille** : La lentille doit être calibrée avant chaque prise de vue.
-3. **Taille de la Zone** : La taille de la zone photographiée influence la taille de la photo et donc le temps d'envoi sur Terre.
-4. **Priorité des Prises de Vue** : Chaque prise de vue a une priorité (échelle de 3 à 1).
-5. **Tâche Unique** : Le satellite ne peut pas prendre de photos et les envoyer simultanément.
-6. **Allocation de Ressources** : La mémoire du satellite est limitée (ex : 5 Go) et la taille d'une photo dépend de la taille de la zone photographiée.
-7. **Durée de la Prise de Vue** : La taille de la zone influence la durée de la prise de vue.
-8. **Débit d'Upload** : Le débit d'upload influence le temps d'envoi des clichés.
-9. **Temps de Recalibration** : Le temps nécessaire pour recalibrer la lentille doit être pris en compte.
-10. **Météo à l'endroit voulu** : Une météo capricieuse à l'endroit de la capture peut empêcher la prise de vue.
+## Architecture du système
 
-### Objectif
+Comme le montre le schéma, l'architecture est composée de six composants principaux:
 
-Maximiser la somme des priorités des clichés pris en respectant les contraintes mentionnées.
+1. **User**: L'utilisateur qui interagit avec le système via le CLI
+2. **CLI**: Interface en ligne de commande qui reçoit les entrées et affiche les résultats
+3. **LLM**: Le modèle de langage qui analyse les requêtes et génère les réponses
+4. **OpenStreetMapAPI**: Service externe pour obtenir des informations géographiques
+5. **Time Window Scheduler**: Module de calcul des fenêtres temporelles optimales
+6. **Solver**: Moteur d'optimisation qui génère les plannings d'observation
 
-## 4. Approche Méthodologique – Programmation par Contraintes (CSP)
+Le système utilise une architecture modulaire qui facilite la maintenance et l'extension.
 
-L'utilisation de la programmation par contraintes est recommandée pour les raisons suivantes :
+## Composants
 
-- Unifier et modéliser l'ensemble des contraintes opérationnelles (visibilité, ressources, temporelles, précédence).
-- Exploiter la propagation des contraintes pour éliminer rapidement des combinaisons impossibles et réduire l'espace de recherche.
-- Optimiser un critère objectif (ex. la somme des priorités) tout en fournissant, si nécessaire, des preuves de l'optimalité ou des alternatives exploitables par les opérateurs.
-- Faciliter l'extension du modèle en cas d'ajout de nouvelles contraintes (nouveau satellite, indisponibilités ponctuelles, etc.) sans nécessiter de réécriture complète des heuristiques.
+### Interface utilisateur (CLI)
 
-Des systèmes et frameworks existants (comme SPIKE du CNES ou EUROPA de la NASA) démontrent que cette approche est efficace pour la gestion d'ordonnancements complexes, y compris pour des configurations comprenant plusieurs satellites et stations sol.
+L'interface en ligne de commande sert de point d'entrée pour les utilisateurs.
 
-## 5. Intégration LLM pour l'Ordonnancement de Prises de Vue Satellite
+### Module LLM
 
-### Contexte
+Le coeur du système, responsable de l'analyse des entrées utilisateur et de la génération de réponses.
 
-L'intégration d'un Large Language Model (LLM) facilite l'interaction avec le système d'ordonnancement de prises de vue satellite en utilisant le langage naturel. L'objectif est de permettre aux utilisateurs de spécifier leurs besoins de manière intuitive, tout en maximisant la somme des priorités des clichés pris.
+**Implémentation**:
+- Utilise une API de modèle de langage (Claude, GPT, etc.)
+- Effectue la détection d'intention sur les entrées utilisateur
+- Formate les requêtes et réponses entre les différents composants
+- Génère des explications et résumés en langage naturel
 
-### Fonctionnement
+### Détection d'intention
 
-1. **Demande de l'Utilisateur** :
-    - Exemple : "Je veux au plus vite les clichés de Tokyo avec une priorité de 3 et de Montréal avec une priorité de 2."
-2. **Traitement de la Demande** :
-    - Le LLM extrait les informations pertinentes : `{"Tokyo": 3, "Montréal": 2}`
-3. **Récupération des Coordonnées GPS** :
-    - Fonction : `get_gps_coordinates(["Tokyo", "Montréal"])`
-    - Sortie : `{"Tokyo": [35.6895, 139.6917], "Montréal": [45.5017, -73.5673]}`
-4. **Planification des Prises de Vue** :
-    - Fonction : `plan_satellite_shots({"Tokyo": [35.6895, 139.6917], "Montréal": [45.5017, -73.5673]}, {"Tokyo": 3, "Montréal": 2})`
-    - Sortie : Plan de prises de vue optimisé avec les heures et les priorités.
+Ce module analyse l'entrée utilisateur pour déterminer s'il s'agit d'une demande d'observation ou d'une question générale.
 
-Voici les formats YAML reformattés pour une meilleure lisibilité :
+**Implémentation**:
+- Utilise des techniques d'analyse sémantique via le LLM
+- Catégorise les requêtes en deux types principaux:
+  - `observation_request`: Demandes de planification d'observation
+  - `general_question`: Questions générales sur le système ou autres sujets
 
-### Format d'Input (YAML)
-```yaml
-satellite:
-  memory_capacity_gb: 5
-  battery_capacity_percent: 100
-  recalibration_time_s: 10
-  image_size_per_km2_gb: 0.15
-  duration_per_km2_sec: 1.5
-  max_photo_duration_s: 120
-  min_battery_percent: 20
-  simultaneous_tasks: false
-  upload_speed_mbps: 2
-  recalibration_time_s: 10
-  cloud_probability: 0.3
+**Simplifications**:
+- Classification binaire simple au lieu d'une taxonomie complexe d'intentions
+- Pas de gestion des intentions ambiguës ou multiples
+- Analyse basée uniquement sur le texte sans contexte historique
 
-constraints:
-  position_required: true
-  calibration_required: true
-  duration_depend_on_size: true
-  limited_memory: true
-  limited_bandwith: true
-  
-requests:
-  - location: "Tokyo"
-    coordinates: [35.6895, 139.6917]
-    priority: 3
-    area_size_km2: 100
-  - location: "Montréal"
-    coordinates: [45.5017, -73.5673]
-    priority: 2
-    area_size_km2: 50
-  - location: "Paris"
-    coordinates: [48.8566, 2.3522]
-    priority: 1
+### OpenStreetMapAPI
+
+Interface avec les services de cartographie pour obtenir des informations géographiques.
+
+**Implémentation**:
+- Utilise l'API OpenStreetMap pour récupérer les coordonnées GPS
+- Convertit les noms de lieux en coordonnées de latitude/longitude
+
+**Simplifications**:
+- Pas de vérification avancée de la précision des coordonnées
+
+### Time Window Scheduler
+
+Ce module calcule les fenêtres temporelles optimales pour les observations.
+
+**Implémentation**:
+- Analyse les contraintes temporelles spécifiées par l'utilisateur
+- Calcule les créneaux disponibles en fonction des coordonnées GPS et de la position du satellite
+- Génère des fenêtres temporelles pour le Solver
+
+**Simplifications**:
+- Modélisation simple des contraintes temporelles
+- Prise en compte limitée des facteurs environnementaux
+
+### Solver
+
+Le moteur d'optimisation qui génère les plannings d'observation optimaux.
+
+**Implémentation**:
+- Utilise des algorithmes d'optimisation pour planifier les observations
+- Maximise l'efficacité des observations selon les contraintes données
+- Génère un planning détaillé avec des horaires précis
+
+**Simplifications**:
+- Algorithmes d'optimisation simplifiés pour les petits ensembles de données
+- Pas de prise en compte des contraintes multi-objectifs complexes
+- Optimisation locale plutôt que globale pour les problèmes de grande taille
+
+## Flux de travail
+
+Le système gère deux flux de travail principaux, selon l'intention détectée:
+
+### Traitement des demandes d'observation
+
+1. L'utilisateur entre une demande d'observation via le CLI
+2. Le CLI transmet la requête au module LLM
+3. Le LLM détecte l'intention comme `observation_request`
+4. Le LLM formate la requête utilisateur pour extraction des paramètres
+5. Le système récupère les coordonnées GPS via OpenStreetMapAPI
+6. Le Time Window Scheduler calcule les fenêtres temporelles appropriées
+7. Les données sont transmises au Solver pour la planification
+8. Le Solver renvoie un résultat optimisé au LLM
+9. Le LLM génère un résumé en langage naturel
+10. Le CLI affiche une réponse structurée à l'utilisateur
+
+### Traitement des questions générales
+
+1. L'utilisateur pose une question via le CLI
+2. Le CLI transmet la question au module LLM
+3. Le LLM détecte l'intention comme `general_question`
+4. Le LLM génère directement une réponse
+5. Le CLI affiche la réponse à l'utilisateur
+
+## Simplifications et limitations
+
+Le système actuel présente plusieurs simplifications pour faciliter l'implémentation:
+
+1. **Détection d'intention binaire**: La classification des requêtes est limitée à deux catégories, ce qui peut ne pas couvrir tous les cas d'utilisation.
+
+2. **Intégration API limitée**: L'utilisation d'APIs externes est simplifiée, sans gestion avancée des erreurs ou des limitations de débit.
+
+3. **Planification temporelle simplifiée**: Les algorithmes de planification ne prennent pas en compte toutes les variables possibles (météo détaillée, accessibilité, etc.).
+
+4. **Absence d'état utilisateur**: Le système ne maintient pas d'historique détaillé des interactions ou des préférences utilisateur.
+
+5. **Interface textuelle basique**: L'interface CLI offre des fonctionnalités limitées par rapport à une interface graphique ou web.
+
+6. **Optimisation locale**: Les algorithmes d'optimisation privilégient la rapidité sur l'optimalité globale pour les problèmes complexes.
+
+7. **Pas de persistance des données**: Les résultats et configurations ne sont pas sauvegardés entre les sessions.
+
+## Installation et configuration
+
+```bash
+# Cloner le repo
+git clone https://github.com/lucasduport/SatelliteCaptureScheduler
+cd observation-planning-system
+
+# Installer les dépendances
+pip install -r requirements.txt
+
+# Configurer les clés API
+cp .env.example .env
+# Éditer .env pour ajouter vos clés API
 ```
 
-### Format d'Output (YAML)
-```yaml
-schedule:
-  - location: "Tokyo"
-    start_time: "2025-04-02T12:30:00Z"
-    end_time: "2025-04-02T12:31:30Z"
-    priority: 3
-  - location: "Montréal"
-    start_time: "2025-04-02T14:10:00Z"
-    end_time: "2025-04-02T14:11:00Z"
-    priority: 2
-  - location: "Paris"
-    start_time: "2025-04-02T16:00:00Z"
-    end_time: "2025-04-02T16:01:15Z"
-    priority: 1
-summary:
-  total_photos: 3
-  percentage_success: 1.0
-  priority_score: 6
+## Utilisation
+
+- Lancer une demo avec des données d'exemple
+```bash
+python main.py sample
+```
+- Demande d'observation
+```bash
+python main.py llm
+> Je voudrais un cliché de la Tour Eiffel le plus vite possible, ainsi que de la Siberie
 ```
 
-## 6. Références et Inspirations Techniques
+- Question générale
+```bash
+python main.py llm
+> Bonjour, comment vas-tu ?
+```
 
-- Frank et al. (NASA Ames) – "Constraint-based Scheduling for Space Missions" décrivant l’architecture d’EUROPA.
-- Jussien & Laas (ONERA) – Études sur la planification efficace des changements d’instruments d’un satellite via CP.
-- DIMACS’98 – Publication formelle introduisant le problème d’ordonnancement satellite en tant que CSP, avec application aux constellations orbitantes.
+## Exemples
+
+### Exemple 1: Demande d'observation
+```
+> Je voudrais un cliché la Tour Eiffel, ainsi qu'un cliché urgent de Tokyo. Et quand c'est possible, l'Australie
+```
