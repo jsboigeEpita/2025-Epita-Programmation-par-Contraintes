@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StorageDeviceContract {
     private String manufacturer;
-    private String modelName;
+    private String name;
     private String interfaceType;
     private String formFactor;
     private String storageType;
@@ -19,7 +19,7 @@ public class StorageDeviceContract {
     public StorageDeviceContract(String manufacturer, String modelName, String interfaceType, String formFactor,
             String storageType, String capacity, String readSpeed, String writeSpeed, String price) {
         this.manufacturer = manufacturer;
-        this.modelName = modelName;
+        this.name = modelName;
         this.interfaceType = interfaceType;
         this.formFactor = formFactor;
         this.storageType = storageType;
@@ -38,11 +38,11 @@ public class StorageDeviceContract {
     }
 
     public String getModelName() {
-        return modelName;
+        return name;
     }
 
     public void setModelName(String modelName) {
-        this.modelName = modelName;
+        this.name = modelName;
     }
 
     public String getInterfaceType() {

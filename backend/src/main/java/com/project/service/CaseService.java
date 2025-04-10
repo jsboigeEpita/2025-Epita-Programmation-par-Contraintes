@@ -15,8 +15,6 @@ import org.chocosolver.solver.Solver;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import org.jboss.logging.Logger;
-import org.kie.internal.runtime.manager.context.CaseContext;
 
 import com.project.controller.contracts.CaseContract;
 import com.project.controller.contracts.VideoCardContract;
@@ -30,7 +28,7 @@ public class CaseService
     @Inject
     CaseRepository caseRepository;
 
-    private static final Logger logger = Logger.getLogger(CaseService.class);
+    // private static final Logger logger = Logger.getLogger(CaseService.class);
     
     private ProductConfig getOrCreate(String sessionId)
     {

@@ -1,6 +1,5 @@
 package com.project.controller.contracts;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class VideoCardContract {
     private String name;
