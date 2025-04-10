@@ -1,22 +1,5 @@
 import random
 from colorama import Fore, Style
-
-grid = [[' ' for _ in range(10)] for _ in range(10)]
-
-def print_grid(l):
-    for a in l:
-        # Join the cells into a single string for proper display
-        # cast each cell to string and color the robot
-        # cell with Fore.RED if it is a robot
-        # else keep it as is
-        # and reset the color
-        # using Style.RESET_ALL
-        # to reset the color
-        # and print the entire row
-        # with a space in between
-        # each cell
-        print(' '.join([Fore.RED + str(cell) + Style.RESET_ALL if cell == '🤖' else str(cell) for cell in a]))
-
 class Rack:
     def __init__(self, x, y):
         self.current_position = (x, y)
@@ -164,24 +147,6 @@ class Grid:
             self.grid[x][y] = 'C'
         else:
             print("Cell is occupied.")
-
-
-# Testing the classes
-
-grid = Grid(5, 5, 'PV')
-robot1 = Robot(0, 0)
-robot2 = Robot(1, 1)
-robot3 = Robot(2, 2)
-
-
-
-grid.print_grid()
-# grid.place_robot(0, 0, robot1)
-# grid.place_robot(0, 1, robot2)
-# grid.place_robot(0, 2, robot3)
-print("After placing robots:")
-grid.place_charging_station(0, 3)
-print_grid(grid.grid)
 
 
 
