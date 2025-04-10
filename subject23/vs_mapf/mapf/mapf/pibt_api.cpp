@@ -38,6 +38,9 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
         if (agent != current_agents_.end())
         {
             a = &agent->second;
+            a->g = agents_info[i].goal;
+            a->v_now = agents_info[i].init;
+            a->v_next = nullptr;
         }
         else
         {
