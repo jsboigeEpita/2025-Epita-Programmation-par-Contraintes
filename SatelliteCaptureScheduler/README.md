@@ -185,7 +185,7 @@ python main.py llm
 - Question générale
 ```bash
 python main.py llm
-> Comment fonctionne le système de planification?
+> Bonjour, comment vas-tu ?
 ```
 
 ## Exemples
