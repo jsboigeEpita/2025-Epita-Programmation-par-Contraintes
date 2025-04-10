@@ -7,7 +7,7 @@ from dataclasses import dataclass
 class SatelliteConfig:
 
     # For the visualization
-    MU: float
+    MU: float 
     A: list[int]
     EC: list[float]
     IC: list[int]
@@ -34,6 +34,8 @@ class Satellite:
         self.IC = np.radians(config.IC)
         self.OMEGA = np.radians(config.OMEGA)
         self.W = np.radians(config.W)
+        self.R = config.R
+        self.NUM_FRAMES = config.NUM_FRAMES
 
         # For the solver
         self.memory_capacity_gb = config.memory_capacity_gb

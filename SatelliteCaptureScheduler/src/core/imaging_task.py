@@ -3,8 +3,9 @@ import numpy as np
 
 class ImagingTask:
 
-    def __init__(self, labels, radius, points):
-        self.points = points
+    def __init__(self, labels, radius, points=None, number_of_tasks=10):
+        self.number_of_tasks = number_of_tasks
+        self.points = points if points else self.generate_random_points(radius)
         self.labels = labels
         self.earth_radius = radius
 
@@ -16,7 +17,7 @@ class ImagingTask:
         Generate random points on the Earth's surface
         """
         points = []
-        for _ in range(len(points)):
+        for _ in range(self.number_of_tasks):
             u = np.random.uniform(0, 2 * np.pi)
             v = np.random.uniform(0, np.pi)
             x = radius * np.cos(u) * np.sin(v)

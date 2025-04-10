@@ -21,7 +21,7 @@ def run_sample_demo():
             W=30,
             R=6371,
             NUM_FRAMES=1000,
-            memory_capacity_gb=5,
+            memory_capacity_gb=10,
             image_size_per_km2_gb=0.15,
             image_duration_per_km2_sec=3.5,
             max_photo_duration_s=120,

@@ -2,7 +2,6 @@ import numpy as np
 
 EARTH_RADIUS = 6378
 
-
 def can_image_points(satellite, imaging_task, t, min_elevation_angle=10):
     """
     Check if a satellite can image points on Earth at time t.
