@@ -1,13 +1,14 @@
 import numpy as np
 import yaml
 import os
+import sys
 from ortools.sat.python import cp_model
 
-from core.satellite import Satellite, SatelliteConfig
+from core.satellite import Satellite
 from core.request import Request, RequestConfig
 from core.imaging_task import ImagingTask
 from visualization.visibility import all_availability
-from solver.scheduler import Satellite, SatelliteScheduler
+from solver.scheduler import SatelliteScheduler
 
 
 def convert_to_solver_input(enriched_locations, satellites: list[Satellite]):
@@ -43,7 +44,7 @@ def convert_to_solver_input(enriched_locations, satellites: list[Satellite]):
         return []
 
     # Create imaging task object
-    imaging_task = ImagingTask(labels, 6378, points)
+    imaging_task = ImagingTask(labels=labels, radius=6378, points=points)
 
     # Define time range (24 hours)
     begin_time = 0

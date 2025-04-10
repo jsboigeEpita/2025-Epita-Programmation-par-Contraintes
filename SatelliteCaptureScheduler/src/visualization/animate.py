@@ -1,10 +1,12 @@
+import os
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-from core.satellite import Satellite
+from core.satellite import Satellite, SatelliteConfig
 from core.imaging_task import ImagingTask
-from visibility import can_image_points, all_availability
+from visualization.visibility import can_image_points, all_availability
 
 
 def animate_orbit(
@@ -38,13 +40,34 @@ def animate_orbit(
     z_earth = R * np.cos(v)
 
     # creating imaging points
-    satellite_imaging = ImagingTask(num_points=number_of_tasks, labels=labels, radius=R)
+    satellite_imaging = ImagingTask(labels=labels, radius=R, number_of_tasks=number_of_tasks)
 
     # creating satellites
     satellites = []
     trajectories = []
     for i in range(number_of_satellites):
-        new_satellite = Satellite(MU, A[i], EC[i], IC[i], OMEGA[i], W[i])
+        # new_satellite = Satellite(MU, A[i], EC[i], IC[i], OMEGA[i], W[i])
+
+        new_satellite = Satellite(
+            SatelliteConfig(
+                MU=MU,
+                A=A[i],
+                EC=EC[i],
+                IC=IC[i],
+                OMEGA=OMEGA[i],
+                W=W[i],
+                R=R,
+                NUM_FRAMES=NUM_FRAMES,
+                memory_capacity_gb=5,
+                image_size_per_km2_gb=0.15,
+                image_duration_per_km2_sec=3.5,
+                max_photo_duration_s=120,
+                recalibration_time_s=30,
+                speed_kms_per_s=speed,
+            )
+        )
+
+
         satellites.append(new_satellite)
         # create the expected trajectory of satellite
         t_full_orbit = np.linspace(0, 2 * np.pi * np.sqrt(A[i] ** 3 / MU), 50)
@@ -235,17 +258,17 @@ LABELS = [
 ]
 
 
-animate_orbit(
-    speed=50,
-    number_of_satellites=1,
-    number_of_tasks=30,
-    labels=LABELS,
-    MU=MU,
-    A=A,
-    EC=EC,
-    IC=IC,
-    OMEGA=OMEGA,
-    W=W,
-    R=R,
-    NUM_FRAMES=NUM_FRAMES,
-)
+# animate_orbit(
+#     speed=50,
+#     number_of_satellites=1,
+#     number_of_tasks=30,
+#     labels=LABELS,
+#     MU=MU,
+#     A=A,
+#     EC=EC,
+#     IC=IC,
+#     OMEGA=OMEGA,
+#     W=W,
+#     R=R,
+#     NUM_FRAMES=NUM_FRAMES,
+#)
