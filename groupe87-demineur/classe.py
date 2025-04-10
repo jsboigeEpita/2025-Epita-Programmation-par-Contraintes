@@ -213,7 +213,6 @@ class MinesweeperGame:
                     PrettyPrinter.print_grid(result_grid, mgrid.grid, self.rows, self.cols, title="Solution CSP")
                 else:
                     console.print("Le solveur n'a trouvé aucune solution.", style="bold red")
-                # On continue la partie après affichage de la solution
             self.check_win()
         if self.win:
             self.print_board(reveal_all=True)
