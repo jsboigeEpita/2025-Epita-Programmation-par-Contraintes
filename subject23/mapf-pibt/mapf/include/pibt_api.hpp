@@ -2,12 +2,11 @@
 
 #include <map>
 
-#include "../include/api.hpp"
 #include "node.hpp"
-#include "pos.hpp"
 #include "problem.hpp"
 #include "singleton.hh"
 #include "solver.hpp"
+#include "struct_api.hpp"
 
 struct AgentInfo
 {

@@ -5,32 +5,18 @@
 
 extern "C"
 {
-    struct cPos
+    struct cIdPos* next_step(struct cAgentInfo* agent_info_arg, size_t size,
+                             char* path);
+
+    __declspec(dllexport) struct cIdPos*
+    next_step_wrapper(struct cAgentInfo* agent_info_arg, size_t size,
+                      char* path)
     {
-        int x;
-        int y;
-    };
-
-    struct cIdPos
-    {
-        int id;
-        struct cPos pos;
-    };
-
-    struct cAgentInfo
-    {
-        int agent_id;
-        struct cPos init;
-        struct cPos goal;
-    };
-
-    struct cIdPos* next_step(struct cAgentInfo* agent_info_arg, size_t size, char* path);
-
-    __declspec(dllexport) struct cIdPos* next_step_wrapper(struct cAgentInfo* agent_info_arg, size_t size, char* path) {
         return next_step(agent_info_arg, size, path);
     }
 
-    __declspec(dllexport) void free_cIdPos(struct cIdPos* arr) {
+    __declspec(dllexport) void free_cIdPos(struct cIdPos* arr)
+    {
         free(arr);
     }
 }
