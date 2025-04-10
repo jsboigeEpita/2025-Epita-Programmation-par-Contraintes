@@ -4,9 +4,9 @@ import argparse
 
 sys.path.append(os.path.abspath("src"))
 
-from core.request import Request, RequestConfig
-from core.satellite import Satellite, SatelliteConfig
-from solver.scheduler import SatelliteScheduler
+from src.core.request import Request, RequestConfig
+from src.core.satellite import Satellite, SatelliteConfig
+from src.solver.scheduler import SatelliteScheduler
 
 
 def run_sample_demo():
@@ -14,11 +14,11 @@ def run_sample_demo():
     satellite = Satellite(
         SatelliteConfig(
             MU=398600.4418,
-            A=[7000, 7500, 8000],
-            EC=[0.01, 0.02, 0.03],
-            IC=[45, 50, 55],
-            OMEGA=[60, 125, 200],
-            W=[30, 35, 40],
+            A=7000,
+            EC=0.01,
+            IC=45,
+            OMEGA=60,
+            W=30,
             R=6371,
             NUM_FRAMES=1000,
             memory_capacity_gb=5,
@@ -51,7 +51,7 @@ def run_sample_demo():
 def run_llm_demo():
     """Run the interactive LLM-based demo"""
     try:
-        from llm.pipeline import cli
+        from src.llm.pipeline import cli
         # Save original args
         original_argv = sys.argv.copy()
         # Clear sys.argv to prevent Click from processing main.py's arguments

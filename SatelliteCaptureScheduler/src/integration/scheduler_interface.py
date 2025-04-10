@@ -1,22 +1,24 @@
 import numpy as np
 import yaml
 import os
+from ortools.sat.python import cp_model
 
-from core.satellite import Satellite
+from core.satellite import Satellite, SatelliteConfig
+from core.request import Request, RequestConfig
 from core.imaging_task import ImagingTask
 from visualization.visibility import all_availability
 from solver.scheduler import Satellite, SatelliteScheduler
 
 
-def convert_to_solver_input(enriched_locations):
+def convert_to_solver_input(enriched_locations, satellites: list[Satellite]):
     """
     Convert the enriched location data from LLM into a format suitable for the solver.
     Add time windows for each location based on satellite visibility.
     """
     # Create satellites
     # Using some typical orbital parameters for Earth observation satellites
-    MU = 398600.4418  # Earth's gravitational parameter (km^3/s^2)
-    satellites = [Satellite(MU, 6800, 0.0001, 51.6, 80, 30)]  # ISS-like orbit
+    # MU = 398600.4418  # Earth's gravitational parameter (km^3/s^2)
+    # satellites = [Satellite(MU, 6800, 0.0001, 51.6, 80, 30)]  # ISS-like orbit
 
     # Create imaging tasks
     points = []
@@ -58,6 +60,7 @@ def convert_to_solver_input(enriched_locations):
     )
 
     # Create the solver requests
+    solver_requests_yaml = []
     solver_requests = []
 
     for loc in enriched_locations:
@@ -73,7 +76,7 @@ def convert_to_solver_input(enriched_locations):
                 # In a more complex implementation, you could merge windows or pick the best one
                 time_window = location_windows[0]
 
-            solver_requests.append(
+            solver_requests_yaml.append(
                 {
                     "location": loc["location"],
                     "coordinates": (
@@ -85,6 +88,19 @@ def convert_to_solver_input(enriched_locations):
                     "time_window_sec": time_window,
                 }
             )
+
+            solver_requests.append(
+                Request(
+                    RequestConfig(
+                        loc["location"],
+                        (loc["gps_coordinates"]["latitude"], loc["gps_coordinates"]["longitude"]),
+                        loc.get("priority", 3),
+                        loc.get("area_size_km2", 1.0),
+                        time_window,
+                    )
+                )
+            )
+
     # Save the solver requests to a YAML file
 
     # Create a directory for outputs if it doesn't exist
@@ -94,44 +110,36 @@ def convert_to_solver_input(enriched_locations):
     # Save to YAML file
     yaml_file_path = os.path.join(output_dir, "solver_input.yaml")
     with open(yaml_file_path, "w") as yaml_file:
-        yaml.dump(solver_requests, yaml_file, default_flow_style=False)
+        yaml.dump(solver_requests_yaml, yaml_file, default_flow_style=False)
 
     print(f"Solver input saved to {yaml_file_path}")
     return solver_requests
 
 
-def run_satellite_scheduler(enriched_locations):
+def run_satellite_scheduler(enriched_locations, satellite:Satellite):
     """
     Run the satellite scheduler with the enriched location data.
     Returns the scheduled observations.
     """
-    # Satellite parameters
-    satellite = {
-        "memory_capacity_gb": 10,
-        "image_size_per_km2_gb": 0.15,
-        "image_duration_per_km2_sec": 3.5,
-        "max_photo_duration_s": 180,
-        "simultaneous_tasks": False,
-        "recalibration_time_s": 30,
-        "speed_kms_per_s": 50,
-    }
 
     # Utiliser la fonction convert_to_solver_input pour préparer les données
-    solver_requests = convert_to_solver_input(enriched_locations)
+    solver_requests = convert_to_solver_input(enriched_locations, [satellite])
 
     if not solver_requests:
         return {"observations": [], "error": "No valid locations with GPS coordinates"}
 
     # Run the solver
-    status, results = SatelliteScheduler.satellite_solver(satellite, solver_requests)
+    scheduler = SatelliteScheduler(satellite, solver_requests)
+    status, results = scheduler.solve()
+    scheduler.print_solution(status, results)
 
     # Format results
     formatted_results = {
         "observations": [],
         "status": (
             "optimal"
-            if status == SatelliteScheduler.cp_model.OPTIMAL
-            else "feasible" if status == SatelliteScheduler.cp_model.FEASIBLE else "infeasible"
+            if status == cp_model.OPTIMAL
+            else "feasible" if status == cp_model.FEASIBLE else "infeasible"
         ),
     }
 
@@ -158,7 +166,7 @@ def run_satellite_scheduler(enriched_locations):
         formatted_results["observations"].append(result_entry)
 
     formatted_results["total_memory_used_gb"] = total_memory
-    formatted_results["memory_capacity_gb"] = satellite["memory_capacity_gb"]
+    formatted_results["memory_capacity_gb"] = satellite.memory_capacity_gb
     # Save the formatted results to a YAML file
     output_dir = "output"
     os.makedirs(output_dir, exist_ok=True)

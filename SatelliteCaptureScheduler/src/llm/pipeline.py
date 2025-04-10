@@ -8,6 +8,7 @@ import yaml
 from dotenv import load_dotenv
 from openai import OpenAI
 
+from core.satellite import Satellite, SatelliteConfig
 from integration.scheduler_interface import run_satellite_scheduler
 
 if sys.stdout.encoding != "utf-8":
@@ -118,8 +119,28 @@ def generate_solver_input(locations):
 def simulate_solver(input_data):
     """Run the real satellite observation scheduling solver."""
     try:
+
+        satellite = Satellite(
+                SatelliteConfig(
+                MU=398600.4418,
+                A=7000,
+                EC=0.01,
+                IC=45,
+                OMEGA=60,
+                W=30,
+                R=6371,
+                NUM_FRAMES=1000,
+                memory_capacity_gb=5,
+                image_size_per_km2_gb=0.15,
+                image_duration_per_km2_sec=3.5,
+                max_photo_duration_s=120,
+                recalibration_time_s=30,
+                speed_kms_per_s=50,
+            )
+        )
+
         # Use our new integrated solver
-        return run_satellite_scheduler(input_data["locations"])
+        return run_satellite_scheduler(input_data["locations"], satellite)
     except Exception as e:
         print(f"Error in solver: {str(e)}")
         # Fallback to simple simulation
