@@ -1,113 +1,155 @@
-<template>
-    <div class="min-h-screen flex flex-col items-center relative">
-        <span class="text-2xl font-bold mt-10 text-white">Configurateur</span>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import type { SelectedComponents, SelectedComponentsResponse } from '../types';
+import { getConfig } from '../api/api';
+import Modal from './modals/Modal.vue';
+import ComponentCard from '../components/ComponentCard.vue';
+import RecapItem from '../components/RecapItem.vue';
+import Logo from '../assets/images/logo.png';
 
-        <div class="flex items-center mt-20 space-x-8">
-            <img
-                :src="isSelected('Case') ? CaseGreen : Case"
-                alt="Case"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Case') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Case')"
+const selectedComponents = ref<SelectedComponents>({
+    case: null,
+    powersupply: null,
+    videocard: null,
+    cpuCooler: null,
+    storage: null,
+    motherboard: null,
+    cpu: null,
+    ram: null,
+});
+const typeComponent = ref<string>('');
+const isModalOpen = ref<boolean>(false);
+const confgPrice = ref<number>(0);
+
+const handleSelectedComponentsUpdate = (components: SelectedComponents) => {
+    selectedComponents.value = components;
+};
+
+onMounted(async () => {
+    const config = <SelectedComponentsResponse>await getConfig();
+    confgPrice.value = config.price;
+    selectedComponents.value = {
+        case: config.pcCase,
+        powersupply: config.powerSupply,
+        videocard: config.videoCard,
+        cpuCooler: config.cpuCooler,
+        storage: config.storage,
+        motherboard: config.motherboard,
+        cpu: config.cpu,
+        ram: config.memory,
+    };
+});
+</script>
+
+<template>
+    <div class="flex items-center justify-center space-x-8 w-full mt-10">
+        <img
+            :src="Logo"
+            alt="Case"
+            class="w-24"
+        />
+        <span class="text-4xl font-bold text-white">CONFIGURATEUR</span>
+    </div>
+
+    <div class="flex justify-center mt-10 space-x-8 text-white">
+        <div class="flex flex-col items-start w-[1000px] space-y-2 mb-10">
+            <span class="text-2xl font-semibold opacity-50">COMPOSANTS</span>
+            <ComponentCard
+                :componentType="'case'"
+                :component="selectedComponents.case"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
             />
-            <img
-                :src="isSelected('Alim') ? AlimGreen : Alim"
-                alt="Alim"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Alim') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Alim')"
+            <ComponentCard
+                :componentType="'powersupply'"
+                :component="selectedComponents.powersupply"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
             />
-            <img
-                :src="isSelected('Graphics') ? GraphicsGreen : Graphics"
-                alt="Graphics"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Graphics') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Graphics')"
+            <ComponentCard
+                :componentType="'videocard'"
+                :component="selectedComponents.videocard"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
             />
-            <img
-                :src="isSelected('Ventirad') ? VentiradGreen : Ventirad"
-                alt="Ventirad"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Ventirad') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Ventirad')"
+            <ComponentCard
+                :componentType="'cpu-cooler'"
+                :component="selectedComponents.cpuCooler"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
             />
-            <img
-                :src="isSelected('Watercooling') ? WatercoolingGreen : Watercooling"
-                alt="Watercooling"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Watercooling') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Watercooling')"
+            <ComponentCard
+                :componentType="'storage'"
+                :component="selectedComponents.storage"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
+            />
+            <ComponentCard
+                :componentType="'motherboard'"
+                :component="selectedComponents.motherboard"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
+            />
+            <ComponentCard
+                :componentType="'cpu'"
+                :component="selectedComponents.cpu"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
+            />
+            <ComponentCard
+                :componentType="'ram'"
+                :component="selectedComponents.ram"
+                :selectedComponents="selectedComponents"
+                @selected-components="handleSelectedComponentsUpdate"
             />
         </div>
 
-        <div class="flex items-center mt-5 space-x-8">
-			<img
-                :src="isSelected('Disque') ? DisqueGreen : Disque"
-                alt="Disque"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Disque') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Disque')"
-            />
-			<img
-                :src="isSelected('Motherboard') ? MotherboardGreen : Motherboard"
-                alt="Motherboard"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Motherboard') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Motherboard')"
-            />
-			<img
-                :src="isSelected('Processeur') ? ProcesseurGreen : Processeur"
-                alt="Processeur"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Processeur') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Processeur')"
-            />
-			<img
-                :src="isSelected('Ram') ? RamGreen : Ram"
-                alt="Ram"
-                class="w-32 cursor-pointer transition-opacity duration-300"
-                :class="isSelected('Ram') ? 'opacity-100' : 'opacity-20 hover:opacity-100'"
-                @click="toggleComponent('Ram')"
-            />
-		</div>
+        <div class="w-[400px] text-white space-y-2">
+            <span class="text-2xl font-semibold opacity-50">RECAPITULATIF</span>
+            <div
+                class="p-4 bg-[var(--color-background-secondary-dark)] border-2 border-[green] border-opacity-50 rounded-md space-y-4"
+            >
+                <div class="space-y-1 border-b-2 border-white">
+                    <RecapItem :component="selectedComponents.case" />
+                    <RecapItem :component="selectedComponents.cpu" />
+                    <RecapItem :component="selectedComponents.cpuCooler" />
+                    <RecapItem :component="selectedComponents.motherboard" />
+                    <RecapItem :component="selectedComponents.powersupply" />
+                    <RecapItem :component="selectedComponents.storage" />
+                    <RecapItem :component="selectedComponents.videocard" />
+                    <RecapItem :component="selectedComponents.ram" />
+                </div>
+
+                <div class="w-full flex justify-between p-2">
+                    <span>TOTAL :</span>
+                    <span>${{ confgPrice }}</span>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <Modal
+        v-model:isOpen="isModalOpen"
+        :componentType="typeComponent"
+        :selected-components="selectedComponents"
+    />
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-
-import Alim from '../assets/images/computer-white/Alim.png';
-import Case from '../assets/images/computer-white/Case.png';
-import Graphics from '../assets/images/computer-white/Graphics.png';
-import Ventirad from '../assets/images/computer-white/Ventirad.png';
-import Watercooling from '../assets/images/computer-white/Watercooling.png';
-import Disque from '../assets/images/computer-white/Disque.png';
-import Motherboard from '../assets/images/computer-white/Motherboard.png';
-import Processeur from '../assets/images/computer-white/Processeur.png';
-import Ram from '../assets/images/computer-white/Ram.png';
-
-
-import AlimGreen from '../assets/images/computer-green/Alim.png';
-import CaseGreen from '../assets/images/computer-green/Case.png';
-import GraphicsGreen from '../assets/images/computer-green/Graphics.png';
-import VentiradGreen from '../assets/images/computer-green/Ventirad.png';
-import WatercoolingGreen from '../assets/images/computer-green/Watercooling.png';
-import DisqueGreen from '../assets/images/computer-green/Disque.png';
-import MotherboardGreen from '../assets/images/computer-green/Motherboard.png';
-import ProcesseurGreen from '../assets/images/computer-green/Processeur.png';
-import RamGreen from '../assets/images/computer-green/Ram.png';
-
-const selectedComponents = ref<string[]>([]);
-
-function isSelected(name: string): boolean {
-    return selectedComponents.value.includes(name);
+<style>
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-function toggleComponent(name: string) {
-    if (isSelected(name)) {
-        selectedComponents.value = selectedComponents.value.filter((item) => item !== name);
-    } else {
-        selectedComponents.value.push(name);
-    }
+::-webkit-scrollbar-track {
+    background: var(--color-background-dark);
 }
-</script>
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: green;
+}
+</style>
