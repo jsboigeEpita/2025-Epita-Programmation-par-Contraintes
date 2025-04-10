@@ -10,7 +10,6 @@ def main():
     console.print("2 : Jouer à Minesweeper")
     choice = input("Votre choix (1/2) : ")
     if choice == "1":
-        # Exemple avec une grille 5x5 prédéfinie
         grid5x5 = {
             (0, 0): 0, (0, 1): 1, (0, 2): 1, (0, 3): 1, (0, 4): 0,
             (1, 0): 1, (1, 1): "?", (1, 2): "?", (1, 3): "?", (1, 4): 1,
