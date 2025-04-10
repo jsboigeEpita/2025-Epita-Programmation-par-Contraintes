@@ -1,5 +1,7 @@
 from constraint import Problem, ExactSumConstraint
-from tabulate import tabulate
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel     
 
 
 class MinesweeperGrid:
@@ -46,11 +48,25 @@ class MinesweeperSolver:
 
 class PrettyPrinter:
     @staticmethod
-    def print_grid(grid, size):
-        data = [[grid[(i, j)] for j in range(size)] for i in range(size)]
-        headers = [f"Col {j}" for j in range(size)]
-        print(tabulate(data, headers=headers,
-              showindex="Row", tablefmt="fancy_grid"))
+    def print_grid(result_grid, size, original_grid):
+        table = Table(title="Minesweeper Board", show_lines=True)
+        table.add_column("Row", style="bold magenta", justify="center")
+        for j in range(size):
+            table.add_column(f"Col {j}", justify="center")
+        for i in range(size):
+            row = [str(i)]
+            for j in range(size):
+                val = result_grid[(i, j)]
+                orig = original_grid[(i, j)]
+                if orig == "?":
+                    # Soluce d'une case inconnue : 1 = mine, 0 = vide
+                    cell_text = "[bold red]1[/bold red]" if val == 1 else "[green]0[/green]"
+                else:
+                    cell_text = "[blue]" + str(val) + "[/blue]"
+                row.append(cell_text)
+            table.add_row(*row)
+        console = Console()
+        console.print(Panel(table, title="Solution", expand=False))
 
 
 if __name__ == "__main__":
@@ -103,7 +119,7 @@ if __name__ == "__main__":
     }
 
     grid8 = {
-        (0, 0): 2, (0, 1): "?", (0, 2): 2, (0, 3): 3, (0, 4): 2, (0, 5): "?", (0, 6): "?", (0, 7): "?", (0, 8): "?", (0, 9): "?", (0, 10): 1,
+        (0, 0): 2, (0, 1): "?", (0, 2): "?", (0, 3): 2, (0, 4): "?", (0, 5): 3, (0, 6): 2, (0, 7): "?", (0, 8): "?", (0, 9): 1, (0, 10): 1,
         (1, 0): "?", (1, 1): 3, (1, 2): "?", (1, 3): "?", (1, 4): "?", (1, 5): "?", (1, 6): "?", (1, 7): "?", (1, 8): "?", (1, 9): "?", (1, 10): 1,
         (2, 0): "?", (2, 1): 3, (2, 2): "?", (2, 3): "?", (2, 4): 2, (2, 5): "?", (2, 6): "?", (2, 7): 3, (2, 8): "?", (2, 9): "?", (2, 10): "?",
         (3, 0): "?", (3, 1): "?", (3, 2): 2, (3, 3): 1, (3, 4): "?", (3, 5): "?", (3, 6): "?", (3, 7): 3, (3, 8): "?", (3, 9): "?", (3, 10): "?",
@@ -116,15 +132,17 @@ if __name__ == "__main__":
 
     grids = [(grid1, 5), (grid2, 4), (grid3, 3),
              (grid4, 3), (grid5, 3), (grid6, 6), (grid7, 7), (grid8, 11)]
-
+    
+    
+    console = Console()
     for idx, (grid, size) in enumerate(grids, start=1):
-        print(f"Grille {idx}")
+        console.rule(f"Grille {idx}")
         mgrid = MinesweeperGrid(grid, size)
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
-        print("Nombre de solutions:", len(solutions))
+        console.print(f"Nombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]")
         for num, solution in enumerate(solutions, start=1):
-            print(f"Solution {num}:")
+            console.print(f"\nSolution {num}:", style="underline bold")
             result_grid = mgrid.apply_solution(solution)
-            PrettyPrinter.print_grid(result_grid, size)
-            print("-" * 20)
+            PrettyPrinter.print_grid(result_grid, size, mgrid.grid)
+            console.print("-" * 40)
