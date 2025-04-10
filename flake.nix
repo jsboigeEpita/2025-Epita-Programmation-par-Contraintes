@@ -18,6 +18,8 @@
                 setuptools
                 openai
                 python-dotenv
+            ] ++ [
+                uv
             ];
           };
       }
