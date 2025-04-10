@@ -91,7 +91,7 @@ def negamax(board, depth, alpha, beta, player_piece, ai_original_piece):
 
     return max_eval, best_col
 
-def get_move(board, piece, depth=4):
+def get_move(board, piece, depth=6):
     state = ConnectFourBoard()
     state.board = np.copy(board)
     _, col = negamax(state, depth, -math.inf, math.inf, piece, piece)
