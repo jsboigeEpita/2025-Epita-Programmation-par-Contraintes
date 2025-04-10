@@ -802,7 +802,6 @@ def scenario_2():
     # Define the total time limit for the scheduling
     total_time_limit = 10
     schedule = solve_robot_task_scheduling(robots, tasks, total_time_limit)
-    print(schedule)
 
 def scenario_3():
         # Example Usage
