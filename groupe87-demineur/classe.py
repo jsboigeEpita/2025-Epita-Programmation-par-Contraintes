@@ -1,10 +1,10 @@
 import random
+import questionary
 from constraint import Problem, ExactSumConstraint
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 
-# --- Partie CSP (solveur) ---
 class MinesweeperGrid:
     def __init__(self, grid, size):
         self.grid = grid
@@ -45,8 +45,8 @@ class MinesweeperSolver:
 
 class PrettyPrinter:
     @staticmethod
-    def print_grid(result_grid, size, original_grid):
-        table = Table(title="Minesweeper Board", show_lines=True)
+    def print_grid(result_grid, size, original_grid, title="Solution"):
+        table = Table(title=title, show_lines=True)
         table.add_column("Row", style="bold magenta", justify="center")
         for j in range(size):
             table.add_column(f"Col {j}", justify="center")
@@ -61,9 +61,8 @@ class PrettyPrinter:
                     cell_text = f"[blue]{val}[/blue]"
                 row.append(cell_text)
             table.add_row(*row)
-        Console().print(Panel(table, title="Solution", expand=False))
+        Console().print(Panel(table, title=title, expand=False))
 
-# --- Partie Jeu interactif ---
 class MinesweeperGame:
     def __init__(self, rows, cols, mine_count):
         self.rows = rows
@@ -81,12 +80,9 @@ class MinesweeperGame:
         mine_positions = set(random.sample(positions, self.mine_count))
         for pos in positions:
             if pos in mine_positions:
-                self.board[pos] = -1  # mine
+                self.board[pos] = -1
             else:
-                count = 0
-                for nb in self.get_neighbors(pos):
-                    if nb in mine_positions:
-                        count += 1
+                count = sum(1 for nb in self.get_neighbors(pos) if nb in mine_positions)
                 self.board[pos] = count
 
     def get_neighbors(self, pos):
@@ -94,16 +90,14 @@ class MinesweeperGame:
         nbrs = []
         for dr in [-1, 0, 1]:
             for dc in [-1, 0, 1]:
-                if dr == 0 and dc == 0:
-                    continue
+                if dr == 0 and dc == 0: continue
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < self.rows and 0 <= nc < self.cols:
                     nbrs.append((nr, nc))
         return nbrs
 
     def reveal_cell(self, pos):
-        if pos in self.flagged or pos in self.revealed:
-            return
+        if pos in self.flagged or pos in self.revealed: return
         self.revealed.add(pos)
         if self.board[pos] == -1:
             self.game_over = True
@@ -113,12 +107,9 @@ class MinesweeperGame:
                     self.reveal_cell(nb)
 
     def toggle_flag(self, pos):
-        if pos in self.revealed:
-            return
-        if pos in self.flagged:
-            self.flagged.remove(pos)
-        else:
-            self.flagged.add(pos)
+        if pos in self.revealed: return
+        if pos in self.flagged: self.flagged.remove(pos)
+        else: self.flagged.add(pos)
 
     def check_win(self):
         total_cells = self.rows * self.cols
@@ -143,43 +134,40 @@ class MinesweeperGame:
                     else:
                         cell = f"[blue]{self.board[pos]}[/blue]"
                 else:
-                    if pos in self.flagged:
-                        cell = "[bold yellow]F[/bold yellow]"
-                    else:
-                        cell = "[grey]□[/grey]"
+                    cell = "[grey]□[/grey]" if pos not in self.flagged else "[bold yellow]F[/bold yellow]"
                 row.append(cell)
             table.add_row(*row)
-        Console().print(Panel(table, title="Minesweeper Game", expand=False))
+        Console().print(Panel(table, title="Minesweeper", expand=False))
 
     def play(self):
         console = Console()
         while not self.game_over:
             self.print_board()
-            console.print("Commandes : o row col (ouvrir) | f row col (drapeau)", style="bold cyan")
-            cmd = input("Votre commande : ").split()
-            if len(cmd) != 3:
-                console.print("Commande invalide", style="bold red")
-                continue
-            action, row, col = cmd[0], cmd[1], cmd[2]
+            action = questionary.select(
+                "Choisissez l'action",
+                choices=["Ouvrir une case", "Poser/décrocher un drapeau", "Quitter"]
+            ).ask()
+            if action == "Quitter":
+                console.print("Fin de partie.", style="bold red")
+                return
+            row = questionary.text("Entrez la ligne :").ask()
+            col = questionary.text("Entrez la colonne :").ask()
             try:
                 pos = (int(row), int(col))
             except ValueError:
-                console.print("Coordonnées invalides", style="bold red")
+                console.print("Coordonnées invalides.", style="bold red")
                 continue
             if not (0 <= pos[0] < self.rows and 0 <= pos[1] < self.cols):
-                console.print("Coordonnées hors limites", style="bold red")
+                console.print("Coordonnées hors limites.", style="bold red")
                 continue
-            if action.lower() == "o":
+            if action == "Ouvrir une case":
                 self.reveal_cell(pos)
                 if self.game_over and self.board[pos] == -1:
                     self.print_board(reveal_all=True)
-                    console.print("BOOM! Vous avez perdu.", style="bold red")
+                    console.print("BOOM ! Vous avez perdu.", style="bold red")
                     return
-            elif action.lower() == "f":
-                self.toggle_flag(pos)
             else:
-                console.print("Action inconnue.", style="bold red")
-                continue
+                self.toggle_flag(pos)
             self.check_win()
         if self.win:
             self.print_board(reveal_all=True)

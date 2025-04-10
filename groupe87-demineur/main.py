@@ -1,15 +1,17 @@
 
 from classe import *
 
-
 def main():
     console = Console()
-    console.print(
-        "[bold underline]Minesweeper : Solveur CSP et Jeu Interactif[/bold underline]")
-    console.print("1 : Afficher des solutions avec le solveur (CSP)")
-    console.print("2 : Jouer à Minesweeper")
-    choice = input("Votre choix (1/2) : ")
-    if choice == "1":
+    console.print("[bold underline]Minesweeper : Solveur CSP & Jeu Interactif[/bold underline]\n")
+    choice = questionary.select(
+        "Sélectionnez un mode",
+        choices=[
+            "Voir les solutions (CSP)",
+            "Jouer à Minesweeper"
+        ]
+    ).ask()
+    if choice == "Voir les solutions (CSP)":
         grid5x5 = {
             (0, 0): 0, (0, 1): 1, (0, 2): 1, (0, 3): 1, (0, 4): 0,
             (1, 0): 1, (1, 1): "?", (1, 2): "?", (1, 3): "?", (1, 4): 1,
@@ -20,26 +22,20 @@ def main():
         mgrid = MinesweeperGrid(grid5x5, 5)
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
-        console.print(
-            f"Nombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]")
+        console.print(f"\nNombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]\n")
         for num, solution in enumerate(solutions, start=1):
-            console.print(f"\nSolution {num}:", style="underline bold")
+            console.print(f"Solution {num}:", style="underline bold")
             result_grid = mgrid.apply_solution(solution)
             PrettyPrinter.print_grid(result_grid, 5, mgrid.grid)
             console.print("-" * 40)
-    elif choice == "2":
-        try:
-            rows = int(input("Nombre de lignes : "))
-            cols = int(input("Nombre de colonnes : "))
-            mine_count = int(input("Nombre de mines : "))
-        except ValueError:
-            console.print("Valeurs invalides.", style="bold red")
-            return
+    elif choice == "Jouer à Minesweeper":
+        rows = int(questionary.text("Nombre de lignes :", default="9").ask())
+        cols = int(questionary.text("Nombre de colonnes :", default="9").ask())
+        mine_count = int(questionary.text("Nombre de mines :", default="10").ask())
         game = MinesweeperGame(rows, cols, mine_count)
         game.play()
     else:
         console.print("Choix invalide.", style="bold red")
-
 
 if __name__ == "__main__":
     main()
