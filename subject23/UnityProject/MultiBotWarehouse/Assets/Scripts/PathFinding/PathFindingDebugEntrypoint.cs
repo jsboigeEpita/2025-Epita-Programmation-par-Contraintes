@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 using static PathFindingCppWrapper;
 
@@ -22,6 +20,8 @@ public class PathFindingDebugEntrypoint : MonoBehaviour
     {
         if (tryButton)
         {
+            Debug.Log("LALA: " + MapF.test(11));
+
             IndexedPoint[] result = NextStep(agentInfoArg, count, path);
 
             string filePath = Path.Combine(Application.persistentDataPath, "pathfinding.csv");
@@ -31,7 +31,7 @@ public class PathFindingDebugEntrypoint : MonoBehaviour
             {
                 for (int i = 0; i < result.Length; i++)
                 {
-                    writer.WriteLine(string.Join("\t", result[i]));
+                    writer.WriteLine(result[i].id + ": " + result[i].point.x + "," + result[i].point.y);
                 }
             }
 

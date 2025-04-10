@@ -7839,6 +7839,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+--- !u!1 &460582136 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3416190905810337136, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+  m_PrefabInstance: {fileID: 9016814112591796769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &470655613
 GameObject:
   m_ObjectHideFlags: 0
@@ -27490,6 +27495,7 @@ GameObject:
   - component: {fileID: 1495022880}
   - component: {fileID: 1495022881}
   - component: {fileID: 1495022882}
+  - component: {fileID: 1495022883}
   m_Layer: 0
   m_Name: Wharehouse
   m_TagString: Untagged
@@ -27534,13 +27540,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableGridDebug: 1
   sources: []
-  robots: []
+  robots:
+  - {fileID: 460582136}
   shelves: []
   packers: []
   outputs: []
   gridSize: {x: 39, y: 41}
   gridBlocksContainer: {fileID: 1409847394}
   gridOriginTransform: {fileID: 1343038596}
+  mapPath: 
+  wrapperMapPath: 
 --- !u!114 &1495022882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27597,6 +27606,29 @@ MonoBehaviour:
   horizon: 2147483647
   verbose: 1
   solveButton: 0
+--- !u!114 &1495022883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495022879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cafdf15c2046b87498b7ad8d8254db2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentInfoArg:
+  - agentId: 0
+    init:
+      x: 0
+      y: 0
+    goal:
+      x: 2
+      y: 2
+  count: 1
+  path: C:\Users\Julien\AppData\LocalLow\DefaultCompany\MultiBotWarehouse\map.ssv
+  tryButton: 0
 --- !u!1 &1495246718
 GameObject:
   m_ObjectHideFlags: 0

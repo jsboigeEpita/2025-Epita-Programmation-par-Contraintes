@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,6 +41,9 @@ public class Warehouse : MonoBehaviour
     [SerializeField]
     private Transform gridOriginTransform;
 
+    public string mapPath;
+    public string wrapperMapPath;
+
     private List<GameObject>[] pointsOfInterest;
     
     public bool[][] grid;
@@ -77,13 +79,13 @@ public class Warehouse : MonoBehaviour
     {
         if (enableGridDebug)
         {
-            string filePath = Path.Combine(Application.persistentDataPath, "grid.ssv");
-            Debug.Log("Outputting grid to " + filePath);
+            mapPath = Path.Combine(Application.persistentDataPath, "grid.ssv");
+            Debug.Log("Outputting map to " + mapPath);
 
-            using (StreamWriter writer = new StreamWriter(filePath))
+            using (StreamWriter writer = new StreamWriter(mapPath))
             {
-                writer.WriteLine("height " + gridSize.y);
-                writer.WriteLine("width " + gridSize.x);
+                writer.WriteLine("height " + gridSize.x);
+                writer.WriteLine("width " + gridSize.y);
                 writer.WriteLine("map");
 
                 foreach (bool[] row in grid)
@@ -92,6 +94,18 @@ public class Warehouse : MonoBehaviour
                 }
             }
 
+            wrapperMapPath = Path.Combine(Application.persistentDataPath, "map.ssv");
+            Debug.Log("Outputting wrapperMap to " + wrapperMapPath);
+
+            using (StreamWriter writer = new StreamWriter(wrapperMapPath))
+            {
+                writer.WriteLine("map_file=" + mapPath);
+                writer.WriteLine("agents=" + robots.Count);
+                writer.WriteLine("seed=0");
+                writer.WriteLine("random_problem=0");
+                writer.WriteLine("max_timestep=5000000");
+                writer.WriteLine("max_comp_time=30000000");
+            }
         }
     }
 }

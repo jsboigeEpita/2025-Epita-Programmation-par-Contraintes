@@ -1,49 +1,66 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
 public class PathFindingCppWrapper
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct cPoint
+    public static class MapF
     {
-        public int x;
-        public int y;
-
-        public cPoint(int x, int y)
+        [StructLayout(LayoutKind.Sequential)]
+        public struct cPoint
         {
-            this.x = x;
-            this.y = y;
-        }
-    };
+            public int x;
+            public int y;
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct cIndexedPoint
-    {
-        public int id;
-        public cPoint point;
+            public cPoint(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+        };
 
-        public cIndexedPoint(int id, cPoint point)
+        [StructLayout(LayoutKind.Sequential)]
+        public struct cIndexedPoint
         {
-            this.id = id;
-            this.point = point;
-        }
-    };
+            public int id;
+            public cPoint point;
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct cAgentInfo
-    {
-        public int agentId;
-        public cPoint init;
-        public cPoint goal;
+            public cIndexedPoint(int id, cPoint point)
+            {
+                this.id = id;
+                this.point = point;
+            }
+        };
 
-        public cAgentInfo(int agentId, cPoint init, cPoint goal)
+        [StructLayout(LayoutKind.Sequential)]
+        public struct cAgentInfo
         {
-            this.agentId = agentId;
-            this.init = init;
-            this.goal = goal;
-        }
-    };
+            public int agentId;
+            public cPoint init;
+            public cPoint goal;
+
+            public cAgentInfo(int agentId, cPoint init, cPoint goal)
+            {
+                this.agentId = agentId;
+                this.init = init;
+                this.goal = goal;
+            }
+        };
+
+        [DllImport("mapf", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int test(int i);
+
+        [DllImport("mapf", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void free_cIdPos(IntPtr arr);
+
+        [DllImport("mapf", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr next_step_wrapper(
+            [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] cAgentInfo[] agent_info_arg,
+            ulong count,
+            [MarshalAs(UnmanagedType.LPStr)] string path
+        );
+    }
 
     [System.Serializable]
     public struct Point
@@ -86,31 +103,20 @@ public class PathFindingCppWrapper
         }
     };
 
-
-    [DllImport("mapf-pibt", CallingConvention = CallingConvention.Cdecl)]
-    private static extern IntPtr next_step_wrapper(
-        [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)] cAgentInfo[] agent_info_arg,
-        ulong count,
-        [MarshalAs(UnmanagedType.LPStr)] string path
-    );
-
-    [DllImport("mapf-pibt", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void free_cIdPos(IntPtr arr);
-
     public static IndexedPoint[] NextStep(AgentInfo[] agentInfoArg, int count, string path)
     {
-        IntPtr ptr = next_step_wrapper(agentInfoArg.Select(ele => new cAgentInfo(ele.agentId, new cPoint(ele.init.x, ele.init.y), new cPoint(ele.goal.x, ele.goal.y))).ToArray(), (ulong)count, path);
+        IntPtr ptr = MapF.next_step_wrapper(agentInfoArg.Select(ele => new MapF.cAgentInfo(ele.agentId, new MapF.cPoint(ele.init.x, ele.init.y), new MapF.cPoint(ele.goal.x, ele.goal.y))).ToArray(), (ulong)count, path);
 
-        cIndexedPoint[] managedArray = new cIndexedPoint[count];
+        MapF.cIndexedPoint[] managedArray = new MapF.cIndexedPoint[count];
 
-        int structSize = Marshal.SizeOf(typeof(cIndexedPoint));
+        int structSize = Marshal.SizeOf(typeof(MapF.cIndexedPoint));
         for (int i = 0; i < count; i++)
         {
             IntPtr structPtr = new IntPtr(ptr.ToInt64() + i * structSize);
-            managedArray[i] = Marshal.PtrToStructure<cIndexedPoint>(structPtr);
+            managedArray[i] = Marshal.PtrToStructure<MapF.cIndexedPoint>(structPtr);
         }
 
-        free_cIdPos(ptr);
+        MapF.free_cIdPos(ptr);
 
         return managedArray.Select(ele => new IndexedPoint(ele.id, new Point(ele.point.x, ele.point.y))).ToArray();
     }
