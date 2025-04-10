@@ -51,56 +51,62 @@ def score_position(board_state, piece):
             score += evaluate_window(window, piece)
     return score
 
-def negamax(board, depth, alpha, beta, player_piece, ai_original_piece):
-    opponent_piece = 3 - player_piece
+def negamax_alpha_beta(board, depth, alpha, beta, color, ai_piece):
     valid_locations = board.get_valid_locations()
     is_terminal = board.game_over or len(valid_locations) == 0
-
+    current_piece = ai_piece if color == 1 else 3 - ai_piece
+    
+    # Terminal node check
     if depth == 0 or is_terminal:
         if is_terminal:
-            winner = board.winner
-            if winner == ai_original_piece:
-                return (1000000 + depth, None)
-            elif winner == (3 - ai_original_piece):
-                return (-1000000 - depth, None)
-            else: # Draw
+            if board.winner == ai_piece:
+                return (1000000 * color, None)  # AI wins
+            elif board.winner == (3 - ai_piece):
+                return (-1000000 * color, None)  # Opponent wins
+            else:  # Draw
                 return (0, None)
-        else: # Depth is zero
-            return (score_position(board.get_board(), ai_original_piece), None)
-
-    max_eval = -math.inf
+        else:  # Depth is zero - evaluate from current position
+            return (color * score_position(board.get_board(), ai_piece), None)
+    
+    value = -math.inf
     best_col = random.choice(valid_locations) if valid_locations else None
-
+    
     for col in valid_locations:
         temp_board = ConnectFourBoard()
         temp_board.board = np.copy(board.get_board())
-        if not temp_board.drop_piece(col, player_piece):
+        row = temp_board.drop_piece(col, current_piece)
+        
+        if row == -1:  # Invalid move
             continue
-
-        # Recursive call, negating score and swapping/negating alpha beta
-        eval_score, _ = negamax(temp_board, depth - 1, -beta, -alpha, opponent_piece, ai_original_piece)
-        eval_score = -eval_score
-
-        if eval_score > max_eval:
-            max_eval = eval_score
+            
+        # Recursively evaluate with color negation
+        new_score, _ = negamax_alpha_beta(temp_board, depth - 1, -beta, -alpha, -color, ai_piece)
+        new_score = -new_score
+        
+        # Update best value and move
+        if new_score > value:
+            value = new_score
             best_col = col
-
-        alpha = max(alpha, eval_score)
+            
+        # Update alpha
+        alpha = max(alpha, value)
         if alpha >= beta:
-            break # Prune
-
-    return max_eval, best_col
+            break  # Beta cutoff
+            
+    return value, best_col
 
 def get_move(board, piece, depth=6):
     state = ConnectFourBoard()
     state.board = np.copy(board)
-    _, col = negamax(state, depth, -math.inf, math.inf, piece, piece)
-
+    
+    # Start negamax search, with color=1 since AI is making move
+    _, col = negamax_alpha_beta(state, depth, -math.inf, math.inf, 1, piece)
+    
     # Fallback if negamax returns None unexpectedly
     if col is None:
-         valid_locations = state.get_valid_locations()
-         return random.choice(valid_locations) if valid_locations else None
-
+        valid_locations = state.get_valid_locations()
+        return random.choice(valid_locations) if valid_locations else None
+    
     return col
 
 def name():
