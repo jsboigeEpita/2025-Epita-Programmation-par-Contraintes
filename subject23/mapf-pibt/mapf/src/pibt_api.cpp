@@ -10,6 +10,10 @@ Pibt_api::Pibt_api(Problem* _P)
 
 std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
 {
+    P->clear();
+    occupied_now.resize(G->getNodesSize(), nullptr);
+    occupied_next.resize(G->getNodesSize(), nullptr);
+
     // compare priority of agents
     auto compare = [](Agent* a, const Agent* b) {
         if (a->elapsed != b->elapsed)
@@ -35,10 +39,13 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
         if (agent != current_agents_.end())
         {
             a = &agent->second;
+            a->v_now = agents_info[i].init;
+            a->v_next = nullptr;
+            a->g = agents_info[i].goal;
         }
         else
         {
-            int d = disable_dist_init ? 0 : pathDist(i);
+            int d = 0;
             a = new Agent{ i, // id
                            s, // current location
                            nullptr, // next location
@@ -48,10 +55,13 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
                            getRandomFloat(0, 1, MT) }; // tie-breaker
             current_agents_.insert({ a->id, *a });
         }
+
         undecided.push(a);
         occupied_now[s->id] = a;
+        P->setStart(a->id, s);
+        P->setGoal(a->id, g);
     }
-    solution.add(P->getConfigStart());
+    this->createDistanceTable();
     // planning
     while (!undecided.empty())
     {
