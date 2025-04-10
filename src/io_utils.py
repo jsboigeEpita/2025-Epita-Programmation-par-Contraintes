@@ -52,3 +52,11 @@ def load_function_from_file(filename: str, function_name: str):
         raise TypeError(f"'{function_name}' in '{filename}' is not callable.")
 
     return func
+
+
+def pretty_print_values(values: dict) -> None:
+    """
+    Pretty prints the values of a dictionary.
+    """
+    for key, value in values.items():
+        print(f"- {key}: {value}")

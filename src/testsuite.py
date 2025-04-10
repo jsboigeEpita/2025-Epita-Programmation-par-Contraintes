@@ -1,6 +1,17 @@
 import io
 from contextlib import redirect_stdout
 import unittest
+import itertools
+
+
+def generate_all_possible_test_cases(values):
+    """
+    Generate all possible test cases from the given function and values.
+    """
+    test_cases = []
+    for combination in itertools.product(*values.values()):
+        test_cases.append(dict(zip(values.keys(), combination)))
+    return test_cases
 
 
 def generate_test_suite(func, test_cases):
