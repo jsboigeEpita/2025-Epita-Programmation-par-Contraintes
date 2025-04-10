@@ -8,6 +8,7 @@ struct cIdPos* next_step(struct cAgentInfo* agent_info_arg, size_t size,
                          char* path)
 {
     std::string instance_file{ path };
+    // Pibt_api pibt_api = Pibt_api::instance();
     Pibt_api pibt_api{ instance_file };
     std::vector<AgentInfo> agent_info{};
     for (size_t i = 0; i < size; i++)

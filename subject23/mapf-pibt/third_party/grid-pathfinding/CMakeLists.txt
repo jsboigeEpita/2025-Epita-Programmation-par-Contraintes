@@ -10,8 +10,3 @@ add_custom_target(clang-format
   ../graph/include/*.hpp
   ../graph/src/*.cpp
   ../tests/*.cpp)
-
-# test
-set(TEST_MAIN_FUNC ./third_party/googletest/googletest/src/gtest_main.cc)
-add_executable(test ./tests/test_graph.cpp ${TEST_ALL_SRC} ${TEST_MAIN_FUNC})
-target_link_libraries(test lib-graph gtest)
