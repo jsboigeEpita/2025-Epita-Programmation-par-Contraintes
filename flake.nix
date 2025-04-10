@@ -18,7 +18,6 @@
                 setuptools
                 openai
                 python-dotenv
-                pipreqs
             ];
           };
       }
