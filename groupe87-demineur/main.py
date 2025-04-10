@@ -4,7 +4,8 @@ from classe import *
 
 def main():
     console = Console()
-    console.print("[bold underline]Minesweeper : Solveur CSP & Jeu Interactif[/bold underline]\n")
+    console.print(
+        "[bold underline]Minesweeper : Solveur CSP & Jeu Interactif[/bold underline]\n")
     choice = questionary.select(
         "Sélectionnez un mode",
         choices=[
@@ -24,7 +25,8 @@ def main():
         mgrid = MinesweeperGrid(grid5x5, 5, 5)
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
-        console.print(f"\nNombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]\n")
+        console.print(
+            f"\nNombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]\n")
         for num, solution in enumerate(solutions, start=1):
             console.print(f"Solution {num}:", style="underline bold")
             result_grid = mgrid.apply_solution(solution)
@@ -33,11 +35,13 @@ def main():
     elif choice == "Jouer à Minesweeper":
         rows = int(questionary.text("Nombre de lignes :", default="9").ask())
         cols = int(questionary.text("Nombre de colonnes :", default="9").ask())
-        mine_count = int(questionary.text("Nombre de mines :", default="10").ask())
+        mine_count = int(questionary.text(
+            "Nombre de mines :", default="10").ask())
         game = MinesweeperGame(rows, cols, mine_count)
         game.play()
     else:
         console.print("Choix invalide.", style="bold red")
+
 
 if __name__ == "__main__":
     main()
