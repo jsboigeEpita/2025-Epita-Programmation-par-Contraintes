@@ -7,6 +7,7 @@ import coverage_utils
 import unittest
 import logging
 import random
+import time
 
 logging.basicConfig(
     level=logging.INFO,
@@ -44,19 +45,27 @@ def generate_and_run_testsuite(filename, function_name):
     print()
     logging.info("Starting evaluation...")
     strategies = {
-        "all_combinations": all_test_cases,
-        "pairwise": initial_test_set,
+        "All Combinations": all_test_cases,
+        "Pairwise": initial_test_set,
+        #"Mixed": []
     }
     for strategy in strategies.keys():
         print(
-            "\n======================================================================\n"
+            "\n======================================================================"
         )
-        logging.info(f'"{strategy}" strategy')
+        print(f'\033[94m{strategy} Strategy\033[0m')
+        start_time = time.time()
         test_suite = testsuite.generate_test_suite(
             io_utils.load_function_from_file(filename, function_name),
             strategies[strategy],
         )
         coverage_utils.compute_coverage(test_suite, strategy)
+        print("----------------------------------------------------------------------")
+        end_time = time.time()
+        print(f"Time taken: {end_time - start_time:.3f} seconds")
+        print(
+            "======================================================================\n\n"
+        )
 
     return
 

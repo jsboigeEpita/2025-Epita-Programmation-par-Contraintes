@@ -58,5 +58,7 @@ def pretty_print_values(values: dict) -> None:
     """
     Pretty prints the values of a dictionary.
     """
+    print("\n======================================================================")
     for key, value in values.items():
-        print(f"- {key}: {value}")
+        print(f"\033[94m{key}: {value}\033[0m")
+    print("======================================================================\n")

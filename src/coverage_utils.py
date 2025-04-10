@@ -1,7 +1,6 @@
 import coverage
 import unittest
 import sys
-import os
 from io import StringIO
 
 
@@ -15,10 +14,8 @@ def compute_coverage(test_suite, strategy_name):
     
     runner = unittest.TextTestRunner(verbosity=0)
     cov = coverage.Coverage(
-        # Configure coverage to only include test_twise.py
-        #source=['test_twise.py'],
         # Exclude testsuite.py and other test files
-        omit=['testsuite.py', '*/__init__.py']
+        omit=['testsuite.py', '*/__init__.py'],
     )
     cov.start()
     try:
