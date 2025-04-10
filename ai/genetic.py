@@ -1,31 +1,19 @@
 import numpy as np
 import random
-from board import ConnectFourBoard # Assuming board.py is in the same directory
-import math # For infinity
+from board import ConnectFourBoard
 
-# --- Genetic Algorithm Configuration (Represents the *Result* of Training) ---
-
-# These weights would ideally be determined through an offline GA training process.
-# They represent the "best chromosome" found.
-# The features are just examples; a real GA might use more/different ones.
-# Weights: [Own_3_in_row, Own_2_in_row, Opponent_3_in_row, Opponent_2_in_row, Center_Control]
-# Note: A 4-in-a-row is treated as an immediate win/loss (infinite score).
-# Positive weights are good for AI, negative weights are bad (opponent benefit).
-# We negate opponent scores when adding to the total.
 BEST_WEIGHTS = np.array([
-    100,     # Score for having 3 of AI's pieces in a row (with one empty)
-    5,       # Score for having 2 of AI's pieces in a row (with two empties)
-    -80,     # Score for opponent having 3 pieces in a row (negative because it's bad for AI) - Block this!
-    -10,     # Score for opponent having 2 pieces in a row
-    3        # Small bonus for each piece in the center column
+    100,     
+    5,       
+    -80,     
+    -10,     
+    3       
 ])
 
-# Constants for pieces
 AI_PIECE = 2
 PLAYER_PIECE = 1
 EMPTY_SLOT = 0
 
-# --- Evaluation Function ---
 
 def evaluate_window(window, piece, weights):
     """Calculates the score for a 4-slot window."""
@@ -60,7 +48,6 @@ def score_board_state(board_array, piece, weights):
     score = 0
     rows, cols = board_array.shape
 
-    # --- Score Windows ---
     # Horizontal
     for r in range(rows):
         for c in range(cols - 3):
@@ -93,8 +80,7 @@ def score_board_state(board_array, piece, weights):
 
     return score
 
-# --- Helper to Check for Immediate Win/Loss ---
-# (Similar to expert system, useful for pruning)
+
 def _check_immediate_win_ga(board_obj, piece):
     """Checks if a piece can win immediately."""
     valid_locations = board_obj.get_valid_locations()
@@ -107,7 +93,6 @@ def _check_immediate_win_ga(board_obj, piece):
             return col
     return None
 
-# --- Helper to Check if Move Sets Up Opponent Win ---
 def _is_move_dangerous(board_obj, col, piece):
     """Checks if making move 'col' allows opponent to win next turn."""
     opponent_piece = 3 - piece
@@ -115,18 +100,17 @@ def _is_move_dangerous(board_obj, col, piece):
     temp_board = ConnectFourBoard()
     temp_board.board = board_obj.get_board()
     row = temp_board.get_next_open_row(col)
-    if row == -1: return False # Should not happen for valid col
-    temp_board.drop_piece(col, piece) # Make the move
+    if row == -1: return False 
+    temp_board.drop_piece(col, piece)
 
-    # Check if game ended (then it's not dangerous in this sense)
+    # Check if game ended
     if temp_board.game_over:
         return False
 
-    # Check if opponent has a winning move *now*
+    # Check if opponent has a winning move 
     opponent_winning_move = _check_immediate_win_ga(temp_board, opponent_piece)
     return opponent_winning_move is not None
 
-# --- Required Public Interface Functions ---
 
 def get_move(board_state, piece):
     """
@@ -150,28 +134,23 @@ def get_move(board_state, piece):
     # --- Rule 1: Win if possible ---
     winning_move = _check_immediate_win_ga(board_obj, piece)
     if winning_move is not None:
-        # print(f"GA AI: Found immediate win in column {winning_move}") # Debug
         return winning_move
 
     # --- Rule 2: Block opponent's win ---
     blocking_move = _check_immediate_win_ga(board_obj, opponent_piece)
     if blocking_move is not None:
-        # print(f"GA AI: Found blocking move in column {blocking_move}") # Debug
         return blocking_move
 
     # --- Rule 3: Evaluate moves using the GA weights ---
     best_score = -float('inf')
     best_col = random.choice(valid_locations) # Start with a random valid move
 
-    scored_moves = {} # Store scores for debugging/analysis
+    scored_moves = {} # Store scores for analysis
 
     for col in valid_locations:
         # Check if this move allows the opponent to win immediately next turn
         if _is_move_dangerous(board_obj, col, piece):
-             # print(f"GA AI: Move {col} is dangerous, assigning very low score.") # Debug
-             # Assign a very low score, but slightly different per column
-             # to ensure a move is still picked if all are dangerous.
-             move_score = -1e9 - col # Avoid this move unless absolutely necessary
+             move_score = -1e9 - col 
         else:
             # Simulate dropping the piece
             row = board_obj.get_next_open_row(col)
@@ -188,8 +167,6 @@ def get_move(board_state, piece):
             best_score = move_score
             best_col = col
 
-    # print(f"GA AI: Move scores: {scored_moves}") # Debug
-    # print(f"GA AI: Chose column {best_col} with score {best_score}") # Debug
     return best_col
 
 def name():
