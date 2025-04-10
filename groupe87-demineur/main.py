@@ -8,14 +8,15 @@ class MinesweeperGrid:
     def get_neighbors(self, pos):
         i, j = pos
         return [
-            (i+di, j+dj)
+            (i + di, j + dj)
             for di in [-1, 0, 1]
             for dj in [-1, 0, 1]
-            if not (di == 0 and dj == 0) and (i+di, j+dj) in self.grid
+            if not (di == 0 and dj == 0) and (i + di, j + dj) in self.grid
         ]
 
     def apply_solution(self, solution):
-        return {pos: (solution[pos] if val == "?" else val) for pos, val in self.grid.items()}
+        return {pos: (solution[pos] if val == "?" else val)
+                for pos, val in self.grid.items()}
 
 class MinesweeperSolver:
     def __init__(self, minesweeper_grid):
@@ -68,20 +69,16 @@ if __name__ == "__main__":
         (1, 0): 1, (1, 1): "?", (1, 2): 1,
         (2, 0): "?", (2, 1): 1, (2, 2): 0,
     }
-    
     grid4 = {
-        (0, 0): 1, (0, 1): 1, (0, 2): "?",
-        (1, 0): 1, (1, 1): "?", (1, 2): 1,
-        (2, 0): "?", (2, 1): 1, (2, 2): 1,
+        (0, 0): 1, (0, 1): "?", (0, 2): "?",
+        (1, 0): "?", (1, 1): "?", (1, 2): 0,
+        (2, 0): "?", (2, 1): 1, (2, 2): 0,
     }
-    
     grid5 = {
         (0, 0): 1, (0, 1): "?", (0, 2): "?",
-        (1, 0): 1, (1, 1): "?", (1, 2): 1,
-        (2, 0): "?", (2, 1): "?", (2, 2): "?",
+        (1, 0): "?", (1, 1): "?", (1, 2): "?",
+        (2, 0): 0, (2, 1): "?", (2, 2): 0,
     }
-    
-    
     grids = [(grid1, 5), (grid2, 4), (grid3, 3), (grid4, 3), (grid5, 3)]
 
     for idx, (grid, size) in enumerate(grids, start=1):
@@ -90,8 +87,8 @@ if __name__ == "__main__":
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
         print("Nombre de solutions:", len(solutions))
-        if solutions:
-            solution = solutions[0]
+        for num, solution in enumerate(solutions, start=1):
+            print(f"Solution {num}:")
             result_grid = mgrid.apply_solution(solution)
             PrettyPrinter.print_grid(result_grid, size)
-        print("-" * 20)
+            print("-" * 20)
