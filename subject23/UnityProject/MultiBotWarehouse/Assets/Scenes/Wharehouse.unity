@@ -27494,8 +27494,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1495022880}
   - component: {fileID: 1495022881}
-  - component: {fileID: 1495022882}
-  - component: {fileID: 1495022883}
   m_Layer: 0
   m_Name: Wharehouse
   m_TagString: Untagged
@@ -27516,6 +27514,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1760148976}
+  - {fileID: 2045097145}
+  - {fileID: 1830018685}
   - {fileID: 1122046030}
   - {fileID: 1717446342}
   - {fileID: 36341893}
@@ -27550,85 +27551,6 @@ MonoBehaviour:
   gridOriginTransform: {fileID: 1343038596}
   mapPath: 
   wrapperMapPath: 
---- !u!114 &1495022882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495022879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 647da37c70c0fc04ead66d6165698668, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numRobots: 2
-  jobs:
-  - tasks:
-    - startLocationId: 0
-      endLocationId: 2
-      serviceTime: 0
-      type: 1
-    - startLocationId: 0
-      endLocationId: 2
-      serviceTime: 0
-      type: 1
-    - startLocationId: 1
-      endLocationId: 2
-      serviceTime: 0
-      type: 3
-    - startLocationId: 2
-      endLocationId: 3
-      serviceTime: 0
-      type: 4
-  - tasks:
-    - startLocationId: 0
-      endLocationId: 2
-      serviceTime: 0
-      type: 1
-    - startLocationId: 1
-      endLocationId: 2
-      serviceTime: 0
-      type: 1
-    - startLocationId: 1
-      endLocationId: 2
-      serviceTime: 0
-      type: 3
-    - startLocationId: 2
-      endLocationId: 3
-      serviceTime: 0
-      type: 4
-  travelTimes:
-  - values: 00000000010000000100000001000000
-  - values: 01000000000000000100000001000000
-  - values: 01000000010000000000000001000000
-  - values: 01000000010000000100000000000000
-  horizon: 2147483647
-  verbose: 1
-  solveButton: 0
---- !u!114 &1495022883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495022879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cafdf15c2046b87498b7ad8d8254db2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentInfoArg:
-  - agentId: 0
-    init:
-      x: 0
-      y: 0
-    goal:
-      x: 2
-      y: 2
-  count: 1
-  path: C:\Users\Julien\AppData\LocalLow\DefaultCompany\MultiBotWarehouse\map.ssv
-  tryButton: 0
 --- !u!1 &1495246718
 GameObject:
   m_ObjectHideFlags: 0
@@ -33515,6 +33437,94 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+--- !u!1 &1760148975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1760148976}
+  - component: {fileID: 1760148977}
+  m_Layer: 0
+  m_Name: Solver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1760148976
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760148975}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1495022880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1760148977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760148975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647da37c70c0fc04ead66d6165698668, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numRobots: 2
+  jobs:
+  - tasks:
+    - startLocationId: 0
+      endLocationId: 2
+      serviceTime: 0
+      type: 1
+    - startLocationId: 0
+      endLocationId: 2
+      serviceTime: 0
+      type: 1
+    - startLocationId: 1
+      endLocationId: 2
+      serviceTime: 0
+      type: 3
+    - startLocationId: 2
+      endLocationId: 3
+      serviceTime: 0
+      type: 4
+  - tasks:
+    - startLocationId: 0
+      endLocationId: 2
+      serviceTime: 0
+      type: 1
+    - startLocationId: 1
+      endLocationId: 2
+      serviceTime: 0
+      type: 1
+    - startLocationId: 1
+      endLocationId: 2
+      serviceTime: 0
+      type: 3
+    - startLocationId: 2
+      endLocationId: 3
+      serviceTime: 0
+      type: 4
+  travelTimes:
+  - values: 00000000010000000100000001000000
+  - values: 01000000000000000100000001000000
+  - values: 01000000010000000000000001000000
+  - values: 01000000010000000100000000000000
+  horizon: 2147483647
+  verbose: 1
+  solveButton: 0
 --- !u!1 &1763491763
 GameObject:
   m_ObjectHideFlags: 0
@@ -35309,6 +35319,69 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824573731}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1830018684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1830018685}
+  - component: {fileID: 1830018687}
+  - component: {fileID: 1830018686}
+  m_Layer: 0
+  m_Name: LLM Agent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1830018685
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830018684}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1495022880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1830018686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830018684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fb669ee76209d4db598542a2faf857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiInteraction: {fileID: 1830018687}
+  model: gpt-4o-mini-2024-07-18
+  verbose: 1
+  inputButton: 0
+  inputText: I would like to get one bed
+--- !u!114 &1830018687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830018684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780756a50e089454a9acb99960110aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  apiKeys: {fileID: 11400000, guid: 3c351e94ae32cd4469cd58f2f1c108af, type: 2}
 --- !u!1 &1831712009
 GameObject:
   m_ObjectHideFlags: 0
@@ -39979,6 +40052,61 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041826971}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2045097144
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2045097145}
+  - component: {fileID: 2045097146}
+  m_Layer: 0
+  m_Name: Mapf
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2045097145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045097144}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1495022880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2045097146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045097144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cafdf15c2046b87498b7ad8d8254db2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentInfoArg:
+  - agentId: 0
+    init:
+      x: 0
+      y: 0
+    goal:
+      x: 2
+      y: 2
+  count: 1
+  path: C:\Users\Julien\AppData\LocalLow\DefaultCompany\MultiBotWarehouse\map.ssv
+  tryButton: 0
 --- !u!4 &2059971931 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 595158761984292329, guid: 9edf2ebff0f3b0243b9d0a909dea1522, type: 3}

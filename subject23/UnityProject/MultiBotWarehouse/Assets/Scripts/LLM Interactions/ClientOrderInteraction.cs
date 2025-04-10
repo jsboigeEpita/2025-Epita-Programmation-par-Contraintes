@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ClientOrderInteraction : MonoBehaviour
@@ -20,6 +21,7 @@ public class ClientOrderInteraction : MonoBehaviour
     private string inputText;
 
     private IAsyncEnumerator<string> currentLoop = null;
+    private System.Threading.Tasks.ValueTask<bool> currentMoveNextTask;
 
     private string prompt = 
         "You are a furniture warehouse assistant responsible for taking orders and confirming them with customers. " +
@@ -77,25 +79,35 @@ public class ClientOrderInteraction : MonoBehaviour
         "\n" +
         "Always check the client's order against the furniture list and follow the above rules strictly.";
 
-    public async IAsyncEnumerable<string> SendOrderMessage(string message)
-    {
-        await foreach (string result in apiInteraction.StartConversation(prompt, message, model, false, verbose))
-            yield return result;
-    }
-
     private void Update()
     {
         if (inputButton)
         {
-            if (currentLoop != null)
-                currentLoop = SendOrderMessage(inputText).GetAsyncEnumerator();
-
-            Debug.Log("Received the following message: " + currentLoop.Current);
-
-            if (currentLoop.MoveNextAsync().IsCompletedSuccessfully)
+            if (currentLoop == null)
             {
+                currentLoop = apiInteraction.StartConversation(prompt, inputText, model, false, verbose).GetAsyncEnumerator();
+                currentMoveNextTask = currentLoop.MoveNextAsync();
+            }
+
+            if (!currentMoveNextTask.IsCompletedSuccessfully)
+            {
+                return;
+            }
+            else
+            {
+                currentMoveNextTask = currentLoop.MoveNextAsync();
+            }
+
+            if (currentMoveNextTask.AsTask().Status == TaskStatus.RanToCompletion)
+            {
+                Debug.Log("Received the following message: " + currentLoop.Current);
+                currentLoop.DisposeAsync();
                 currentLoop = null;
                 inputButton = false;
+            }
+            else
+            {
+                Debug.Log("Received the following message: " + currentLoop.Current);
             }
         }
     }

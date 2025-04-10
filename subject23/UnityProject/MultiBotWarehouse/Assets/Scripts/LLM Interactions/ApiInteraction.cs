@@ -117,7 +117,7 @@ public class ApiInteraction : MonoBehaviour
             else
             {
                 if (verbose)
-                    Debug.LogError("Error: " + request.error);
+                    Debug.LogError("Error: " + request.error + " | " + request.downloadHandler.text);
 
                 yield return null;
             }
@@ -143,7 +143,7 @@ public class ApiInteraction : MonoBehaviour
 
         await foreach (ChatResponse chatResponse in Send(initialRequest, verbose))
         {
-            if (chatResponse?.choices != null && chatResponse.choices.Count > 0)
+            if (chatResponse!= null && chatResponse.choices != null && chatResponse.choices.Count > 0)
             {
                 ChatMessage responseMessage = chatResponse.choices[0].message;
                 conversationHistory.Add(responseMessage);
@@ -166,6 +166,7 @@ public class ApiInteraction : MonoBehaviour
             else
             {
                 yield return "Assistant didn't respond.";
+                yield break;
             }
         }
     }
