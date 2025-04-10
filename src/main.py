@@ -1,3 +1,4 @@
+from itertools import pairwise
 import chat
 import twise
 import io_utils
@@ -41,19 +42,22 @@ def generate_and_run_testsuite(filename, function_name):
         f"Selecting {len(initial_test_set)} random test cases from {len(all_test_cases)} possible test cases..."
     )
 
+    pairwise_test_set = twise.t_wise_testing(values, [], t=3)
+    logging.info(f"Total test cases generated: {len(pairwise_test_set)}")
+
     # 6. Evaluation
     print()
     logging.info("Starting evaluation...")
     strategies = {
-        "All Combinations": all_test_cases,
-        "Pairwise": initial_test_set,
-        #"Mixed": []
+        # "all_combinations": all_test_cases,
+        "10_sample": initial_test_set,
+        "pairwise": pairwise_test_set,
     }
     for strategy in strategies.keys():
         print(
             "\n======================================================================"
         )
-        print(f'\033[94m{strategy} Strategy\033[0m')
+        print(f"\033[94m{strategy} Strategy\033[0m")
         start_time = time.time()
         test_suite = testsuite.generate_test_suite(
             io_utils.load_function_from_file(filename, function_name),
@@ -71,4 +75,5 @@ def generate_and_run_testsuite(filename, function_name):
 
 
 # generate_and_run_testsuite("./tests/test_twise.py", "configure_volume")
-generate_and_run_testsuite("./tests/test_discout.py", "calculate_discount")
+# generate_and_run_testsuite("./tests/test_discout.py", "calculate_discount")
+generate_and_run_testsuite("./tests/complex.py", "complex")
