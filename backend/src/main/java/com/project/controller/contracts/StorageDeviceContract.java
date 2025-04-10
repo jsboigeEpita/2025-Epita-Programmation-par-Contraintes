@@ -15,10 +15,10 @@ public class StorageDeviceContract {
     public StorageDeviceContract() {
     }
 
-    public StorageDeviceContract(String manufacturer, String modelName, String interfaceType, String formFactor,
+    public StorageDeviceContract(String manufacturer, String name, String interfaceType, String formFactor,
             String storageType, String capacity, String readSpeed, String writeSpeed, String price) {
         this.manufacturer = manufacturer;
-        this.name = modelName;
+        this.name = name;
         this.interfaceType = interfaceType;
         this.formFactor = formFactor;
         this.storageType = storageType;
@@ -36,11 +36,11 @@ public class StorageDeviceContract {
         this.manufacturer = manufacturer;
     }
 
-    public String getModelName() {
+    public String getName() {
         return name;
     }
 
-    public void setModelName(String modelName) {
+    public void setName(String modelName) {
         this.name = modelName;
     }
 

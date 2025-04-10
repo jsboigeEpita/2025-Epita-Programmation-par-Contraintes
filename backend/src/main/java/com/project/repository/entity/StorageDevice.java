@@ -40,10 +40,10 @@ public class StorageDevice extends PanacheMongoEntity {
     public StorageDevice() {
     }
 
-    public StorageDevice(String manufacturer, String modelName, String interfaceType, String formFactor,
+    public StorageDevice(String manufacturer, String name, String interfaceType, String formFactor,
             String storageType, String capacity, String readSpeed, String writeSpeed, String price) {
         this.manufacturer = manufacturer;
-        this.name = modelName;
+        this.name = name;
         this.interfaceType = interfaceType;
         this.formFactor = formFactor;
         this.storageType = storageType;
@@ -61,12 +61,12 @@ public class StorageDevice extends PanacheMongoEntity {
         this.manufacturer = manufacturer;
     }
 
-    public String getModelName() {
+    public String getName() {
         return name;
     }
 
-    public void setModelName(String modelName) {
-        this.name = modelName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getInterfaceType() {
