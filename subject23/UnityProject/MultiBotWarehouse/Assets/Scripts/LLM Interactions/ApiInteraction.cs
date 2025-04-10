@@ -88,7 +88,7 @@ public class ApiInteraction : MonoBehaviour
     }
     #endregion
 
-    private async IAsyncEnumerable<ChatResponse> Send(ChatRequest chatRequest, bool verbose = false)
+    private async Task<ChatResponse> SendAsync(ChatRequest chatRequest, bool verbose = false)
     {
         string jsonContent = JsonConvert.SerializeObject(chatRequest);
 
@@ -112,66 +112,58 @@ public class ApiInteraction : MonoBehaviour
                     Debug.Log("Received response: " + responseText);
 
                 var chatResponse = JsonConvert.DeserializeObject<ChatResponse>(responseText);
-                yield return chatResponse;
+                return chatResponse;
             }
             else
             {
                 if (verbose)
                     Debug.LogError("Error: " + request.error + " | " + request.downloadHandler.text);
 
-                yield return null;
+                return null;
             }
         }
     }
 
-    public async IAsyncEnumerable<string> StartConversation(string systemMessage, string userMessage, string model, bool enableFunctionCalling, bool verbose = false)
+    public async Task<string> StartConversationAsync(string systemMessage, string userMessage, string model, bool enableFunctionCalling, bool verbose = false)
     {
-        List<ChatMessage> conversationHistory = new List<ChatMessage>();
-
-        ChatMessage systemChatMessage = new ChatMessage { role = "system", content = systemMessage };
-        ChatMessage userChatMessage = new ChatMessage { role = "user", content = userMessage };
-        
-        conversationHistory.Add(systemChatMessage);
-        conversationHistory.Add(userChatMessage);
+        List<ChatMessage> conversationHistory = new List<ChatMessage>
+        {
+            new ChatMessage { role = "system", content = systemMessage },
+            new ChatMessage { role = "user", content = userMessage }
+        };
 
         ChatRequest initialRequest = new ChatRequest
         {
             model = model,
             messages = conversationHistory,
-            Functions = enableFunctionCalling ? functionDefinitions.ToList() : new List<FunctionDefinition>(),
+            Functions = enableFunctionCalling ? functionDefinitions.ToList() : null,
         };
 
-        await foreach (ChatResponse chatResponse in Send(initialRequest, verbose))
+        ChatResponse chatResponse = await SendAsync(initialRequest, verbose);
+        if (chatResponse != null && chatResponse.choices != null && chatResponse.choices.Count > 0)
         {
-            if (chatResponse!= null && chatResponse.choices != null && chatResponse.choices.Count > 0)
+            ChatMessage responseMessage = chatResponse.choices[0].message;
+            conversationHistory.Add(responseMessage);
+
+            if (responseMessage.FunctionCall != null && enableFunctionCalling)
             {
-                ChatMessage responseMessage = chatResponse.choices[0].message;
-                conversationHistory.Add(responseMessage);
-
-                if (responseMessage.FunctionCall != null && enableFunctionCalling)
-                {
-                    await foreach (string result in CallFunction(conversationHistory, responseMessage, model, verbose))
-                    {
-                        yield return result;
-                    }
-                }
-                else
-                {
-                    if (verbose)
-                        Debug.Log("Assistant response: " + responseMessage.content);
-
-                    yield return responseMessage.content;
-                }
+                return await CallFunctionAsync(conversationHistory, responseMessage, model, verbose);
             }
             else
             {
-                yield return "Assistant didn't respond.";
-                yield break;
+                if (verbose)
+                    Debug.Log("Assistant response: " + responseMessage.content);
+
+                return responseMessage.content;
             }
+        }
+        else
+        {
+            return "Assistant didn't respond in StartConversationAsync.";
         }
     }
 
-    private async IAsyncEnumerable<string> ContinueConversationWithFunctionResult(List<ChatMessage> conversationHistory, string model, bool verbose = false)
+    private async Task<string> ContinueConversationWithFunctionResultAsync(List<ChatMessage> conversationHistory, string model, bool verbose = false)
     {
         ChatRequest newRequest = new ChatRequest
         {
@@ -180,32 +172,29 @@ public class ApiInteraction : MonoBehaviour
             Functions = functionDefinitions.ToList(),
         };
 
-        await foreach (var chatResponse in Send(newRequest, true))
+        ChatResponse chatResponse = await SendAsync(newRequest, verbose);
+        if (chatResponse?.choices != null && chatResponse.choices.Count > 0)
         {
-            if (chatResponse?.choices != null && chatResponse.choices.Count > 0)
+            ChatMessage responseMessage = chatResponse.choices[0].message;
+            conversationHistory.Add(responseMessage);
+
+            if (responseMessage.FunctionCall != null)
             {
-                ChatMessage responseMessage = chatResponse.choices[0].message;
-                conversationHistory.Add(responseMessage);
+                return await CallFunctionAsync(conversationHistory, responseMessage, model, verbose);
+            }
+            else
+            {
+                if (verbose)
+                    Debug.Log("Assistant response: " + responseMessage.content);
 
-                if (responseMessage.FunctionCall != null)
-                {
-                    await foreach (string result in CallFunction(conversationHistory, responseMessage, model, verbose))
-                    {
-                        yield return result;
-                    }
-                }
-                else
-                {
-                    if (verbose)
-                        Debug.Log("Assistant response: " + responseMessage.content);
-
-                    yield return responseMessage.content;
-                }
+                return responseMessage.content;
             }
         }
+
+        return "Assistant didn't respond in ContinueConversationWithFunctionResultAsync.";
     }
 
-    private async IAsyncEnumerable<string> CallFunction(List<ChatMessage> conversationHistory, ChatMessage message, string model, bool verbose = false)
+    private async Task<string> CallFunctionAsync(List<ChatMessage> conversationHistory, ChatMessage message, string model, bool verbose = false)
     {
         Dictionary<string, string> args = JsonConvert.DeserializeObject<Dictionary<string, string>>(message.FunctionCall.arguments);
 
@@ -227,17 +216,14 @@ public class ApiInteraction : MonoBehaviour
 
             conversationHistory.Add(functionResultMessage);
 
-            await foreach (string continuousResult in ContinueConversationWithFunctionResult(conversationHistory, model, verbose))
-            {
-                yield return continuousResult;
-            }
+            return await ContinueConversationWithFunctionResultAsync(conversationHistory, model, verbose);
         }
         else
         {
             if (verbose)
                 Debug.Log("LLM called \"" + message.FunctionCall.name + "\" with keys {" + string.Join(" ", args.Keys) + "} and values {" + string.Join(" ", args.Values) + "} but it does not exist.");
 
-            yield return "The function " + message.FunctionCall.name + " does not exist.";
+            return "The function " + message.FunctionCall.name + " does not exist.";
         }
     }
 }
