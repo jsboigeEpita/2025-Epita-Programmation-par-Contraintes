@@ -35,11 +35,6 @@ public class SolverDebugEntrypoint : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        
-    }
-
     private void Update()
     {
         if (solveButton)
