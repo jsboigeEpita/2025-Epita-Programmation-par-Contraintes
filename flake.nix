@@ -18,6 +18,7 @@
                 setuptools
                 openai
                 python-dotenv
+                matplotlib
             ] ++ [
                 uv
             ];
