@@ -5,7 +5,7 @@ import os
 from core.satellite import Satellite
 from core.imaging_task import ImagingTask
 from visualization.visibility import all_availability
-from solver.scheduler import satellite_solver, cp_model
+from solver.scheduler import Satellite, SatelliteScheduler
 
 
 def convert_to_solver_input(enriched_locations):
@@ -123,15 +123,15 @@ def run_satellite_scheduler(enriched_locations):
         return {"observations": [], "error": "No valid locations with GPS coordinates"}
 
     # Run the solver
-    status, results = satellite_solver(satellite, solver_requests)
+    status, results = SatelliteScheduler.satellite_solver(satellite, solver_requests)
 
     # Format results
     formatted_results = {
         "observations": [],
         "status": (
             "optimal"
-            if status == cp_model.OPTIMAL
-            else "feasible" if status == cp_model.FEASIBLE else "infeasible"
+            if status == SatelliteScheduler.cp_model.OPTIMAL
+            else "feasible" if status == SatelliteScheduler.cp_model.FEASIBLE else "infeasible"
         ),
     }
 

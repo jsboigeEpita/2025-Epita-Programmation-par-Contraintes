@@ -221,7 +221,6 @@ def detect_intent_with_llm(user_text):
         print(f"Error detecting intent with LLM: {str(e)}")
         return "general_question"
 
-
 @click.command()
 def cli():
     """Interactive CLI for Satellite Observation Scheduling"""
@@ -238,34 +237,28 @@ def cli():
         click.secho("[1] Enter a new observation request or ask a question", fg="cyan")
         click.secho("[2] Exit", fg="cyan")
 
-        # Modification: utiliser click.prompt avec prompt_suffix pour contrôler la mise en forme
         choice = click.prompt(
             "Choose an option",
             type=int,
             default=1,
             show_default=False,
             prompt_suffix=": ",
-            show_choices=False,
         )
 
         if choice == 1:
-            # Modification: utiliser prompt_suffix pour assurer que l'input est sur la même ligne
             user_text = click.prompt(
                 "\nEnter your observation request or question",
                 prompt_suffix=": ",
             )
             click.echo("\nProcessing input...")
 
-            # Add user message to conversation history
             conversation_history.append({"role": "user", "content": user_text})
 
-            # Detect intent using LLM
             intent = detect_intent_with_llm(user_text)
             click.secho(f"Detected intent: {intent}", fg="blue")
 
             if intent == "observation_request":
                 try:
-                    # Parse the user request
                     parsed_data_str = parse_user_request(user_text)
                     parsed_data = json.loads(parsed_data_str)
 
@@ -276,14 +269,11 @@ def cli():
                         )
                         continue
 
-                    # Generate solver input and run simulation
                     solver_input = generate_solver_input(parsed_data["requests"])
                     solver_output = simulate_solver(solver_input)
 
-                    # Get a description of the output
                     summary = describe_solver_output(solver_output)
 
-                    # Display results
                     click.secho(
                         "\n📋 Extracted Observation Requests:",
                         fg="green",
@@ -322,7 +312,6 @@ def cli():
                     click.secho("\n📝 Summary:", fg="green", bold=True)
                     click.echo(summary)
 
-                    # Add response to conversation history
                     conversation_history.append(
                         {
                             "role": "assistant",
@@ -341,14 +330,12 @@ def cli():
                 status_msg = "\nStatus Check: This functionality is not yet fully implemented. In the future, you'll be able to check the status of your scheduled observations."
                 click.secho(status_msg, fg="yellow")
 
-                # Add response to conversation history
                 conversation_history.append(
                     {"role": "assistant", "content": status_msg}
                 )
 
-            else:  # general_question
+            else:
                 try:
-                    # Add system message at the beginning
                     messages = [
                         {
                             "role": "system",
@@ -367,7 +354,6 @@ def cli():
                     click.secho("\n🤖 Assistant's Response:", fg="green", bold=True)
                     click.echo(assistant_response)
 
-                    # Add response to conversation history
                     conversation_history.append(
                         {"role": "assistant", "content": assistant_response}
                     )
