@@ -5,4 +5,5 @@ target_sources(lib-mapf PRIVATE
     pibt_api.cpp
     problem.cpp
     solver.cpp
+    plan.cpp
     )

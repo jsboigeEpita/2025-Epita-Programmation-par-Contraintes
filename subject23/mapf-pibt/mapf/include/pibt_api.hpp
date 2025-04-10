@@ -20,9 +20,6 @@ class Pibt_api
     : public Solver
     , public Singleton<Pibt_api>
 {
-public:
-    static const std::string SOLVER_NAME;
-
 private:
     // PIBT agent
     struct Agent

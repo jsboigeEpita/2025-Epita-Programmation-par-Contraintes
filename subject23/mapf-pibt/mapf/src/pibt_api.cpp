@@ -7,7 +7,6 @@ Pibt_api::Pibt_api(Problem* _P)
     , occupied_now(Agents(G->getNodesSize(), nullptr))
     , occupied_next(Agents(G->getNodesSize(), nullptr))
 {
-    solver_name = Pibt_api::SOLVER_NAME;
 }
 
 std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
