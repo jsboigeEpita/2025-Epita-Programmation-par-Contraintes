@@ -490,7 +490,7 @@ def a_star_pathfinding(start, goal, grid, empty_cell=0, obstacle_cell=1):
         x, y = current
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:  # Neighboring cells (up, down, left, right)
             neighbor = (x + dx, y + dy)
-            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and (grid[neighbor[0]][neighbor[1]] == empty_cell or (neighbor[0] == goal[0] and neighbor[1] == goal[1])):
+            if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and (grid[neighbor[0]][neighbor[1]] == empty_cell or (neighbor[0] == goal[0] and neighbor[1] == goal[1]) or (grid[neighbor[0]][neighbor[1]] == '@')):
                 tentative_g_score = g_score[current] + 1
                 if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
                     came_from[neighbor] = current
@@ -762,25 +762,33 @@ def scenario_2():
     grid = Grid(15, 15, pattern='PH', nb_robots=2)
     robot_1 = Robot(0, 0, max_energy=10, base_station=(0, 0))
     robot_2 = Robot(0, 1, base_station=(0, 0))
+    robot_3 = Robot(0, 2, base_station=(0, 0))
     grid.place_robot(robot_1.current_position[0], robot_1.current_position[1], robot_1)
     grid.place_robot(robot_2.current_position[0], robot_2.current_position[1], robot_2)
+    grid.place_robot(robot_3.current_position[0], robot_3.current_position[1], robot_3)
     # Define tasks with their target positions
     task_1 = Task("Task 1", 5, 4, 4, id=0)
     task_2 = Task("Task 2", 3, 9, 9, id=1)
+    task_3 = Task("Task 3", 3, 12, 2, id=2)
     grid.place_task(task_1.target[0], task_1.target[1], task_1)
     grid.place_task(task_2.target[0], task_2.target[1], task_2)
+    grid.place_task(task_3.target[0], task_3.target[1], task_3)
     robot_1.set_task(task_1)
     robot_2.set_task(task_2)
+    robot_3.set_task(task_3)
     print("Initial grid:")
     grid.print_grid()
     path1 = robot_1.path_to_task(grid)
     path2 = robot_2.path_to_task(grid)
+    path3 = robot_3.path_to_task(grid)
     print(f"Robot 1 path to task: {path1}")
     print(f"Robot 2 path to task: {path2}")
+    print(f"Robot 3 path to task: {path3}")
     # Create a dictionary of agent paths
     agent_paths = {
         0: path1,
-        1: path2
+        1: path2,
+        2: path3
     }
     # Call the function to solve the multi-agent pathfinding problem
     schedule = multi_agent_pathfinding(agent_paths)
@@ -789,11 +797,12 @@ def scenario_2():
     print_grid_with_paths(grid.grid, agent_paths)
 
 
-    robots = [robot_1, robot_2]
-    tasks = [task_1, task_2]
+    robots = [robot_1, robot_2, robot_3]
+    tasks = [task_1, task_2, task_3]
     # Define the total time limit for the scheduling
     total_time_limit = 10
     schedule = solve_robot_task_scheduling(robots, tasks, total_time_limit)
+    print(schedule)
 
 def scenario_3():
         # Example Usage
