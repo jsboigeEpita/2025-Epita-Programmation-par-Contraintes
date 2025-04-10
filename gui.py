@@ -59,7 +59,7 @@ class GameGUI:
         # Update only the board area, not the top row
         pygame.display.update(pygame.Rect(0, SQUARESIZE, WIDTH, HEIGHT - SQUARESIZE))
     
-    def animate_drop(self, board_state, row, col, piece, speed=5):
+    def animate_drop(self, board_state, row, col, piece, speed=15):
         """
         Animate the piece dropping into the board with proper rendering
         
