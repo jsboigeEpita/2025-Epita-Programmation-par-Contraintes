@@ -306,7 +306,10 @@ def multi_agent_pathfinding(agent_paths):
         print("Agent paths and schedules:")
         for agent, path in agent_paths.items():
             print(f"Agent {agent}: Path: {path}, Schedule: {schedule[agent]}")
+        # return the path and schedule for each agent
         return schedule  # Return the schedule for each agent
+
+
     else:
         print("No feasible solution found.")
 
@@ -550,7 +553,15 @@ def solve_robot_task_scheduling(robots, tasks, total_time_limit):
                 # Calculate the energy needed for the task and the time it takes
                 energy_needed = tasks[t].energy_cost + tasks[t].duration * robots[r].energy_consumption
                 # Check if the robot has enough energy at the start of the task
-                model.Add(assignments[(r, t, time)] == 0).OnlyEnforceIf(robots[r].energy < energy_needed)
+                # Create a Boolean variable to represent whether the robot has insufficient energy
+                insufficient_energy = model.NewBoolVar(f"insufficient_energy_r{r}_t{t}_time{time}")
+
+                # Add constraints to set the Boolean variable based on the energy condition
+                model.Add(robots[r].energy < energy_needed).OnlyEnforceIf(insufficient_energy)
+                model.Add(robots[r].energy >= energy_needed).OnlyEnforceIf(insufficient_energy.Not())
+
+                # Prevent the task assignment if the robot has insufficient energy
+                model.Add(assignments[(r, t, time)] == 0).OnlyEnforceIf(insufficient_energy)
 
     # ... (Add other constraints: inventory, travel, etc.)
 
@@ -753,6 +764,7 @@ def scenario_1():
     # Call the function to solve the multi-agent pathfinding problem
     schedule = multi_agent_pathfinding(agent_paths)
     # Print the grid with paths
+    print(schedule)
 
 def scenario_2():
     """
@@ -847,7 +859,7 @@ if __name__ == "__main__":
     # print("Grid with paths:")
     # print_grid_with_paths(grid, agent_paths_example_1)
 
-    scenario_2()
+    scenario_1()
 
     # if schedule:
     #     # Plot the paths and Gantt chart
