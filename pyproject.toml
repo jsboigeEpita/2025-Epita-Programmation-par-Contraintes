@@ -9,4 +9,5 @@ dependencies = [
     "openai==1.72.0",
     "python-dotenv==1.1.0",
     "z3==0.2.0",
+    "z3-solver>=4.14.1.0",
 ]
