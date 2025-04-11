@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AStar.Options;
+using AStar;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using static PathFindingCppWrapper;
 using static Solver;
 using static Warehouse.Robot;
+using static Warehouse;
 
 public class Warehouse : MonoBehaviour
 {
@@ -50,6 +54,10 @@ public class Warehouse : MonoBehaviour
     private TMP_Text orderTextDebug;
     [SerializeField]
     private TMP_Text tasksTextDebug;
+    [SerializeField]
+    private TMP_Text mapTextDebug;
+    [SerializeField]
+    private ClientOrderInteraction clientOrderInteraction;
 
     [Header("Settings")]
     [SerializeField]
@@ -132,9 +140,15 @@ public class Warehouse : MonoBehaviour
                 writer.WriteLine("width " + gridSize.y);
                 writer.WriteLine("map");
 
-                foreach (bool[] row in grid)
+                for (int y = 0; y < gridSize.x; y++)
                 {
-                    writer.WriteLine(string.Join("", row.Select(ele => ele ? "." : "@").ToList()));
+                    for (int x = 0; x < gridSize.y; x++)
+                    {
+                        writer.Write(grid[y][x] ? "." : "@");
+                    }
+
+                    if (y != gridSize.x - 1)
+                        writer.WriteLine("");
                 }
             }
 
@@ -152,20 +166,20 @@ public class Warehouse : MonoBehaviour
             }
         }
 
-        string[][] orders = new string[0][];
+        //string[][] orders = clientOrderInteraction.GetRandomOrders(1);
 
         int[][] travelTimes = GenerateTravelTimes();
 
         roleJobs.Add(Role.Refill, GenerateRefillJobs());
-        roleJobs.Add(Role.Order, GenerateOrderJobs(orders));
+        //roleJobs.Add(Role.Order, GenerateOrderJobs(orders));
 
         tasksTextDebug.text = string.Join("\n", roleJobs[Role.Refill].Select(ele => ele.Debug()).ToArray());
 
         assignments.Add(Robot.Role.Refill, Solver.Solve(assignedRobots[Robot.Role.Refill].Count, roleJobs[Role.Refill], travelTimes, verbose: false));
-        assignments.Add(Robot.Role.Order, Solver.Solve(assignedRobots[Robot.Role.Order].Count, roleJobs[Role.Order], travelTimes, verbose: false));
+        //assignments.Add(Robot.Role.Order, Solver.Solve(assignedRobots[Robot.Role.Order].Count, roleJobs[Role.Order], travelTimes, verbose: false));
 
         refillTextDebug.text = AssignmentsToString(assignments[Robot.Role.Refill]);
-        orderTextDebug.text = AssignmentsToString(assignments[Robot.Role.Order]);
+        //orderTextDebug.text = AssignmentsToString(assignments[Robot.Role.Order]);
 
         for (int i = 0; i < assignedRobots[Role.Refill].Count; i++)
         {
@@ -177,6 +191,17 @@ public class Warehouse : MonoBehaviour
 
             StartCoroutine(RefillRuntime(refillRobot));
         }
+
+        /*for (int i = 0; i < assignedRobots[Role.Refill].Count; i++)
+        {
+            Robot orderRobot = assignedRobots[Robot.Role.Order][i];
+
+            orderRobot.assignment = assignments[Robot.Role.Order][i].ToList();
+            orderRobot.homePosition = GetGridPosFromWorldPos(orderRobot.controller.transform.position);
+            orderRobot.id = i;
+
+            StartCoroutine(RefillRuntime(orderRobot));
+        }*/
     }
 
     private IEnumerator RefillRuntime(Robot robot)
@@ -190,10 +215,27 @@ public class Warehouse : MonoBehaviour
             int goadId = isGoingToStart ? currentTask.startLocationId : currentTask.endLocationId;
             robot.goal = GetGridPosFromId(goadId);
 
-            if (robot.lastPosition != currentPos)
+            if (robot.lastPosition != currentPos && grid[currentPos.x][currentPos.y])
             {
                 computeGoals();
                 robot.lastPosition = currentPos;
+
+                mapTextDebug.text = "";
+                for (int y = 0; y < gridSize.x; y++)
+                {
+                    for (int x = 0; x < gridSize.y; x++)
+                    {
+                        if (y == currentPos.x && x == currentPos.y)
+                            mapTextDebug.text += "x";
+                        else
+                            mapTextDebug.text += grid[y][x] ? "." : "@";
+                    }
+
+                    if (y != gridSize.x - 1)
+                        mapTextDebug.text += "\n";
+                }
+
+                yield return null;
             }
 
             if (robotGoals == null)
@@ -201,8 +243,8 @@ public class Warehouse : MonoBehaviour
 
             robot.controller.enabled = true;
             robot.controller.target = ConvertGrid2Pos(robotGoals[robot.id].point, robot.controller.transform.position.y);
-            
-            if (Vector3.Distance(robot.controller.target, robot.controller.transform.position) < 5f)
+
+            if (robot.goal == currentPos)
             {
                 if (isGoingToStart == false)
                 {
@@ -210,6 +252,8 @@ public class Warehouse : MonoBehaviour
                 }
 
                 isGoingToStart = !isGoingToStart;
+
+                robot.lastPosition = new Vector2Int(int.MaxValue, int.MaxValue);
             }
 
             yield return new WaitForSeconds(0.2f);
@@ -225,9 +269,37 @@ public class Warehouse : MonoBehaviour
             agentInfos[i].agentId = i;
             agentInfos[i].init = GetGridPosFromWorldPos(robots[i].controller.transform.position);
             agentInfos[i].goal = robots[i].goal;
+
+            Debug.Log("------------");
+            Debug.Log(i);
+            Debug.Log(agentInfos[i].init);
+            Debug.Log(agentInfos[i].goal);
         }
 
-        robotGoals = NextStep(agentInfos, robots.Length, wrapperMapPath);
+        var temp = NextStep(agentInfos, robots.Length, wrapperMapPath).ToList();
+        temp.Sort((ele1, ele2) => ele1.id.CompareTo(ele2.id));
+        robotGoals = temp.ToArray();
+
+        Debug.Log(robotGoals[0].point);
+
+        /*for (int i = 0; i < robots.Length; i++)
+        {
+            var pathfinderOptions = new PathFinderOptions
+            {
+                PunishChangeDirection = true,
+                UseDiagonals = false,
+            };
+
+            var tiles = ;
+
+            var worldGrid = new WorldGrid(tiles);
+            var pathfinder = new PathFinder(worldGrid, pathfinderOptions);
+
+            // The following are equivalent:
+
+            // matrix indexing
+            Position[] path = pathfinder.FindPath(new Position(0, 0), new Position(0, 2));
+        }*/
     }
 
     private void Update()
@@ -314,17 +386,17 @@ public class Warehouse : MonoBehaviour
 
     public Vector3Int ConvertPos2Grid(Vector3 position)
     {
-        return new Vector3Int(Mathf.FloorToInt((position.x - gridOriginTransform.position.x) / gridScale), Mathf.FloorToInt((position.y - gridOriginTransform.position.y) / gridScale), Mathf.FloorToInt((position.z - gridOriginTransform.position.z) / gridScale));
+        return new Vector3Int(Mathf.RoundToInt((position.x - gridOriginTransform.position.x) / gridScale), Mathf.RoundToInt((position.y - gridOriginTransform.position.y) / gridScale), Mathf.RoundToInt((position.z - gridOriginTransform.position.z) / gridScale));
     }
 
     public Vector3 ConvertGrid2Pos(Vector2Int position, float height)
     {
-        return new Vector3(position.x * gridScale, height, position.y * gridScale) + gridOriginTransform.position + new Vector3(0.99f, 0, 0.99f) * gridScale / 2;
+        return new Vector3(position.x * gridScale, height, position.y * gridScale) + gridOriginTransform.position;
     }
 
     public Vector2Int GetGridPosFromWorldPos(Vector3 worldPos)
     {
-        Vector3Int gridPos = ConvertPos2Grid(worldPos + new Vector3(0.99f, 0, 0.99f) * gridScale / 2);
+        Vector3Int gridPos = ConvertPos2Grid(worldPos);
 
         return new Vector2Int(gridPos.x, gridPos.z);
     }

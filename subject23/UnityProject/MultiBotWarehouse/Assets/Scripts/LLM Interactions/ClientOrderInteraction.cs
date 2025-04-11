@@ -1,18 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Google.Protobuf.WellKnownTypes;
-using NUnit.Framework;
-using Unity.Burst.Intrinsics;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.PackageManager;
+using Newtonsoft.Json;
 using UnityEngine;
-using static UnityEditor.Rendering.CameraUI;
-using static UnityEngine.InputManagerEntry;
-using static UnityEngine.InputSystem.Controls.AxisControl;
-using static UnityEngine.Rendering.DebugUI;
+using static ApiInteraction;
 
 public class ClientOrderInteraction : MonoBehaviour
 {
@@ -33,6 +23,16 @@ public class ClientOrderInteraction : MonoBehaviour
     private string inputText;
 
     private Task<string> currentLoop = null;
+
+    [System.Serializable]
+    public class ResultOrder
+    {
+        [JsonProperty("order")]
+        public List<string> order { get; set; }
+
+        [JsonProperty("message")]
+        public string message { get; set; }
+    }
 
     private string prompt =
     "You are a furniture warehouse assistant who takes orders and confirms them with customers. Only items from the furniture list below may be accepted.\n" +
@@ -100,5 +100,22 @@ public class ClientOrderInteraction : MonoBehaviour
                 inputButton = false;
             }
         }
+    }
+
+    public string[][] GetRandomOrders(int amount, bool verbose = true)
+    {
+        string[][] orders = new string[amount][];
+
+        for (int i = 0; i < amount; i++)
+        {
+            ResultOrder result = JsonConvert.DeserializeObject<ResultOrder>(apiInteraction.StartConversationAsync(prompt, "I would like random items.", model, false, verbose).Result);
+
+            orders[i] = result.order.ToArray();
+
+            if (verbose)
+                Debug.Log(result.message);
+        }
+
+        return orders;
     }
 }

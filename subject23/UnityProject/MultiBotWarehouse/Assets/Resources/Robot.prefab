@@ -481,15 +481,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colors: {fileID: 11400000, guid: 993d5c9f94f674446aaadaf0e231caf6, type: 2}
   storeTransform: {fileID: 1759002598498681516}
-  emptyMass: 3
-  loadedMass: 5
+  emptyMass: 2
+  loadedMass: 2
   colorRandomly: 1
   leftWheelCollider: {fileID: 2452746299646156702}
   rightWheelCollider: {fileID: 1353604652925091820}
   leftWheelMesh: {fileID: 3566313745582861341}
   rightWheelMesh: {fileID: 5451817045020292637}
-  motorForce: 21
-  turnForce: 11
+  motorForce: 11
+  turnForce: 3
   drawDirection: 1
   removeItem: 0
   control: {x: 0, y: 0}
@@ -1133,7 +1133,7 @@ WheelCollider:
     targetPosition: 0
   m_SuspensionDistance: 0.02
   m_ForceAppPointDistance: 0
-  m_Mass: 2
+  m_Mass: 1
   m_WheelDampingRate: 1.1
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
@@ -1404,7 +1404,7 @@ WheelCollider:
     targetPosition: 0
   m_SuspensionDistance: 0.02
   m_ForceAppPointDistance: 0
-  m_Mass: 2
+  m_Mass: 1
   m_WheelDampingRate: 1.1
   m_ForwardFriction:
     m_ExtremumSlip: 0.4

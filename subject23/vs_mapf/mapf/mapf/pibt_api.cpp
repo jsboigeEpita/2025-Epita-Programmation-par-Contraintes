@@ -53,7 +53,6 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
             if (a->g != agents_info[i].goal) {
                 // rework
                 a->g = agents_info[i].goal;
-                this->createDistanceTable(a->id);
                 a->elapsed = 0;
             }
         }
@@ -73,9 +72,11 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
             occupied_now[s->id] = a;
             P->setStart(a->id, s);
             P->setGoal(a->id, g);
-            this->createDistanceTable(a->id);
         }
     }
+
+    this->createDistanceTable();
+
     // planning
     while (!undecided.empty())
     {

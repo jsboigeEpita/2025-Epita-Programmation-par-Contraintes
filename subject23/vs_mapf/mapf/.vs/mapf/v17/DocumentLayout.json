@@ -7,6 +7,14 @@
       "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\pibt_api.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\solver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\solver.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\api.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\api.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -19,10 +27,6 @@
       "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\pibt.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\solver.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\pibt.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\pibt.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -33,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\problem.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\problem.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|solutionrelative:mapf\\solver.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C2CC790C-9AC7-4DA5-AF8F-5E9118F3087F}|mapf\\mapf.vcxproj|C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\problem.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -82,7 +82,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "api.hpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\api.hpp",
               "RelativeDocumentMoniker": "mapf\\api.hpp",
@@ -94,7 +94,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "pibt.hpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\pibt.hpp",
               "RelativeDocumentMoniker": "mapf\\pibt.hpp",
@@ -106,7 +106,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "node.hpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\node.hpp",
               "RelativeDocumentMoniker": "mapf\\node.hpp",
@@ -118,19 +118,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "solver.hpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.hpp",
               "RelativeDocumentMoniker": "mapf\\solver.hpp",
               "ToolTip": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.hpp",
               "RelativeToolTip": "mapf\\solver.hpp",
-              "ViewState": "AgIAAKIAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAANQAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-04-11T00:45:53.147Z"
+              "WhenOpened": "2025-04-11T00:45:53.147Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "problem.hpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\problem.hpp",
               "RelativeDocumentMoniker": "mapf\\problem.hpp",
@@ -154,15 +155,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 1,
               "Title": "solver.cpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.cpp",
               "RelativeDocumentMoniker": "mapf\\solver.cpp",
               "ToolTip": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\solver.cpp",
               "RelativeToolTip": "mapf\\solver.cpp",
-              "ViewState": "AgIAANsBAAAAAAAAAAAAAKYBAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAPEAAAAAAAAAAAAAAAEBAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-11T00:37:57.155Z"
+              "WhenOpened": "2025-04-11T00:37:57.155Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -208,14 +210,14 @@
               "RelativeDocumentMoniker": "mapf\\pibt_api.cpp",
               "ToolTip": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\pibt_api.cpp",
               "RelativeToolTip": "mapf\\pibt_api.cpp",
-              "ViewState": "AgIAACMAAAAAAAAAAAAkwDgAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAkwE0AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-04-11T00:37:42.444Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "pibt.cpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\pibt.cpp",
               "RelativeDocumentMoniker": "mapf\\pibt.cpp",
@@ -263,7 +265,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "api.cpp",
               "DocumentMoniker": "C:\\msys64\\home\\Julien\\gits\\prcon_repo_3\\subject23\\vs_mapf\\mapf\\mapf\\api.cpp",
               "RelativeDocumentMoniker": "mapf\\api.cpp",
@@ -271,8 +273,7 @@
               "RelativeToolTip": "mapf\\api.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-11T00:37:22.85Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T00:37:22.85Z"
             },
             {
               "$type": "Document",
