@@ -57,5 +57,7 @@ Then open your browser to `http://localhost:5000`
   - `greedysolver.py`
   - `astarsolver.py`
   - `astarboostedsolver.py`
-- `benchmarks/` - Benchmark results and tools
+- `docs/` - Benchmark results and docs
+  - `benchmarks/`
+  - `slides.pdf` - Presentation slides
 - `MinesweepBenchmark.py` - Benchmarking utility
