@@ -1,7 +1,7 @@
 import random
 
 
-class AstarSolver:
+class AstarBoostedSolver:
     def __init__(self, game):
         self.game = game
         self.width = game.width
@@ -18,7 +18,13 @@ class AstarSolver:
         if self.safe_moves or self.flagged_cells:
             return True
 
-        return self.make_random_guess()
+        # Use advanced solving strategies
+        try:
+            x, y = self.probabilistic_frontier_solver()
+            self.safe_moves.append((x, y))
+            return True
+        except Exception:
+            return self.make_random_guess()
 
     def update_mine_count(self):
         """Update the remaining mine count based on flagged cells."""
@@ -61,7 +67,7 @@ class AstarSolver:
         for y in range(self.height):
             for x in range(self.width):
                 # Skip unrevealed or zero cells
-                if not self.game.revealed[y][x]:
+                if not self.game.revealed[y][x] or self.game.grid[y][x] <= 0:
                     continue
 
                 unrevealed = self.get_unrevealed_neighbors(x, y)
@@ -82,19 +88,52 @@ class AstarSolver:
                         ):
                             self.safe_moves.append((nx, ny))
 
+    def probabilistic_frontier_solver(self):
+        """
+        Advanced probabilistic solver tracking mine frontiers
+        Estimates mine probabilities across board regions
+        """
+        frontier_cells = []
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.game.revealed[y][x]:
+                    unrevealed_neighbors = [
+                        (nx, ny)
+                        for nx in range(max(0, x - 1), min(self.width, x + 2))
+                        for ny in range(max(0, y - 1), min(self.height, y + 2))
+                        if not self.game.revealed[ny][nx]
+                        and not self.game.flagged[ny][nx]
+                    ]
+
+                    # Compute local mine probability
+                    remaining_mines = self.game.grid[y][
+                        x
+                    ] - self.get_flagged_neighbors_count(x, y)
+                    local_prob = (
+                        remaining_mines / len(unrevealed_neighbors)
+                        if unrevealed_neighbors
+                        else 0
+                    )
+
+                    frontier_cells.extend(
+                        (nx, ny, local_prob) for nx, ny in unrevealed_neighbors
+                    )
+
+        # If no frontier cells found, fall back to random
+        if not frontier_cells:
+            candidates = [
+                (x, y)
+                for y in range(self.height)
+                for x in range(self.width)
+                if not self.game.revealed[y][x] and not self.game.flagged[y][x]
+            ]
+            return random.choice(candidates) if candidates else (0, 0)
+
+        # Return cell with lowest probability of being a mine
+        return min(frontier_cells, key=lambda x: x[2])[:2]
+
     def make_random_guess(self):
-        """Make an educated guess when no trivial moves are available."""
-        # Check if there are any unrevealed cells
-        has_unrevealed = any(
-            not self.game.revealed[y][x] and not self.game.flagged[y][x]
-            for y in range(self.height)
-            for x in range(self.width)
-        )
-
-        if not has_unrevealed:
-            return False
-
-        # Find candidate cells
+        """Make a random guess when no other strategy works."""
         candidates = [
             (x, y)
             for y in range(self.height)
@@ -103,10 +142,8 @@ class AstarSolver:
         ]
 
         if candidates:
-            random_candidate = random.choice(candidates)
-            self.safe_moves.append(random_candidate)
+            self.safe_moves.append(random.choice(candidates))
             return True
-
         return False
 
     def apply_moves(self):

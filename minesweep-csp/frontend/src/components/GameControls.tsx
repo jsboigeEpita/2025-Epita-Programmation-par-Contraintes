@@ -103,8 +103,7 @@ const GameControls: React.FC<GameControlsProps> = ({
   // Handle custom input changes
   const handleInputChange = (
     setter: React.Dispatch<React.SetStateAction<number>>,
-    value: number,
-    isForMines = false
+    value: number
   ) => {
     setter(value);
     setIsCustom(true);
@@ -241,11 +240,7 @@ const GameControls: React.FC<GameControlsProps> = ({
               type="number"
               value={mines}
               onChange={(e) =>
-                handleInputChange(
-                  setMines,
-                  Math.max(1, Number(e.target.value)),
-                  true
-                )
+                handleInputChange(setMines, Math.max(1, Number(e.target.value)))
               }
               min="1"
               max={cols * rows - 1}

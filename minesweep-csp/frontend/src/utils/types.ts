@@ -9,6 +9,7 @@ export interface GameState {
   num_mines: number;
   solver_type: string;
   start_time?: number; // Optional start time
+  explosions: number; // Number of explosions in the game
 }
 
 export interface Solver {
