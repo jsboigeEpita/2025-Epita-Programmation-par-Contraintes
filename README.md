@@ -1,5 +1,12 @@
 # Projet Programmation par Contraintes
 
+## Commande pour démarrer le projet
+
+- (cd frontend/ ; npm install ; npm run build)
+- (cd backend/ ; mvn clean install -DskipTests)
+- docker compose up
+
+
 ## Introduction
 
 Ce projet a pour but de vous permettre d'appliquer concrètement les méthodes et outils vus en cours sur les problématiques de recherche (Search), de programmation par contraintes (CSP), et de raisonnement logique avancé (SAT/SMT). Vous serez amenés à résoudre des problèmes réels ou réalistes à l'aide de ces techniques en développant un projet complet, depuis la modélisation jusqu'à la solution opérationnelle.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Component } from '../types';
 
-const props = defineProps<{
+defineProps<{
     component: Component | null;
 }>();
 

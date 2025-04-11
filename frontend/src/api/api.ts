@@ -3,6 +3,7 @@ import type { Component } from '../types';
 import { useSessionStore } from '../stores/sessionStore';
 
 const baseURL = 'http://localhost:8080';
+// const baseURL = 'http://backend:8080';
 
 export async function getComponents(component: string, page: number): Promise<any> {
     try {
