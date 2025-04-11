@@ -106,13 +106,13 @@ Problem::Problem(const std::string& _instance)
   if (!config_s.empty() && num_agents > config_s_size) {
     warn("given starts/goals are not sufficient\nrandomly create instances");
   }
-  if (num_agents > config_s_size) {
-    if (well_formed) {
-      setWellFormedInstance();
-    } else {
-      setRandomStartsGoals();
-    }
-  }
+  // if (num_agents > config_s_size) {
+  //   if (well_formed) {
+  //     setWellFormedInstance();
+  //   } else {
+  //     setRandomStartsGoals();
+  //   }
+  // }
 
   // trimming
   config_s.resize(num_agents);
@@ -162,6 +162,19 @@ Node* Problem::getGoal(int i) const
 {
   if (!(0 <= i && i < (int)config_g.size())) halt("invalid index");
   return config_g[i];
+}
+
+void Problem::clear() {
+  config_s.clear();
+  config_g.clear();
+}
+
+void Problem::setStart(int i, Node *s) {
+  config_s.push_back(s);
+}
+
+void Problem::setGoal(int i,Node* g) {
+  config_g.push_back(g);
 }
 
 void Problem::setRandomStartsGoals()

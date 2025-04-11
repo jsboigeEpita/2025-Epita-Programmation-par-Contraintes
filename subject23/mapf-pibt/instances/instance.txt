@@ -1,5 +1,5 @@
-map_file=map_packer.map
-agents=0
+map_file=/home/lois/Groupe23-Programmation-par-Contraintes/subject23/mapf-pibt/map/map_packer.map
+agents=10
 seed=0
 random_problem=0
 max_timestep=5000000

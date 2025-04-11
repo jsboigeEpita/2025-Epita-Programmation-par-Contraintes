@@ -10,7 +10,7 @@ add_subdirectory(./mapf)
 
 add_executable(app app.cpp)
 target_compile_features(app PUBLIC cxx_std_20)
-target_compile_options(app PUBLIC -std=c++20)
+target_compile_options(app PUBLIC -std=c++20 -g)
 target_link_libraries(app lib-mapf)
 
 # format
