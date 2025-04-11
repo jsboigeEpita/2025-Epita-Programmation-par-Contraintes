@@ -10,7 +10,7 @@ class Robot:
     speed: float  # Units per time
     current_location: Tuple[int, int]  # (x, y) coordinates
 
-@dataclass
+@dataclass                                                                          
 class Goal:
     id: int
     location: Tuple[int, int]  # (x, y) coordinates
@@ -581,98 +581,6 @@ class PathFinder:
         
         return result
 
-    def visualize_detailed_schedule(self, execution_plan, robots, time_resolution=0.5):
-        """
-        Create a more detailed visualization showing robot positions over time
-        
-        Args:
-            execution_plan: The execution plan from execute_assignments
-            robots: List of Robot objects
-            time_resolution: Time step for visualization (smaller = more detail)
-        
-        Returns:
-            String representation of the detailed schedule
-        """
-        if not execution_plan:
-            return "No execution plan provided."
-        
-        # Find the maximum time
-        max_time = 0
-        for robot_id, steps in execution_plan.items():
-            robot_total_time = sum(step['time'] for step in steps)
-            max_time = max(max_time, robot_total_time)
-        
-        # Round up max_time
-        max_time = int(max_time) + 1
-        
-        # Create a timeline of positions for each robot
-        robot_timelines = {}
-        robot_map = {robot.id: robot for robot in robots}
-        
-        for robot_id, steps in execution_plan.items():
-            if not robot_id in robot_map:
-                continue
-                
-            robot = robot_map[robot_id]
-            timeline = {}
-            
-            # Start with the robot's initial position
-            current_position = robot.current_location
-            current_time = 0
-            
-            for step in steps:
-                path = step['path']
-                time_per_cell = step['time'] / (len(path) - 1) if len(path) > 1 else 0
-                
-                # Add each position along the path
-                for i in range(len(path)):
-                    position_time = current_time + (i * time_per_cell)
-                    timeline[position_time] = path[i]
-                
-                current_time += step['time']
-                current_position = path[-1] if path else current_position
-            
-            robot_timelines[robot_id] = timeline
-        
-        # Create the visualization
-        result = []
-        result.append(f"Detailed Robot Schedule (resolution: {time_resolution} time units)")
-        result.append("=" * 80)
-        
-        # For each time step
-        for t in range(0, int(max_time / time_resolution) + 1):
-            actual_time = t * time_resolution
-            
-            # Collect positions of all robots at this time
-            positions = {}
-            for robot_id, timeline in robot_timelines.items():
-                # Find the closest time point
-                closest_time = None
-                min_diff = float('inf')
-                
-                for time_point in timeline.keys():
-                    diff = abs(time_point - actual_time)
-                    if diff < min_diff:
-                        min_diff = diff
-                        closest_time = time_point
-                
-                if closest_time is not None:
-                    positions[robot_id] = timeline[closest_time]
-            
-            # Create the time step visualization
-            time_display = f"Time {actual_time:.1f}: "
-            robot_positions = []
-            
-            for robot_id in sorted(positions.keys()):
-                pos = positions[robot_id]
-                robot_positions.append(f"R{robot_id}@{pos}")
-            
-            result.append(time_display + ", ".join(robot_positions))
-        
-        result.append("=" * 80)
-        return "\n".join(result)
-
-
 # Example usage
 def example_collision_avoidance():
     # Create a 20x20 grid
@@ -727,16 +635,9 @@ def example_collision_avoidance():
         for i, step in enumerate(steps):
             print(f"  Step {i+1}: Go to Goal {step['goal_id']} at {step['goal_location']} (time: {step['time']:.2f})")
     
-    # Print the updated robot positions
-    print("\nRobot Final Positions:")
-    for robot in robots:
-        print(f"Robot {robot.id}: {robot.current_location}")
-    
     # Visualize the assignment
     print("\nGrid Visualization (Collision Free):")
     print(pathfinder.visualize_assignment(robots, goals, collision_free_assignment))
-
-    print(pathfinder.visualize_detailed_schedule(execution_plan, robots))
 
 if __name__ == "__main__":
     example_collision_avoidance()
