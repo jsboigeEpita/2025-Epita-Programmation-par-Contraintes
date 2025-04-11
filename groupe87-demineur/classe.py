@@ -5,7 +5,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 
-# --- Partie CSP et affichage ---
+
 
 class MinesweeperGrid:
     def __init__(self, grid, rows, cols):
@@ -26,6 +26,7 @@ class MinesweeperGrid:
         return {pos: (solution[pos] if self.grid[pos] == "?" else self.grid[pos])
                 for pos in self.grid}
 
+
 class MinesweeperSolver:
     def __init__(self, minesweeper_grid):
         self.grid_obj = minesweeper_grid
@@ -38,17 +39,22 @@ class MinesweeperSolver:
             self.problem.addVariable(pos, [0, 1])
         for pos, val in grid.items():
             if val != "?":
-                neighbors = [n for n in self.grid_obj.get_neighbors(pos) if grid[n] == "?"]
+                neighbors = [n for n in self.grid_obj.get_neighbors(
+                    pos) if grid[n] == "?"]
                 if neighbors:
-                    self.problem.addConstraint(ExactSumConstraint(val), neighbors)
+                    self.problem.addConstraint(
+                        ExactSumConstraint(val), neighbors)
 
     def solve(self):
         self.setup_problem()
         return self.problem.getSolutions()
 
+
 class PrettyPrinter:
     @staticmethod
     def print_grid(result_grid, original_grid, rows, cols, title="Solution"):
+        console = Console()
+        console.clear()
         table = Table(title=title, show_lines=True)
         table.add_column("Row", style="bold magenta", justify="center")
         for j in range(cols):
@@ -60,13 +66,12 @@ class PrettyPrinter:
                 val = result_grid.get(pos, " ")
                 orig = original_grid.get(pos, " ")
                 if orig == "?":
-                    # Dans la solution CSP, on affiche 1 pour mine et 0 pour vide
                     cell_text = "[bold red]1[/bold red]" if val == 1 else "[green]0[/green]"
                 else:
                     cell_text = f"[blue]{orig}[/blue]"
                 row.append(cell_text)
             table.add_row(*row)
-        Console().print(Panel(table, title=title, expand=False))
+        console.print(Panel(table, title=title, expand=False))
 
 # --- Partie Jeu interactif ---
 
@@ -83,13 +88,15 @@ class MinesweeperGame:
         self.generate_board()
 
     def generate_board(self):
-        positions = [(r, c) for r in range(self.rows) for c in range(self.cols)]
+        positions = [(r, c) for r in range(self.rows)
+                     for c in range(self.cols)]
         mine_positions = set(random.sample(positions, self.mine_count))
         for pos in positions:
             if pos in mine_positions:
                 self.board[pos] = -1  # Mine
             else:
-                count = sum(1 for nb in self.get_neighbors(pos) if nb in mine_positions)
+                count = sum(1 for nb in self.get_neighbors(
+                    pos) if nb in mine_positions)
                 self.board[pos] = count
 
     def get_neighbors(self, pos):
@@ -130,6 +137,8 @@ class MinesweeperGame:
             self.game_over = True
 
     def print_board(self, reveal_all=False):
+        console = Console()
+        console.clear()
         table = Table(show_lines=True)
         table.add_column("Row", style="bold magenta", justify="center")
         for c in range(self.cols):
@@ -149,11 +158,9 @@ class MinesweeperGame:
                     cell = "[grey]□[/grey]" if pos not in self.flagged else "[bold yellow]F[/bold yellow]"
                 row.append(cell)
             table.add_row(*row)
-        Console().print(Panel(table, title="Minesweeper", expand=False))
+        console.print(Panel(table, title="Minesweeper", expand=False))
 
     def build_csp_grid(self):
-        # Construit une grille pour le solveur CSP :
-        # les cases révélées affichent leur valeur, les autres sont inconnues ("?")
         grid = {}
         for r in range(self.rows):
             for c in range(self.cols):
@@ -174,6 +181,7 @@ class MinesweeperGame:
     def play(self):
         console = Console()
         while not self.game_over:
+            console.clear()
             self.print_board()
             action = questionary.select(
                 "Choisissez une action",
@@ -210,10 +218,17 @@ class MinesweeperGame:
                 if solutions:
                     solution = solutions[0]
                     result_grid = mgrid.apply_solution(solution)
-                    PrettyPrinter.print_grid(result_grid, mgrid.grid, self.rows, self.cols, title="Solution CSP")
+                    PrettyPrinter.print_grid(
+                        result_grid, mgrid.grid, self.rows, self.cols, title="Solution CSP")
+                    questionary.text(
+                        "Appuyez sur Entrée pour continuer...").ask()
                 else:
-                    console.print("Le solveur n'a trouvé aucune solution.", style="bold red")
+                    console.print(
+                        "Le solveur n'a trouvé aucune solution.", style="bold red")
+                    questionary.text(
+                        "Appuyez sur Entrée pour continuer...").ask()
             self.check_win()
         if self.win:
             self.print_board(reveal_all=True)
-            console.print("Félicitations ! Vous avez gagné.", style="bold green")
+            console.print("Félicitations ! Vous avez gagné.",
+                          style="bold green")

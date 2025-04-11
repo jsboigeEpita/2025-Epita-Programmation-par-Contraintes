@@ -156,3 +156,4 @@ if __name__ == "__main__":
             result_grid = mgrid.apply_solution(solution)
             PrettyPrinter.print_grid(result_grid, size, mgrid.grid)
             console.print("-" * 40)
+    

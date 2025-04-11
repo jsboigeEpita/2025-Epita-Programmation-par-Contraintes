@@ -4,8 +4,8 @@ from classe import *
 
 def main():
     console = Console()
-    console.print(
-        "[bold underline]Minesweeper : Solveur CSP & Jeu Interactif[/bold underline]\n")
+    console.clear()
+    console.print("[bold underline]Minesweeper : Solveur CSP & Jeu Interactif[/bold underline]\n")
     choice = questionary.select(
         "Sélectionnez un mode",
         choices=[
@@ -14,7 +14,6 @@ def main():
         ]
     ).ask()
     if choice == "Voir les solutions (CSP) pour une grille prédéfinie":
-        # Exemple avec une grille 5x5 prédéfinie
         grid5x5 = {
             (0, 0): 0, (0, 1): 1, (0, 2): 1, (0, 3): 1, (0, 4): 0,
             (1, 0): 1, (1, 1): "?", (1, 2): "?", (1, 3): "?", (1, 4): 1,
@@ -25,23 +24,22 @@ def main():
         mgrid = MinesweeperGrid(grid5x5, 5, 5)
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
-        console.print(
-            f"\nNombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]\n")
+        console.clear()
+        console.print(f"\nNombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]\n")
         for num, solution in enumerate(solutions, start=1):
             console.print(f"Solution {num}:", style="underline bold")
             result_grid = mgrid.apply_solution(solution)
             PrettyPrinter.print_grid(result_grid, mgrid.grid, 5, 5)
             console.print("-" * 40)
+        questionary.text("Appuyez sur Entrée pour quitter...").ask()
     elif choice == "Jouer à Minesweeper":
         rows = int(questionary.text("Nombre de lignes :", default="9").ask())
         cols = int(questionary.text("Nombre de colonnes :", default="9").ask())
-        mine_count = int(questionary.text(
-            "Nombre de mines :", default="10").ask())
+        mine_count = int(questionary.text("Nombre de mines :", default="10").ask())
         game = MinesweeperGame(rows, cols, mine_count)
         game.play()
     else:
         console.print("Choix invalide.", style="bold red")
-
 
 if __name__ == "__main__":
     main()
