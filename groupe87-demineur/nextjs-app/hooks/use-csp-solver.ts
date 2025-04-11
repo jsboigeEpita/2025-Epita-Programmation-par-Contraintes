@@ -1,29 +1,52 @@
 "use client"
 
 import type React from "react"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { solveMinesweeperCSP } from "@/lib/csp-solver"
 
-export function useCSPSolver(refreshView: () => void) {
-  const [rows, setRows] = useState(5)
-  const [cols, setCols] = useState(5)
-  const [mines, setMines] = useState(5)
+// Configuration des niveaux de difficulté prédéfinis
+const DIFFICULTY_PRESETS = {
+  beginner: { rows: 8, cols: 8, mines: 10 },
+  easy: { rows: 9, cols: 9, mines: 10 },
+  medium: { rows: 16, cols: 16, mines: 40 },
+  hard: { rows: 16, cols: 30, mines: 99 },
+  expert: { rows: 24, cols: 30, mines: 150 },
+  custom: { rows: 8, cols: 8, mines: 10 }, // Valeurs par défaut pour "custom"
+}
+
+export function useCSPSolver(refreshView: () => void, initialDifficulty: string = "medium") {
+  const [rows, setRows] = useState(() => {
+    const preset = DIFFICULTY_PRESETS[initialDifficulty as keyof typeof DIFFICULTY_PRESETS] 
+    return preset.rows
+  })
+  const [cols, setCols] = useState(() => {
+    const preset = DIFFICULTY_PRESETS[initialDifficulty as keyof typeof DIFFICULTY_PRESETS] 
+    return preset.cols
+  })
+  const [mines, setMines] = useState(() => {
+    const preset = DIFFICULTY_PRESETS[initialDifficulty as keyof typeof DIFFICULTY_PRESETS]
+    return preset.mines
+  })
   const [board, setBoard] = useState<(number | string)[][]>([])
   const [solutions, setSolutions] = useState<any>(null)
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null)
   const [maxSolutions, setMaxSolutions] = useState(10)
   const [animatingSolutions, setAnimatingSolutions] = useState(false)
+  const [difficulty, setDifficulty] = useState<string>(initialDifficulty)
 
   useEffect(() => {
-    initializeBoard()
-  }, [])
+    const preset = DIFFICULTY_PRESETS[difficulty as keyof typeof DIFFICULTY_PRESETS]
+    setRows(preset.rows)
+    setCols(preset.cols)
+    setMines(preset.mines)
+    initializeBoard(preset.rows, preset.cols)
+  }, [difficulty])
 
-  const initializeBoard = () => {
+  const initializeBoard = (initRows = rows, initCols = cols) => {
     setBoard(
-      Array(rows)
+      Array(initRows)
         .fill(null)
-        .map(() => Array(cols).fill("?")),
+        .map(() => Array(initCols).fill("?")),
     )
     setSolutions(null)
     setSelectedCell(null)
@@ -62,12 +85,20 @@ export function useCSPSolver(refreshView: () => void) {
     setSolutions(result)
   }
 
-  const handleReset = () => {
-    initializeBoard()
-    refreshView()
-  }
+  const handleReset = useCallback(() => {
+    if (difficulty !== "custom") {
+      const preset = DIFFICULTY_PRESETS[difficulty as keyof typeof DIFFICULTY_PRESETS]
+      setRows(preset.rows)
+      setCols(preset.cols)
+      setMines(preset.mines)
+      initializeBoard(preset.rows, preset.cols)
+    } else {
+      initializeBoard(rows, cols)
+    }
+    setSolutions(null)
+  }, [difficulty])
 
-  const handleSizeChange = () => {
+  const handleSizeChange = useCallback(() => {
     const validRows = Math.max(2, Math.min(150, rows))
     const validCols = Math.max(2, Math.min(150, cols))
     const validMines = Math.max(1, Math.min(validRows * validCols - 1, mines))
@@ -85,8 +116,10 @@ export function useCSPSolver(refreshView: () => void) {
     setSolutions(null)
     setSelectedCell(null)
 
+    setDifficulty("custom")
+
     refreshView()
-  }
+  }, [rows, cols, mines, refreshView])
 
   const handleRowsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number.parseInt(e.target.value) || 2
@@ -109,6 +142,22 @@ export function useCSPSolver(refreshView: () => void) {
     setMaxSolutions(Math.max(1, Math.min(100, value)))
   }
 
+  const handleDifficultyChange = useCallback(
+    (value: string) => {
+      setDifficulty(value)
+
+      if (value !== "custom") {
+        const preset = DIFFICULTY_PRESETS[value as keyof typeof DIFFICULTY_PRESETS]
+        setRows(preset.rows)
+        setCols(preset.cols)
+        setMines(preset.mines)
+
+        initializeBoard(preset.rows, preset.cols)
+      }
+    },
+    [],
+  )
+
   return {
     rows,
     cols,
@@ -118,6 +167,7 @@ export function useCSPSolver(refreshView: () => void) {
     selectedCell,
     maxSolutions,
     animatingSolutions,
+    difficulty,
     handleCellClick,
     handleCellValueChange,
     animateSolutions,
@@ -128,5 +178,6 @@ export function useCSPSolver(refreshView: () => void) {
     handleColsChange,
     handleMinesChange,
     handleMaxSolutionsChange,
+    handleDifficultyChange,
   }
 }

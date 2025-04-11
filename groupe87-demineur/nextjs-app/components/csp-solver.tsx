@@ -16,6 +16,7 @@ export default function CSPSolver() {
     solutions,
     selectedCell,
     maxSolutions,
+    difficulty,
     animatingSolutions,
     handleCellClick,
     handleCellValueChange,
@@ -27,6 +28,7 @@ export default function CSPSolver() {
     handleColsChange,
     handleMinesChange,
     handleMaxSolutionsChange,
+    handleDifficultyChange,
   } = useCSPSolver()
 
   return (
@@ -55,6 +57,23 @@ export default function CSPSolver() {
             onChange={handleMaxSolutionsChange}
           />
         </div>
+      </div>
+
+      <div className="w-full mb-4">
+        <Label htmlFor="difficulty" className="mb-2 block">Difficulty</Label>
+        <Select value={difficulty} onValueChange={handleDifficultyChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select difficulty" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="beginner">Beginner</SelectItem>
+            <SelectItem value="easy">Easy</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="hard">Hard</SelectItem>
+            <SelectItem value="expert">Expert</SelectItem>
+            <SelectItem value="custom">Custom</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex gap-4 mb-6">
