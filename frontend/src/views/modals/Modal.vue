@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import { images } from '../../assets/index';
-import { getComponents, postComponents } from '../../api/api';
+import { getComponents, getConfig, postComponents } from '../../api/api';
 import type {
     SelectedComponents,
     Component,
@@ -81,12 +81,13 @@ watch(
 
 watch(
     () => props.componentType,
-    (newVal) => {
+    async (newVal) => {
         internalDialog.value = true;
         components.value = [];
         getComponents(newVal, 1).then((res) => {
             components.value = res.slice(0, 500);
         });
+		await getConfig();
     }
 );
 </script>

@@ -7,7 +7,7 @@ const props = defineProps<{
 	component: Component | null;
 }>();
 
-const excludedKeys = ['id', 'name', 'price'];
+const excludedKeys = ['id', 'name', 'price', 'microarchitecture'];
 
 const filteredEntries = computed(() => {
 	if (!props.component) {
@@ -21,7 +21,7 @@ const filteredEntries = computed(() => {
 	<div class="flex flex-wrap items-start text-sm space-x-1">
 		<div v-for="[key, value] in filteredEntries" :key="key" class="flex gap-2">
 			<span class="font-extrabold capitalize">{{ key }}:</span>
-			<span>{{ value }}</span>
+			<span> {{ value }}</span>
 		</div>
 	</div>
 </template>
