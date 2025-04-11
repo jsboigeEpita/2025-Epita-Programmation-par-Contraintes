@@ -4,12 +4,15 @@ import type { Component } from '../types';
 
 const props = defineProps<{
 	componentType: string;
-	component: Component;
+	component: Component | null;
 }>();
 
 const excludedKeys = ['id', 'name', 'price'];
 
 const filteredEntries = computed(() => {
+	if (!props.component) {
+		return [];
+	}
 	return Object.entries(props.component).filter(([key]) => !excludedKeys.includes(key));
 });
 </script>

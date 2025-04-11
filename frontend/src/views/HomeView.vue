@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import type { SelectedComponents, SelectedComponentsResponse } from '../types';
 import { getConfig } from '../api/api';
 import Modal from './modals/Modal.vue';

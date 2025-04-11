@@ -28,7 +28,7 @@ const deleteComponents = async (type: string) => {
         powersupply: config.powerSupply,
         videocard: config.videoCard,
         cpuCooler: config.cpuCooler,
-        storage: config.storage,
+        storage: config.storageDevice,
         motherboard: config.motherboard,
         cpu: config.cpu,
         ram: config.memory,
