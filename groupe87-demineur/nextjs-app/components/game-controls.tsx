@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RefreshCw, Lightbulb, Play, Bomb } from "lucide-react"
+import { RefreshCw, Lightbulb, Play, Bomb, ArrowRight } from "lucide-react"
 
 interface GameControlsProps {
   difficulty: string
@@ -15,6 +15,7 @@ interface GameControlsProps {
   onCustomConfigChange: (field: "rows" | "cols" | "mines", value: number) => void
   onReset: () => void
   onSolve: () => void
+  onNextMove: () => void
   onShowHint: () => void
   onAnimateSolution: () => void
   minesRemaining: number
@@ -30,6 +31,7 @@ export default function GameControls({
   onCustomConfigChange,
   onReset,
   onSolve,
+  onNextMove,
   onShowHint,
   onAnimateSolution,
   minesRemaining,
@@ -37,20 +39,16 @@ export default function GameControls({
   isFirstClick,
   hasSolution,
 }: GameControlsProps) {
-  // Gérer directement le changement de difficulté sans état local
   const handleDifficultyChange = (value: string) => {
-    console.log("GameControls: changing difficulty to", value)
     onDifficultyChange(value)
   }
 
-  // Gérer les changements de configuration personnalisée
   const handleCustomConfigChange = (field: "rows" | "cols" | "mines", e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number.parseInt(e.target.value) || (field === "mines" ? 1 : 2)
 
-    // Appliquer des limites raisonnables
     let validValue = value
     if (field === "rows" || field === "cols") {
-      validValue = Math.max(2, Math.min(field === "rows" ? 20 : 30, value))
+      validValue = Math.max(2, Math.min(150, value))
     } else if (field === "mines") {
       const maxMines = customConfig.rows * customConfig.cols - 1
       validValue = Math.max(1, Math.min(maxMines, value))
@@ -91,6 +89,10 @@ export default function GameControls({
           <Button onClick={onSolve} disabled={!isPlaying || isFirstClick}>
             Solve with CSP
           </Button>
+          <Button onClick={onNextMove} disabled={!isPlaying || isFirstClick} variant="secondary">
+            <ArrowRight className="h-4 w-4 mr-2" />
+            Next Move
+          </Button>
         </div>
       </div>
 
@@ -102,7 +104,7 @@ export default function GameControls({
               id="custom-rows"
               type="number"
               min="2"
-              max="20"
+              max="150"
               value={customConfig.rows}
               onChange={(e) => handleCustomConfigChange("rows", e)}
             />
@@ -113,7 +115,7 @@ export default function GameControls({
               id="custom-cols"
               type="number"
               min="2"
-              max="30"
+              max="150"
               value={customConfig.cols}
               onChange={(e) => handleCustomConfigChange("cols", e)}
             />

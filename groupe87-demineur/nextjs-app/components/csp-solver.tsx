@@ -1,136 +1,44 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { solveMinesweeperCSP } from "@/lib/csp-solver"
 import SolutionDisplay from "./solution-display"
+import { useCSPSolver } from "@/hooks/use-csp-solver"
 
 export default function CSPSolver({ refreshView }: { refreshView: () => void }) {
-  const [rows, setRows] = useState(5)
-  const [cols, setCols] = useState(5)
-  const [mines, setMines] = useState(5)
-  const [board, setBoard] = useState<(number | string)[][]>([])
-  const [solutions, setSolutions] = useState<any>(null)
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null)
-  const [maxSolutions, setMaxSolutions] = useState(10)
-  const [animatingSolutions, setAnimatingSolutions] = useState(false)
-
-  // Initialiser le tableau au chargement et lors des changements de dimensions
-  useEffect(() => {
-    initializeBoard()
-  }, [rows, cols])
-
-  const initializeBoard = () => {
-    setBoard(
-      Array(rows)
-        .fill(null)
-        .map(() => Array(cols).fill("?")),
-    )
-    setSolutions(null)
-    setSelectedCell(null)
-  }
-
-  const handleCellClick = (row: number, col: number) => {
-    if (row >= rows || col >= cols) return
-    setSelectedCell([row, col])
-  }
-
-  const handleCellValueChange = (value: string) => {
-    if (!selectedCell) return
-
-    const [row, col] = selectedCell
-    const newBoard = [...board]
-
-    if (value === "?") {
-      newBoard[row][col] = "?"
-    } else {
-      const numValue = Number.parseInt(value)
-      if (!isNaN(numValue) && numValue >= 0 && numValue <= 8) {
-        newBoard[row][col] = numValue
-      }
-    }
-
-    setBoard(newBoard)
-  }
-
-  const animateSolutions = () => {
-    setAnimatingSolutions(true)
-    setTimeout(() => setAnimatingSolutions(false), 3000)
-  }
-
-  const handleSolve = () => {
-    const result = solveMinesweeperCSP(board, mines, [], maxSolutions)
-    setSolutions(result)
-  }
-
-  const handleReset = () => {
-    initializeBoard()
-    refreshView()
-  }
-
-  // Corriger la fonction handleSizeChange
-  const handleSizeChange = () => {
-    // Vérifier que les valeurs sont valides
-    const validRows = Math.max(2, Math.min(100, rows))
-    const validCols = Math.max(2, Math.min(100, cols))
-    const validMines = Math.max(1, Math.min(validRows * validCols - 1, mines))
-
-    // Mettre à jour les états avec les valeurs validées
-    setRows(validRows)
-    setCols(validCols)
-    setMines(validMines)
-
-    // Initialiser le tableau avec les nouvelles dimensions
-    setBoard(
-      Array(validRows)
-        .fill(null)
-        .map(() => Array(validCols).fill("?")),
-    )
-
-    setSolutions(null)
-    setSelectedCell(null)
-
-    // Forcer un rafraîchissement
-    refreshView()
-  }
-
-  // Ajouter des gestionnaires d'événements pour les changements de dimensions
-  const handleRowsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number.parseInt(e.target.value) || 2
-    setRows(Math.max(2, Math.min(100, value)))
-  }
-
-  const handleColsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number.parseInt(e.target.value) || 2
-    setCols(Math.max(2, Math.min(100, value)))
-  }
-
-  const handleMinesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number.parseInt(e.target.value) || 1
-    const maxMines = rows * cols - 1
-    setMines(Math.max(1, Math.min(maxMines, value)))
-  }
-
-  const handleMaxSolutionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number.parseInt(e.target.value) || 1
-    setMaxSolutions(Math.max(1, Math.min(100, value)))
-  }
+  const {
+    rows,
+    cols,
+    mines,
+    board,
+    solutions,
+    selectedCell,
+    maxSolutions,
+    animatingSolutions,
+    handleCellClick,
+    handleCellValueChange,
+    animateSolutions,
+    handleSolve,
+    handleReset,
+    handleSizeChange,
+    handleRowsChange,
+    handleColsChange,
+    handleMinesChange,
+    handleMaxSolutionsChange,
+  } = useCSPSolver(refreshView)
 
   return (
     <div className="flex flex-col items-center">
       <div className="grid grid-cols-4 gap-4 mb-6 w-full">
         <div>
           <Label htmlFor="rows">Rows</Label>
-          <Input id="rows" type="number" min="2" max="100" value={rows} onChange={handleRowsChange} />
+          <Input id="rows" type="number" min="2" max="150" value={rows} onChange={handleRowsChange} />
         </div>
         <div>
           <Label htmlFor="cols">Columns</Label>
-          <Input id="cols" type="number" min="2" max="100" value={cols} onChange={handleColsChange} />
+          <Input id="cols" type="number" min="2" max="150" value={cols} onChange={handleColsChange} />
         </div>
         <div>
           <Label htmlFor="mines">Mines</Label>

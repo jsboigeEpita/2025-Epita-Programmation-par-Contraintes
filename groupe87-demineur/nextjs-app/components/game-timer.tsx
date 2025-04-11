@@ -13,7 +13,8 @@ export default function GameTimer({ isRunning, onTimeUpdate, resetKey = 0 }: Gam
 
   useEffect(() => {
     setSeconds(0)
-  }, [resetKey])
+    onTimeUpdate(0)
+  }, [resetKey, onTimeUpdate])
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -26,8 +27,6 @@ export default function GameTimer({ isRunning, onTimeUpdate, resetKey = 0 }: Gam
           return newTime
         })
       }, 1000)
-    } else if (interval) {
-      clearInterval(interval)
     }
 
     return () => {
@@ -41,5 +40,9 @@ export default function GameTimer({ isRunning, onTimeUpdate, resetKey = 0 }: Gam
     return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
-  return <div className="text-2xl font-mono tabular-nums">{formatTime(seconds)}</div>
+  return (
+    <div className="text-2xl font-mono tabular-nums bg-gray-100 p-2 rounded-md border border-gray-300">
+      {formatTime(seconds)}
+    </div>
+  )
 }
