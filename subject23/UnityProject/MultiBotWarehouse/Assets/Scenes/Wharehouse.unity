@@ -23486,6 +23486,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2140815722232149835, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
   m_PrefabInstance: {fileID: 490832139}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1247481895 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2192515008326796933, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+  m_PrefabInstance: {fileID: 490832139}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5356e23601de7994192f369c1f24c88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1252720113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28434,6 +28445,10 @@ MonoBehaviour:
   robots:
   - role: 0
     controller: {fileID: 2142897994}
+  - role: 0
+    controller: {fileID: 2079980636}
+  - role: 0
+    controller: {fileID: 1247481895}
   shelves:
   - {fileID: 24192883}
   - {fileID: 1034008135}
@@ -36763,6 +36778,7 @@ MonoBehaviour:
   verbose: 1
   inputButton: 0
   inputText: I would like to get one bed
+  orders: []
 --- !u!114 &1830018687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41905,6 +41921,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2077017037}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2079980636 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2192515008326796933, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+  m_PrefabInstance: {fileID: 1697283335}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5356e23601de7994192f369c1f24c88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2084480077
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 using UnityEngine;
 using static ApiInteraction;
 
@@ -21,6 +23,8 @@ public class ClientOrderInteraction : MonoBehaviour
     private bool inputButton = false;
     [SerializeField]
     private string inputText;
+    [SerializeField]
+    private List<string> orders;
 
     private Task<string> currentLoop = null;
 
@@ -102,20 +106,26 @@ public class ClientOrderInteraction : MonoBehaviour
         }
     }
 
-    public string[][] GetRandomOrders(int amount, bool verbose = true)
+    public string[][] GetRandomOrders()
+    {
+        return orders.Select(ele => JsonConvert.DeserializeObject<ResultOrder>(ele).order.ToArray()).ToArray();
+    }
+
+    /*public string[][] GetRandomOrders(int amount, bool verbose = true)
     {
         string[][] orders = new string[amount][];
 
         for (int i = 0; i < amount; i++)
         {
-            ResultOrder result = JsonConvert.DeserializeObject<ResultOrder>(apiInteraction.StartConversationAsync(prompt, "I would like random items.", model, false, verbose).Result);
-
-            orders[i] = result.order.ToArray();
-
-            if (verbose)
-                Debug.Log(result.message);
+            UniTask.Run(async () =>
+            {
+                return await apiInteraction.StartConversationAsync(prompt, inputText, model, false, verbose);
+            }).ContinueWith(result =>
+            {
+                orders[i] = JsonConvert.DeserializeObject<ResultOrder>(result).order.ToArray();
+            });
         }
 
         return orders;
-    }
+    }*/
 }
