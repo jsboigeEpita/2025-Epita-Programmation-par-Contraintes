@@ -59,11 +59,25 @@ public:
         return G->getNode(x, y);
     }
     std::vector<cIdPos> get_next_step(AgentsInfo& agents_info);
+
+    static Pibt_api& instance(const std::string& instance_file) {
+        static Pibt_api inst(instance_file);
+        return inst;
+    }
+
+private:
     Pibt_api(std::string instance_file)
-        : Pibt_api{ new Problem(instance_file) } {};
-    Pibt_api(Problem* _P);
-    ~Pibt_api()
-    {
+            : Pibt_api{ new Problem(instance_file)} {
+    };
+
+    ~Pibt_api() {
         delete P;
     }
+
+    Pibt_api(Problem* _P);
+
+    // pour empêcher la copie
+    Pibt_api(const Pibt_api&) = delete;
+    Pibt_api& operator=(const Pibt_api&) = delete;
+
 };

@@ -135,14 +135,14 @@ Path Graph::getPathWithCache(Node* const s, Node* const g, std::mt19937* MT)
 
   // for allocating memory, for small field
   const int MEMORY_SIZE = is_small_graph ? V.size() : 0;
-  AstarNode GC_S[10000000];
+  AstarNode GC_S[100000];
   int node_total_cnt = 0;
 
   // garbage collection, for large field
   AstarNodes GC_L;
 
   // closed list
-  bool CLOSE_S[10000000];  // for small field
+  bool CLOSE_S[100000];  // for small field
   std::memset(CLOSE_S, false, sizeof(CLOSE_S));
   std::unordered_map<int, bool> CLOSE_L;  // for large field
 

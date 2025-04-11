@@ -27,8 +27,6 @@ int main()
 {
     std::cout << "Hello World!\n";
 
-    std::cout << test(5) << "\n\n";
-
     struct cPos a {0,0};
     struct cPos b {2,2};
 
@@ -43,17 +41,19 @@ int main()
     std::cout << result->id << "\n";
     std::cout << result->pos.x << "," << result->pos.y << "\n\n\n";
 
+    for (size_t i = 0; i < 10; i++)
+    {
+        c = { 0, result->pos, b };
 
-    c = { 0, result->pos, b };
+        std::cout << c.agent_id << "\n";
+        std::cout << c.goal.x << "," << c.goal.y << "\n";
+        std::cout << c.init.x << "," << c.init.y << "\n\n";
 
-    std::cout << c.agent_id << "\n";
-    std::cout << c.goal.x << "," << c.goal.y << "\n";
-    std::cout << c.init.x << "," << c.init.y << "\n\n";
+        result = next_step_wrapper(&c, 1, (char*)"C:\\Users\\Julien\\AppData\\LocalLow\\DefaultCompany\\MultiBotWarehouse\\map.ssv");
 
-    result = next_step_wrapper(&c, 1, (char*)"C:\\Users\\Julien\\AppData\\LocalLow\\DefaultCompany\\MultiBotWarehouse\\map.ssv");
-
-    std::cout << result->id << "\n";
-    std::cout << result->pos.x << "," << result->pos.y << "\n";
+        std::cout << result->id << "\n";
+        std::cout << result->pos.x << "," << result->pos.y << "\n";
+    }
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage

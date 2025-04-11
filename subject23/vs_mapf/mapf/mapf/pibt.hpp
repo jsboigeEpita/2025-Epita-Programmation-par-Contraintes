@@ -10,7 +10,6 @@
 
 #pragma once
 #include "solver.hpp"
-#include "problem.hpp"
 
 class PIBT : public Solver
 {

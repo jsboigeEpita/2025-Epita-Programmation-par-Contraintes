@@ -1,6 +1,6 @@
 #pragma once
 
-#include "singleton.hh"
+#include "../include/singleton.hh"
 
 template <typename T>
 T& Singleton<T>::instance()

@@ -1,8 +1,6 @@
-
 #include "pch.h"
 
 #include "pos.hpp"
-
 
 #include <cmath>
 #include <iomanip>

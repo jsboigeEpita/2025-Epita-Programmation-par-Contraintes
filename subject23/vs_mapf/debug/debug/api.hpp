@@ -10,6 +10,4 @@ extern "C"
             char* path);
 
     __declspec(dllimport) void free_cIdPos(struct cIdPos* arr);
-
-        __declspec(dllimport) int test(int i);
 }

@@ -20,15 +20,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\mapf\x64\Debug\mapf.dll">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\..\mapf\x64\Debug\mapf.exp">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\..\mapf\x64\Debug\mapf.pdb">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
+    <ClInclude Include="api.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="mapf.dll">
       <Filter>Fichiers de ressources</Filter>
     </None>
@@ -40,16 +36,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\mapf\x64\Debug\mapf.lib">
-      <Filter>Fichiers de ressources</Filter>
-    </Library>
     <Library Include="mapf.lib">
       <Filter>Fichiers de ressources</Filter>
     </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="api.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

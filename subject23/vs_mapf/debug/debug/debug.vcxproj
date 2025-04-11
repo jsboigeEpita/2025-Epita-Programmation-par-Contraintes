@@ -130,19 +130,15 @@
     <ClCompile Include="debug.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\mapf\x64\Debug\mapf.dll" />
-    <None Include="..\..\mapf\x64\Debug\mapf.exp" />
-    <None Include="..\..\mapf\x64\Debug\mapf.pdb" />
+    <ClInclude Include="api.hpp" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="mapf.dll" />
     <None Include="mapf.exp" />
     <None Include="mapf.pdb" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\mapf\x64\Debug\mapf.lib" />
     <Library Include="mapf.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="api.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

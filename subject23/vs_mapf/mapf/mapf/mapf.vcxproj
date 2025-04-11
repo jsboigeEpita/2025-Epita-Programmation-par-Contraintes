@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{902d297a-87f7-4540-850f-f4163d6e7d11}</ProjectGuid>
+    <ProjectGuid>{c2cc790c-9ac7-4da5-af8f-5e9118f3087f}</ProjectGuid>
     <RootNamespace>mapf</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>

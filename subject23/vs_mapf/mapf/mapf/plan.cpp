@@ -1,10 +1,8 @@
-
 #include "pch.h"
+
 #include "plan.hpp"
 #include "node.hpp"
 #include "graph.hpp"
-
-
 
 Config Plan::get(const int t) const
 {

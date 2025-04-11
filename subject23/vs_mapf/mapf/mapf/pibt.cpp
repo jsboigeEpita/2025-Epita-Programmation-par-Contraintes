@@ -1,11 +1,8 @@
-
 #include "pch.h"
 
 #include "pibt.hpp"
 #include "node.hpp"
 #include "getopt.h"
-#include "pibt_api.hpp"
-
 
 const std::string PIBT::SOLVER_NAME = "PIBT";
 
@@ -30,7 +27,7 @@ void PIBT::run()
     };
 
     // agents have not decided their next locations
-    std::priority_queue<PIBT::Agent*, Agents, decltype(compare)> undecided(compare);
+    std::priority_queue<Agent*, Agents, decltype(compare)> undecided(compare);
     // agents have already decided their next locations
     std::vector<Agent*> decided;
 

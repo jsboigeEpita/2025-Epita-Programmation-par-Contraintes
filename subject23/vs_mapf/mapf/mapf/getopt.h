@@ -473,7 +473,7 @@ start:
 		}
 		if (*(place = nargv[optind]) != '-' ||
 		    (place[1] == '\0' && strchr(options, '-') == NULL)) {
-			place = (char*)EMSG;		/* found non-option */
+			place = (char *)EMSG;		/* found non-option */
 			if (flags & FLAG_ALLARGS) {
 				/*
 				 * GNU extension:
@@ -511,7 +511,7 @@ start:
 		 */
 		if (place[1] != '\0' && *++place == '-' && place[1] == '\0') {
 			optind++;
-			place = (char*)EMSG;
+			place = (char *)EMSG;
 			/*
 			 * We found an option (--), so if we skipped
 			 * non-options, we have to permute.
@@ -543,7 +543,7 @@ start:
 		optchar = parse_long_options(nargv, options, long_options,
 		    idx, short_too);
 		if (optchar != -1) {
-			place = (char*)EMSG;
+			place = (char *)EMSG;
 			return (optchar);
 		}
 	}
@@ -570,7 +570,7 @@ start:
 		if (*place)			/* no space */
 			/* NOTHING */;
 		else if (++optind >= nargc) {	/* no arg */
-			place = (char*)EMSG;
+			place = (char *)EMSG;
 			if (PRINT_ERROR)
 				warnx(recargchar, optchar);
 			optopt = optchar;
@@ -579,7 +579,7 @@ start:
 			place = nargv[optind];
 		optchar = parse_long_options(nargv, options, long_options,
 		    idx, 0);
-		place = (char*)EMSG;
+		place = (char *)EMSG;
 		return (optchar);
 	}
 	if (*++oli != ':') {			/* doesn't take argument */
@@ -591,7 +591,7 @@ start:
 			optarg = place;
 		else if (oli[1] != ':') {	/* arg not optional */
 			if (++optind >= nargc) {	/* no arg */
-				place = (char*)EMSG;
+				place = (char *)EMSG;
 				if (PRINT_ERROR)
 					warnx(recargchar, optchar);
 				optopt = optchar;
@@ -599,7 +599,7 @@ start:
 			} else
 				optarg = nargv[optind];
 		}
-		place = (char*)EMSG;
+		place = (char *)EMSG;
 		++optind;
 	}
 	/* dump back option letter */
