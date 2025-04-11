@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import SolutionDisplay from "./solution-display"
 import { useCSPSolver } from "@/hooks/use-csp-solver"
 
-export default function CSPSolver({ refreshView }: { refreshView: () => void }) {
+export default function CSPSolver() {
   const {
     rows,
     cols,
@@ -27,7 +27,7 @@ export default function CSPSolver({ refreshView }: { refreshView: () => void }) 
     handleColsChange,
     handleMinesChange,
     handleMaxSolutionsChange,
-  } = useCSPSolver(refreshView)
+  } = useCSPSolver()
 
   return (
     <div className="flex flex-col items-center">
