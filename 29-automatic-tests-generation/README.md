@@ -417,3 +417,4 @@ L'objectif de ce projet est de préparer une contribution concrète à l'une de 
 - [BenchExec (outil standardisé pour l'évaluation des solveurs)](https://github.com/sosy-lab/benchexec)
 
 Ce sujet représente une excellente opportunité pour acquérir une visibilité scientifique en contribuant directement aux progrès internationaux dans le domaine de la résolution automatique de problèmes complexes.
+
