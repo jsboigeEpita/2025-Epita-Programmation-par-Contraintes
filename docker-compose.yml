@@ -25,6 +25,7 @@ services:
     build:
       context: ./backend
     container_name: backend
+    image: ppc-backend:latest
     ports:
       - "8080:8080"
     depends_on:
@@ -35,6 +36,7 @@ services:
     build:
       context: ./frontend
     container_name: frontend
+    image: ppc-frontend:latest
     ports:
       - "5173:80"
     depends_on:
