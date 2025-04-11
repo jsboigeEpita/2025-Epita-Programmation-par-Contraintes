@@ -5,6 +5,12 @@ grâce à un algorithme génétique couplé à un réseau de neurones. L'objecti
 
 Ce projet à été intégralement écrit en C# et utilise le moteur de jeu Unity pour la simulation.
 
+## Lancement
+
+Dans le dossier `BuildFolder`, il suffit de lancer le fichier `PRCON.exe`.
+
+Vous pouvez aussi ouvrir le dossier racine avec Unity.
+
 # Sommaire
 - [Objectifs du projet](#objectifs-du-projet)
 - [Étapes du projet](#étapes-du-projet)
