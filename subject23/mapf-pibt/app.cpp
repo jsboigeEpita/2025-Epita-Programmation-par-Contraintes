@@ -16,10 +16,13 @@ int main(int argc, char* argv[])
     int i = 0;
     struct cIdPos res;
     do {
+        if (i == 20) {
+            agent0.goal= {4, 5};
+        }
         res = next_step(&agent0, 1, instance_path)[0];
         std::cout << res.pos.x << ", " << res.pos.y << std::endl;
         agent0.init.x = res.pos.x;
         agent0.init.y = res.pos.y;
 
-    } while (++i < 10 && res.pos.x != goal.x || res.pos.y != goal.y);
+    } while (++i < 30);
 }

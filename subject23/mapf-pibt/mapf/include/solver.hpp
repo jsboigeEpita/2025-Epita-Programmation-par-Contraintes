@@ -139,6 +139,7 @@ protected:
 public:
   int pathDist(const int i, Node* const s) const;  // get path distance between s -> g_i
   int pathDist(const int i) const;                 // get path distance between s_i -> g_i
+  void createDistanceTable(int i);                      // compute distance table
   void createDistanceTable();                      // compute distance table
   void setDistanceTable(DistanceTable* p) { distance_table_p = p; }  // used in nested solvers
   // use grid-pathfinding

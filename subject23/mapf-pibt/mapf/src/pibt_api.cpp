@@ -11,6 +11,8 @@ Pibt_api::Pibt_api(Problem* _P)
 std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
 {
     P->clear();
+    occupied_now.clear();
+    occupied_next.clear();
     occupied_now.resize(G->getNodesSize(), nullptr);
     occupied_next.resize(G->getNodesSize(), nullptr);
 
@@ -41,7 +43,16 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
             a = &agent->second;
             a->v_now = agents_info[i].init;
             a->v_next = nullptr;
-            a->g = agents_info[i].goal;
+
+            undecided.push(a);
+            occupied_now[s->id] = a;
+            P->setStart(a->id, s);
+            P->setGoal(a->id, g);
+            if (a->g != agents_info[i].goal) {
+                // rework
+                a->g = agents_info[i].goal;
+                this->createDistanceTable(a->id);
+            }
         }
         else
         {
@@ -54,14 +65,14 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
                            d, // dist from s -> g
                            getRandomFloat(0, 1, MT) }; // tie-breaker
             current_agents_.insert({ a->id, *a });
-        }
 
-        undecided.push(a);
-        occupied_now[s->id] = a;
-        P->setStart(a->id, s);
-        P->setGoal(a->id, g);
+            undecided.push(a);
+            occupied_now[s->id] = a;
+            P->setStart(a->id, s);
+            P->setGoal(a->id, g);
+            this->createDistanceTable(a->id);
+        }
     }
-    this->createDistanceTable();
     // planning
     while (!undecided.empty())
     {
@@ -84,7 +95,14 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
         res.push_back(cIdPos{ agent->id,
                               { agent->v_next->pos.x, agent->v_next->pos.y } });
     }
-
+    // acting
+    for (auto a : decided) {
+      // update priority
+      a->elapsed = (a->v_next == a->g) ? 0 : a->elapsed + 1;
+      // reset params
+      a->v_now = a->v_next;
+      a->v_next = nullptr;
+    }
     return res;
 }
 
