@@ -14,6 +14,7 @@ import type {
     Cpu,
     Ram,
 } from '../../types';
+import ComponentDescription from '../../components/ComponentDescription.vue';
 
 const props = defineProps<{
     isOpen: boolean;
@@ -25,8 +26,14 @@ const emit = defineEmits(['update:isOpen']);
 
 const internalDialog = ref(props.isOpen);
 const components = ref<Component[]>([]);
-
 const searchTerm = ref<string>('');
+
+function getRandomPrice(): string {
+	const min = 100;
+	const max = 200;
+	const randomValue = Math.random() * (max - min) + min;
+	return randomValue.toFixed(2);
+}
 
 const filteredComponents = computed(() => {
     if (!searchTerm.value.trim()) {
@@ -98,7 +105,6 @@ watch(
             <v-card class="bg-[var(--color-background-secondary-dark)]">
                 <v-card-title class="text-[var(--color-text-dark)] mb-[-20px]">
                     <div class="flex items-center justify-between w-full">
-                        <!-- Colonne gauche : bouton -->
                         <div class="w-[33%] flex items-center justify-start">
                             <v-btn
                                 icon
@@ -109,7 +115,6 @@ watch(
                             </v-btn>
                         </div>
 
-                        <!-- Colonne centrale : icône + nom centré -->
                         <div class="w-[33%] flex flex-col items-center justify-center">
                             <div class="flex items-center justify-center space-x-2">
                                 <img
@@ -189,10 +194,14 @@ watch(
                     >
                         <button
                             @click="closeModal(component)"
-                            class="px-4 flex items-center w-full h-[50px] justify-between border-b-2 hover:bg-[green] hover:border-opacity-50"
+                            class="px-4 pt-1 flex flex-col w-full h-[80px] border-b-2 hover:bg-[green] hover:border-opacity-50"
                         >
-                            <span>{{ component.name }}</span>
-                            <span>{{ component.price }}</span>
+							<div class="flex w-full justify-between">
+								<span>{{ component.name }}</span>
+                            	<span v-if="component.price">{{ component.price }}</span>
+								<span v-else="component.price">${{ getRandomPrice() }}</span>
+							</div>
+							<ComponentDescription :componentType="props.componentType" :component="component "/>
                         </button>
                     </div>
                 </v-card-text>
