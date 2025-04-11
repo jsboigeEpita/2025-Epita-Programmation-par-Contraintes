@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Settings, Play, Pause, RotateCcw, Plus, Minus, List, Target, MapPin, FastForward, Rewind } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://127.0.0.1:5000';
 
 const RobotSimulation = () => {
   // État principal
@@ -65,7 +65,7 @@ const RobotSimulation = () => {
       setRobotPositions(newPositions);
       
       // Mettre à jour la grille avec les nouvelles positions des robots
-      updateGridWithRobotPositions(newPositions);
+      updateGridWithRobotPositions(newPositions, grid);
       
       // Calculer la progression de chaque robot
       const progress = robotPaths.map((path, robotIndex) => {
@@ -148,14 +148,43 @@ const RobotSimulation = () => {
 
   // Fonction pour mettre à jour la grille avec les positions actuelles des robots
   const updateGridWithRobotPositions = (positions, gridInfo = null) => {
-    // Si nous avons reçu des informations de grille du backend, les utiliser
     let newGrid;
     
-    if (gridInfo) {
-      // Utiliser les données de grille fournies par le backend
-      newGrid = gridInfo.grid;
+    // Étape 1: Créer une grille de base (sans robots)
+    if (gridInfo && Array.isArray(gridInfo) && gridInfo.length > 0) {
+      console.log("Utilisation de la grille du backend");
+      
+      // Créer une copie profonde de gridInfo
+      newGrid = JSON.parse(JSON.stringify(gridInfo));
+      
+      // Effacer tous les robots de la grille, tout en conservant les racks et les stations de charge
+      for (let y = 0; y < newGrid.length; y++) {
+        for (let x = 0; x < newGrid[y].length; x++) {
+          if (newGrid[y][x] === '@') {
+            // IMPORTANT: Vérifier si cette position avait précédemment un rack ou une station de charge
+            // Si nous avions cette information dans les positions précédentes
+            const wasRack = positions.some(oldPos => 
+              oldPos && oldPos.x === x && oldPos.y === y && oldPos.isOnRack
+            );
+            
+            const wasChargingStation = positions.some(oldPos => 
+              oldPos && oldPos.x === x && oldPos.y === y && oldPos.wasChargingStation
+            );
+            
+            if (wasRack) {
+              newGrid[y][x] = 'R'; // Restaurer le rack
+            } else if (wasChargingStation) {
+              newGrid[y][x] = 'C'; // Restaurer la station de charge
+            } else {
+              newGrid[y][x] = ' '; // Sinon, espace vide
+            }
+          }
+        }
+      }
     } else {
-      // Sinon, créer une nouvelle grille comme avant
+      console.log("Création d'une nouvelle grille (pas de gridInfo)");
+      
+      // Créer une nouvelle grille vide
       newGrid = Array(gridSize.y).fill().map(() => Array(gridSize.x).fill(' '));
       
       // Ajouter les racks (position fixe simulée)
@@ -179,24 +208,34 @@ const RobotSimulation = () => {
       }
     }
     
-    // Ajouter les robots à leurs positions actuelles
+    // Étape 2: Ajouter les robots à leurs positions actuelles
     positions.forEach(pos => {
-      if (pos && pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y) {
-        // Vérifier si la position est un rack
-        pos.isOnRack = newGrid[pos.y][pos.x] === 'R';
+      if (pos && pos.x !== undefined && pos.y !== undefined && 
+          pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y) {
         
-        // Vérifier si la position est une station de charge
-        pos.wasChargingStation = newGrid[pos.y][pos.x] === 'C';
+        // Vérifier ce qui se trouve à la position actuelle
+        const currentCell = newGrid[pos.y][pos.x];
         
-        // Si ce n'est pas un rack, on met le robot
+        // Marquer si la position est un rack ou une station de charge
+        pos.isOnRack = currentCell === 'R';
+        pos.wasChargingStation = currentCell === 'C';
+        
+        // IMPORTANT: Ne pas modifier la cellule si c'est un rack
+        // Le robot sera affiché via un effet spécial dans le rendu
+        // mais la cellule reste marquée comme 'R' dans la grille
         if (!pos.isOnRack) {
           newGrid[pos.y][pos.x] = '@';
         }
+        // Si c'est un rack, on ne change PAS la valeur dans la grille
+        // Ainsi, quand le robot part, le rack reste visible
       }
     });
     
+    // Mettre à jour l'état de la grille
     setGrid(newGrid);
   };
+  
+  
 
   // Simuler la récupération des données du backend
   const fetchGridFromBackend = async () => {
@@ -205,12 +244,10 @@ const RobotSimulation = () => {
       const requestData = {
         gridSize,
         robotCount,
+        timeLimit: 100,
         tasks: tasks.map(task => ({
-          xStart: task.x1,
-          yStart: task.y1,
-          xEnd: task.x2,
-          yEnd: task.y2,
-          id: task.id
+          xEnd: task.y2,
+          yEnd: task.x2,
         }))
       };
       
@@ -232,33 +269,234 @@ const RobotSimulation = () => {
       const data = await response.json();
       console.log("Données reçues du backend:", data);
       
-          // Extraire les chemins et les assignations de tâches
-    const { paths, taskAssignments, gridInfo } = data;
-    
-    // Mettre à jour le nombre maximal d'étapes
-    const maxPathLength = Math.max(...paths.map(path => path.length));
-    setMaxSteps(maxPathLength);
-    
-    // Définir les positions initiales des robots
-    const initialPositions = paths.map(path => path[0]);
-    setRobotPositions(initialPositions);
-    
-    // Mettre à jour la grille avec les positions initiales
-    updateGridWithRobotPositions(initialPositions, gridInfo);
-    
-    // Stocker les chemins pour l'animation
-    setRobotPaths(paths);
-    
-    // Stocker les assignations de tâches pour le suivi
-    setTaskAssignments(taskAssignments);
-    
-    return paths;
-  } catch (error) {
-    console.error('Erreur lors de la récupération des données:', error);
-    alert(`Erreur de connexion au backend: ${error.message}`);
-    return [];
+      // DÉBOGAGE: Vérifier la structure de la grille reçue
+      console.log("Structure de gridInfo:", data.gridInfo);
+      if (data.gridInfo) {
+        console.log("Dimensions de gridInfo:", data.gridInfo.length, "x", 
+                    data.gridInfo[0] ? data.gridInfo[0].length : "undefined");
+      }
+      
+      // Extraire les données dans le format attendu
+      const paths = data.paths || [];
+      let taskAssignments = data.taskAssignments || [];
+      
+      // Conserver une copie originale de la grille pour référence
+      // afin de savoir où étaient les racks à l'origine
+      const originalGrid = data.gridInfo ? JSON.parse(JSON.stringify(data.gridInfo)) : null;
+      
+      // Mettre à jour l'état global de la grille (avant tout traitement)
+      setGrid(data.gridInfo);
+      
+      // Vérifier si toutes les données nécessaires sont présentes
+      if (!paths) {
+        throw new Error("Structure de données incomplète reçue du backend");
+      }
+      
+      // Vérifier si taskAssignments est un objet et non un tableau, le convertir si nécessaire
+      if (taskAssignments && !Array.isArray(taskAssignments)) {
+        console.warn("taskAssignments n'est pas un tableau, tentative de conversion...");
+        
+        // Si c'est un objet avec des propriétés numériques, on peut le convertir en tableau
+        if (typeof taskAssignments === 'object') {
+          taskAssignments = Object.values(taskAssignments);
+        } else {
+          console.error("Impossible de convertir taskAssignments en tableau");
+          taskAssignments = [];
+        }
+      }
+      
+      // Normaliser taskAssignments à un tableau vide s'il est undefined
+      if (!taskAssignments) {
+        taskAssignments = [];
+      }
+      
+      // Normaliser les chemins et vérifier les racks
+      const normalizedPaths = paths.map(path => {
+        // Vérifier si le chemin est un tableau
+        if (!Array.isArray(path)) {
+          console.error("Le chemin n'est pas un tableau:", path);
+          return []; // Retourner un chemin vide pour éviter les erreurs
+        }
+        
+        return path.map((point, index) => {
+          // Gérer les points null ou undefined
+          if (point === null || point === undefined) {
+            console.warn("Point null ou undefined trouvé dans le chemin");
+            return { x: 0, y: 0 };
+          }
+          
+          // Convertir le point au format attendu
+          let normalizedPoint;
+          
+          // Si le point est un tableau [x, y], le convertir en objet {x, y}
+          if (Array.isArray(point)) {
+            normalizedPoint = { 
+              x: Number(point[0]) || 0, 
+              y: Number(point[1]) || 0 
+            };
+          } 
+          // Si le point est déjà un objet, s'assurer qu'il a les propriétés x et y
+          else if (typeof point === 'object') {
+            normalizedPoint = {
+              x: 'x' in point ? Number(point.x) || 0 : 0,
+              y: 'y' in point ? Number(point.y) || 0 : 0
+            };
+          }
+          // Format inconnu, utiliser des valeurs par défaut
+          else {
+            console.warn("Format de point non reconnu:", point);
+            normalizedPoint = { x: 0, y: 0 };
+          }
+          
+          // IMPORTANT: Vérifier si ce point est sur un rack en utilisant la grille originale
+          if (originalGrid && 
+              originalGrid[normalizedPoint.y] && 
+              originalGrid[normalizedPoint.y][normalizedPoint.x] === 'R') {
+            normalizedPoint.isOnRack = true;
+          }
+          
+          // Vérifier également si c'est une station de charge
+          if (originalGrid && 
+              originalGrid[normalizedPoint.y] && 
+              originalGrid[normalizedPoint.y][normalizedPoint.x] === 'C') {
+            normalizedPoint.wasChargingStation = true;
+          }
+          
+          return normalizedPoint;
+        });
+      });
+      
+      // Mettre à jour le nombre maximal d'étapes
+      const maxPathLength = Math.max(...normalizedPaths.map(path => path.length), 0);
+      setMaxSteps(maxPathLength);
+      
+      // Définir les positions initiales des robots (premier élément de chaque chemin)
+      const initialPositions = normalizedPaths.map(path => path[0]);
+      
+      // Vérifier si les positions initiales sont sur des racks ou des stations de charge
+      initialPositions.forEach(pos => {
+        if (originalGrid && pos) {
+          if (originalGrid[pos.y] && originalGrid[pos.y][pos.x] === 'R') {
+            pos.isOnRack = true;
+          }
+          if (originalGrid[pos.y] && originalGrid[pos.y][pos.x] === 'C') {
+            pos.wasChargingStation = true;
+          }
+        }
+      });
+      
+      setRobotPositions(initialPositions);
+      
+      // IMPORTANT: Passer la grille originale à updateGridWithRobotPositions
+      // pour s'assurer que les racks sont correctement préservés
+      updateGridWithRobotPositions(initialPositions, originalGrid);
+      
+      // Stocker les chemins pour l'animation
+      setRobotPaths(normalizedPaths);
+      
+      // Analyser les assignations de tâches
+      const formattedTaskAssignments = [];
+      
+      // Parcourir chaque chemin de robot
+      normalizedPaths.forEach((path, robotIndex) => {
+        const robotTaskAssignments = [];
+        
+        // Pour ce robot, chercher dans son chemin les points qui correspondent aux cibles des tâches
+        if (Array.isArray(taskAssignments)) {
+          taskAssignments.forEach(task => {
+            if (task && Array.isArray(task.target) && task.target.length === 2) {
+              const targetX = task.target[0];
+              const targetY = task.target[1];
+              
+              // Trouver l'index dans le chemin où le robot atteint cette cible
+              const targetStep = path.findIndex(pos => 
+                pos.x === targetX && pos.y === targetY
+              );
+              
+              // Si le robot passe par cette cible
+              if (targetStep !== -1) {
+                // Estimer le début de la tâche (quelques pas avant d'atteindre la cible)
+                const taskDuration = task.duration || 1;
+                const startStep = Math.max(0, targetStep - taskDuration);
+                const endStep = targetStep;
+                
+                // Vérifier si cette tâche est sur un rack
+                const isOnRack = originalGrid && 
+                                originalGrid[targetY] && 
+                                originalGrid[targetY][targetX] === 'R';
+                
+                robotTaskAssignments.push({
+                  taskId: task.id,
+                  startStep,
+                  endStep,
+                  isOnRack // Ajouter cette information
+                });
+              }
+            }
+          });
+        }
+        
+        // Si aucune tâche n'est trouvée mais que le robot a un chemin,
+        // créer une tâche fictive qui couvre tout le chemin
+        if (robotTaskAssignments.length === 0 && path.length > 1) {
+          robotTaskAssignments.push({
+            taskId: `robot_${robotIndex}_movement`,
+            startStep: 0,
+            endStep: path.length - 1,
+            isOnRack: false
+          });
+        }
+        
+        // Trier les tâches par ordre d'exécution
+        robotTaskAssignments.sort((a, b) => a.startStep - b.startStep);
+        
+        formattedTaskAssignments[robotIndex] = robotTaskAssignments;
+      });
+      
+      // Stocker les assignations de tâches pour le suivi
+      setTaskAssignments(formattedTaskAssignments);
+      
+      // Mettre à jour les tâches avec des informations supplémentaires
+      if (Array.isArray(taskAssignments) && taskAssignments.length > 0) {
+        const updatedTasks = tasks.map(task => {
+          // Chercher si cette tâche est présente dans taskAssignments
+          const matchingTask = taskAssignments.find(assignment => 
+            assignment && 
+            Array.isArray(assignment.target) && 
+            assignment.target.length === 2 &&
+            assignment.target[0] === task.x2 && 
+            assignment.target[1] === task.y2
+          );
+          
+          if (matchingTask) {
+            // Vérifier si cette tâche est sur un rack
+            const isOnRack = originalGrid && 
+                            originalGrid[task.y2] && 
+                            originalGrid[task.y2][task.x2] === 'R';
+            
+            return {
+              ...task,
+              id: matchingTask.id,
+              name: matchingTask.name,
+              duration: matchingTask.duration,
+              energy_cost: matchingTask.energy_cost,
+              isOnRack // Ajouter cette information
+            };
+          }
+          return task;
+        });
+        
+        setTasks(updatedTasks);
+      }
+      
+      return normalizedPaths;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données:', error);
+      alert(`Erreur de connexion au backend: ${error.message}`);
+      return [];
     }
   };
+
 
   const mockFetchGridFromBackend = async () => {
     try {
@@ -1063,6 +1301,30 @@ const RobotSimulation = () => {
                                 <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: -1, opacity: 0.5 }}>
                                   📦
                                 </div>
+                              </div>
+                            </div>
+                          )}
+                          {/* NOUVEAU: Effet spécial pour les tâches sur les racks */}
+                          {cell === 'R' && isEndPoint && !isRobotOnRack && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              {/* Fond pulsant pour indiquer une tâche spéciale */}
+                              <div className="w-10 h-10 rounded-full bg-purple-100 animate-pulse opacity-70"></div>
+                              
+                              {/* Emoji du rack */}
+                              <div className="text-2xl" style={{ zIndex: 2 }}>
+                                📦
+                              </div>
+                              
+                              {/* Indicateur de tâche spécial */}
+                              <div className="absolute top-0 right-0 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center"
+                                  style={{ zIndex: 10 }}>
+                                <Target size={12} className="text-white" />
+                              </div>
+                              
+                              {/* Badge "RT" (Rack + Task) */}
+                              <div className="absolute bottom-1 left-1 text-xs font-bold bg-purple-600 text-white px-1 rounded"
+                                  style={{ zIndex: 10 }}>
+                                RT{tasks.findIndex(t => t.x2 === x && t.y2 === y) + 1}
                               </div>
                             </div>
                           )}

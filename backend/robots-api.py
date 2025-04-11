@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
+import flask_cors
 # Il faut vous assurer que le fichier robots-ortools-3.py est renommé ou accessible en tant que module.
 # Par exemple, ici on suppose que le fichier est disponible en tant que module "robots_ortools_3".
 from robots_ortools_3 import Grid, Robot, Task, multi_agent_pathfinding, solve_robot_task_scheduling
 
 app = Flask(__name__)
-
+flask_cors.CORS(app)
 @app.route("/simulate", methods=["POST"])
 def simulate():
     """
@@ -41,7 +42,7 @@ def simulate():
     print(f"Grid Size: {grid_size}, Robot Count: {robot_count}, Tasks: {tasks_data}, Time Limit: {time_limit}")
 
     # Création de la grille (ici on choisit le pattern 'PH2', mais vous pouvez le modifier)
-    grid = Grid(grid_size, grid_size, pattern="PH2", nb_robots=robot_count)
+    grid = Grid(grid_size["x"], grid_size["y"], pattern="PH", nb_robots=robot_count)
     
     # Création des robots. Nous les plaçons sur la première ligne, de la colonne 0 à robot_count-1
     robots = []
@@ -109,12 +110,18 @@ def simulate():
 
 
     # Convert robot_paths to a JSON-serializable format
-    robot_paths_serializable = {
-        robot_id: path for robot_id, path in robot_paths.items()
-    }
-    
+    robot_paths_serializable = [path for robot_id, path in robot_paths.items()]
+
+    new_list = []
+    for liste in robot_paths_serializable:
+        l = []
+        for (a,b) in liste:
+            x, y = b, a
+            l.append((x,y))
+        new_list.append(l)
+
     print(path_schedule)
-    return jsonify({"path_schedule": path_schedule, "task_schedule": task_attribution_csp_serializable, "path_schedule": robot_paths_serializable})
+    return jsonify({"paths": new_list, "taskAssignments": task_attribution_csp_serializable, "gridInfo": grid.grid, })
 
 if __name__ == "__main__":
     app.run(debug=True)
