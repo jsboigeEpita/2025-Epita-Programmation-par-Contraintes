@@ -5,7 +5,7 @@ public class Shelf : MonoBehaviour
     public Item currentItem;
 
     private Vector3 storePosition;
-    private string itemName;
+    public string itemName;
     private float furnitureScale;
 
     public void Initialize(Vector3 storePosition, string itemName, float furnitureScale)

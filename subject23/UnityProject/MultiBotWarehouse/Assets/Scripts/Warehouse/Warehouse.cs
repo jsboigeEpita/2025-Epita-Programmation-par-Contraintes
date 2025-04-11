@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using static PathFindingCppWrapper;
+using static Solver;
 using static Warehouse.Robot;
 
 public class Warehouse : MonoBehaviour
@@ -12,7 +16,7 @@ public class Warehouse : MonoBehaviour
     public static int gridScale = 10;
 
     [System.Serializable]
-    public struct Robot
+    public class Robot
     {
         public enum Role
         {
@@ -20,8 +24,21 @@ public class Warehouse : MonoBehaviour
             Order
         }
 
+        [NonSerialized]
+        public int id;
+
         public Role role;
         public AutomatedRobotController controller;
+
+        [NonSerialized]
+        public Vector2Int lastPosition = new Vector2Int(int.MaxValue, int.MaxValue);
+        [NonSerialized]
+        public Vector2Int homePosition;
+
+        [NonSerialized]
+        public Vector2Int goal;
+        [NonSerialized]
+        public List<int> assignment;
     }
 
     [Header("Setup")]
@@ -65,6 +82,9 @@ public class Warehouse : MonoBehaviour
 
     private Dictionary<Robot.Role, int[][]> assignments;
     private Dictionary<Robot.Role, List<Robot>> assignedRobots;
+    private Dictionary<Robot.Role, Solver.Job[]> roleJobs;
+
+    private IndexedPoint[] robotGoals;
 
     private void Awake()
     {
@@ -91,11 +111,12 @@ public class Warehouse : MonoBehaviour
         {
             assignedRobots.Add(role, new List<Robot>());
         }
-
         foreach (Robot robot in robots)
         {
             assignedRobots[robot.role].Add(robot);
         }
+
+        roleJobs = new Dictionary<Role, Job[]>();
     }
 
     private void Start()
@@ -135,16 +156,83 @@ public class Warehouse : MonoBehaviour
 
         int[][] travelTimes = GenerateTravelTimes();
 
-        Solver.Job[] refillJobs = GenerateRefillJobs();
-        Solver.Job[] orderJobs = GenerateOrderJobs(orders);
+        roleJobs.Add(Role.Refill, GenerateRefillJobs());
+        roleJobs.Add(Role.Order, GenerateOrderJobs(orders));
 
-        tasksTextDebug.text = string.Join("\n", refillJobs.Select(ele => ele.Debug()).ToArray());
+        tasksTextDebug.text = string.Join("\n", roleJobs[Role.Refill].Select(ele => ele.Debug()).ToArray());
 
-        assignments.Add(Robot.Role.Refill, Solver.Solve(assignedRobots[Robot.Role.Refill].Count, refillJobs, travelTimes, verbose: false));
-        assignments.Add(Robot.Role.Order, Solver.Solve(assignedRobots[Robot.Role.Order].Count, orderJobs, travelTimes, verbose: false));
+        assignments.Add(Robot.Role.Refill, Solver.Solve(assignedRobots[Robot.Role.Refill].Count, roleJobs[Role.Refill], travelTimes, verbose: false));
+        assignments.Add(Robot.Role.Order, Solver.Solve(assignedRobots[Robot.Role.Order].Count, roleJobs[Role.Order], travelTimes, verbose: false));
 
         refillTextDebug.text = AssignmentsToString(assignments[Robot.Role.Refill]);
         orderTextDebug.text = AssignmentsToString(assignments[Robot.Role.Order]);
+
+        for (int i = 0; i < assignedRobots[Role.Refill].Count; i++)
+        {
+            Robot refillRobot = assignedRobots[Robot.Role.Refill][i];
+
+            refillRobot.assignment = assignments[Robot.Role.Refill][i].ToList();
+            refillRobot.homePosition = GetGridPosFromWorldPos(refillRobot.controller.transform.position);
+            refillRobot.id = i;
+
+            StartCoroutine(RefillRuntime(refillRobot));
+        }
+    }
+
+    private IEnumerator RefillRuntime(Robot robot)
+    {
+        bool isGoingToStart = true;
+
+        while (robot.assignment.Count > 0)
+        {
+            Vector2Int currentPos = GetGridPosFromWorldPos(robot.controller.transform.position);
+            Task currentTask = roleJobs[Role.Refill].Select(ele => ele.tasks).Aggregate(new List<Task>(), (acc, ele) => { acc.AddRange(ele); return acc; }).ToArray()[robot.assignment[0]];
+            int goadId = isGoingToStart ? currentTask.startLocationId : currentTask.endLocationId;
+            robot.goal = GetGridPosFromId(goadId);
+
+            if (robot.lastPosition != currentPos)
+            {
+                computeGoals();
+                robot.lastPosition = currentPos;
+            }
+
+            if (robotGoals == null)
+                yield return null;
+
+            robot.controller.enabled = true;
+            robot.controller.target = ConvertGrid2Pos(robotGoals[robot.id].point, robot.controller.transform.position.y);
+            
+            if (Vector3.Distance(robot.controller.target, robot.controller.transform.position) < 5f)
+            {
+                if (isGoingToStart == false)
+                {
+                    robot.assignment.RemoveAt(0);
+                }
+
+                isGoingToStart = !isGoingToStart;
+            }
+
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
+    private void computeGoals()
+    {
+        AgentInfo[] agentInfos = new AgentInfo[robots.Length];
+
+        for (int i = 0; i < robots.Length; i++)
+        {
+            agentInfos[i].agentId = i;
+            agentInfos[i].init = GetGridPosFromWorldPos(robots[i].controller.transform.position);
+            agentInfos[i].goal = robots[i].goal;
+        }
+
+        robotGoals = NextStep(agentInfos, robots.Length, wrapperMapPath);
+    }
+
+    private void Update()
+    {
+        
     }
 
     private Solver.Job[] GenerateRefillJobs()
@@ -229,14 +317,14 @@ public class Warehouse : MonoBehaviour
         return new Vector3Int(Mathf.FloorToInt((position.x - gridOriginTransform.position.x) / gridScale), Mathf.FloorToInt((position.y - gridOriginTransform.position.y) / gridScale), Mathf.FloorToInt((position.z - gridOriginTransform.position.z) / gridScale));
     }
 
-    public Vector3 ConvertGrid2Pos(Vector3Int position)
+    public Vector3 ConvertGrid2Pos(Vector2Int position, float height)
     {
-        return position * gridScale;
+        return new Vector3(position.x * gridScale, height, position.y * gridScale) + gridOriginTransform.position + new Vector3(0.99f, 0, 0.99f) * gridScale / 2;
     }
 
     public Vector2Int GetGridPosFromWorldPos(Vector3 worldPos)
     {
-        Vector3Int gridPos = ConvertPos2Grid(worldPos);
+        Vector3Int gridPos = ConvertPos2Grid(worldPos + new Vector3(0.99f, 0, 0.99f) * gridScale / 2);
 
         return new Vector2Int(gridPos.x, gridPos.z);
     }

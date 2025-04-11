@@ -54,6 +54,7 @@ std::vector<cIdPos> Pibt_api::get_next_step(AgentsInfo& agents_info)
                 // rework
                 a->g = agents_info[i].goal;
                 this->createDistanceTable(a->id);
+                a->elapsed = 0;
             }
         }
         else

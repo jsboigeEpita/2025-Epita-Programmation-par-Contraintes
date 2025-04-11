@@ -46,6 +46,13 @@ public class ShelfManager : MonoBehaviour
                     {
                         while (shelvingUnit.currentShelf.currentItem != null)
                             shelvingUnit.DoOneRotation(0.1f);
+
+                        string name = robotManager.currentItem.gameObject.name;
+
+                        shelvingUnit.currentShelf.TakeFromRobot(robotManager);
+
+                        if (name.Contains(shelvingUnit.currentShelf.itemName))
+                            shelvingUnit.DoOneRotation(0.1f);
                     }
                     else
                     {

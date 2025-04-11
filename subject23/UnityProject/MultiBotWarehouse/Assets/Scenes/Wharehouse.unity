@@ -8893,17 +8893,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
---- !u!114 &490832140 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2192515008326796933, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
-  m_PrefabInstance: {fileID: 490832139}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5356e23601de7994192f369c1f24c88e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &492343952
 GameObject:
   m_ObjectHideFlags: 0
@@ -28411,6 +28400,7 @@ MonoBehaviour:
   furnitures: {fileID: 11400000, guid: cda07a7c9251a3545a57bd033d3aa866, type: 2}
   refillTextDebug: {fileID: 1823863276}
   orderTextDebug: {fileID: 2122356165}
+  tasksTextDebug: {fileID: 1274329610}
   enableGridDebug: 1
   sources:
   - {fileID: 2027066508}
@@ -28441,10 +28431,6 @@ MonoBehaviour:
   robots:
   - role: 0
     controller: {fileID: 2142897994}
-  - role: 0
-    controller: {fileID: 1697283336}
-  - role: 0
-    controller: {fileID: 490832140}
   shelves:
   - {fileID: 24192883}
   - {fileID: 1034008135}
@@ -33092,17 +33078,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
---- !u!114 &1697283336 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2192515008326796933, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
-  m_PrefabInstance: {fileID: 1697283335}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5356e23601de7994192f369c1f24c88e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1698380522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41353,12 +41328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentInfoArg:
   - agentId: 0
-    init:
-      x: 0
-      y: 0
-    goal:
-      x: 2
-      y: 2
+    init: {x: 0, y: 0}
+    goal: {x: 2, y: 2}
   count: 1
   path: C:\Users\Julien\AppData\LocalLow\DefaultCompany\MultiBotWarehouse\map.ssv
   tryButton: 0
@@ -43001,6 +42972,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2192515008326796933, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3416190905810337136, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
       propertyPath: m_Name
       value: Robot 0
@@ -43016,7 +42991,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2142897993}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5356e23601de7994192f369c1f24c88e, type: 3}
   m_Name: 

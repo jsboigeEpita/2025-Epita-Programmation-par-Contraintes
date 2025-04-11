@@ -20,8 +20,6 @@ public class PathFindingDebugEntrypoint : MonoBehaviour
     {
         if (tryButton)
         {
-            Debug.Log("LALA: " + MapF.test(11));
-
             IndexedPoint[] result = NextStep(agentInfoArg, count, path);
 
             string filePath = Path.Combine(Application.persistentDataPath, "pathfinding.csv");

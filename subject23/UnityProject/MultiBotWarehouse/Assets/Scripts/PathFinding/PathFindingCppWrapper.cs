@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 public class PathFindingCppWrapper
 {
@@ -49,9 +50,6 @@ public class PathFindingCppWrapper
         };
 
         [DllImport("mapf", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int test(int i);
-
-        [DllImport("mapf", CallingConvention = CallingConvention.Cdecl)]
         public static extern void free_cIdPos(IntPtr arr);
 
         [DllImport("mapf", CallingConvention = CallingConvention.Cdecl)]
@@ -63,25 +61,12 @@ public class PathFindingCppWrapper
     }
 
     [System.Serializable]
-    public struct Point
-    {
-        public int x;
-        public int y;
-
-        public Point(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    };
-
-    [System.Serializable]
     public struct IndexedPoint
     {
         public int id;
-        public Point point;
+        public Vector2Int point;
 
-        public IndexedPoint(int id, Point point)
+        public IndexedPoint(int id, Vector2Int point)
         {
             this.id = id;
             this.point = point;
@@ -92,10 +77,10 @@ public class PathFindingCppWrapper
     public struct AgentInfo
     {
         public int agentId;
-        public Point init;
-        public Point goal;
+        public Vector2Int init;
+        public Vector2Int goal;
 
-        public AgentInfo(int agentId, Point init, Point goal)
+        public AgentInfo(int agentId, Vector2Int init, Vector2Int goal)
         {
             this.agentId = agentId;
             this.init = init;
@@ -105,7 +90,7 @@ public class PathFindingCppWrapper
 
     public static IndexedPoint[] NextStep(AgentInfo[] agentInfoArg, int count, string path)
     {
-        IntPtr ptr = MapF.next_step_wrapper(agentInfoArg.Select(ele => new MapF.cAgentInfo(ele.agentId, new MapF.cPoint(ele.init.x, ele.init.y), new MapF.cPoint(ele.goal.x, ele.goal.y))).ToArray(), (ulong)count, path);
+        IntPtr ptr = MapF.next_step_wrapper(agentInfoArg.Select(ele => new MapF.cAgentInfo(ele.agentId, new MapF.cPoint(ele.init.y, ele.init.x), new MapF.cPoint(ele.goal.y, ele.goal.x))).ToArray(), (ulong)count, path);
 
         MapF.cIndexedPoint[] managedArray = new MapF.cIndexedPoint[count];
 
@@ -118,6 +103,6 @@ public class PathFindingCppWrapper
 
         MapF.free_cIdPos(ptr);
 
-        return managedArray.Select(ele => new IndexedPoint(ele.id, new Point(ele.point.x, ele.point.y))).ToArray();
+        return managedArray.Select(ele => new IndexedPoint(ele.id, new Vector2Int(ele.point.y, ele.point.x))).ToArray();
     }
 }
