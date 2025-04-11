@@ -146,14 +146,13 @@ if __name__ == "__main__":
     console = Console()
     for idx, (grid, size) in enumerate(grids, start=1):
         console.rule(f"Grille {idx}")
-        mgrid = MinesweeperGrid(grid, size)
+        # Pour une grille carrée, on passe 'size' pour les lignes et colonnes
+        mgrid = MinesweeperGrid(grid, size, size)
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
-        console.print(
-            f"Nombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]")
+        console.print(f"Nombre de solutions: [bold yellow]{len(solutions)}[/bold yellow]")
         for num, solution in enumerate(solutions, start=1):
             console.print(f"\nSolution {num}:", style="underline bold")
             result_grid = mgrid.apply_solution(solution)
-            PrettyPrinter.print_grid(result_grid, size, mgrid.grid)
+            PrettyPrinter.print_grid(result_grid, mgrid.grid, mgrid.rows, mgrid.cols)
             console.print("-" * 40)
-    

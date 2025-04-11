@@ -54,7 +54,7 @@ class PrettyPrinter:
     @staticmethod
     def print_grid(result_grid, original_grid, rows, cols, title="Solution"):
         console = Console()
-        console.clear()
+        #console.clear()
         table = Table(title=title, show_lines=True)
         table.add_column("Row", style="bold magenta", justify="center")
         for j in range(cols):
