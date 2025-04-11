@@ -28,15 +28,20 @@ public class ShelfManager : MonoBehaviour
 
             if (robotManager.currentItem == null)
             {
-                if (shelvingUnit.currentShelf.currentItem == null)
+                if (shelvingUnit.items.Where(ele => ele != null).Count() != 0)
                 {
-                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " without any objects.");
+                    while (shelvingUnit.currentShelf.currentItem == null)
+                        shelvingUnit.DoOneRotation(0);
+
+                    shelvingUnit.currentShelf.PutOnRobot(robotManager);
+
+                    shelvingUnit.DoOneRotation(0.1f);
+                }
+                else
+                {
+                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " without any objects and there was nothing.");
                     return;
                 }
-
-                shelvingUnit.currentShelf.PutOnRobot(robotManager);
-
-                shelvingUnit.DoOneRotation(0.1f);
             }
             else if (robotManager.currentItem != null)
             {

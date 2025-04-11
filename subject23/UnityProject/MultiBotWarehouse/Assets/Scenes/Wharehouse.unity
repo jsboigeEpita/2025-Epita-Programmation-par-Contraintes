@@ -28404,7 +28404,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495022879}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b4092288d2595140a4d002a717bbd41, type: 3}
   m_Name: 
@@ -43702,6 +43702,14 @@ PrefabInstance:
     - target: {fileID: 3416190905810337136, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4253414896441402868, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+      propertyPath: turnForce
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4253414896441402868, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
+      propertyPath: motorForce
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 4253414896441402868, guid: 915e1b92c9f80634c90f639cc246644f, type: 3}
       propertyPath: colorRandomly
