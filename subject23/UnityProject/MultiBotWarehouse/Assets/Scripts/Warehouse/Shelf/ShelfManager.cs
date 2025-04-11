@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class ShelfManager : MonoBehaviour
@@ -5,20 +6,17 @@ public class ShelfManager : MonoBehaviour
     [Header("Setup")]
     [SerializeField]
     private Furnitures furnitures;
+    public ShelvingUnit shelvingUnit;
 
     [Header("Prefab")]
     [SerializeField]
-    private int furnitureIndex;
+    public int furnitureIndex;
     [SerializeField]
     private GameObject furniturePrefab;
-
-    private ShelvingUnit shelvingUnit;
 
     private void Awake()
     {
         furniturePrefab = furnitures.furnitures[furnitureIndex];
-
-        shelvingUnit = GetComponent<ShelvingUnit>();
         shelvingUnit.itemGameObject = furniturePrefab;
     }
 
@@ -37,18 +35,31 @@ public class ShelfManager : MonoBehaviour
                 }
 
                 shelvingUnit.currentShelf.PutOnRobot(robotManager);
+
+                shelvingUnit.DoOneRotation(0.1f);
             }
             else if (robotManager.currentItem != null)
             {
-                if (shelvingUnit.currentShelf.currentItem != null)
-                {
-                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an object but an object was already here.");
-                    return;
-                }
                 if (robotManager.currentItem.itemIndexes == null)
-                    shelvingUnit.currentShelf.TakeFromRobot(robotManager);
+                {
+                    if (shelvingUnit.items.Where(ele => ele != null).Count() < shelvingUnit.items.Count)
+                    {
+                        while (shelvingUnit.currentShelf.currentItem != null)
+                            shelvingUnit.DoOneRotation(0.1f);
+                    }
+                    else
+                    {
+                        if (shelvingUnit.currentShelf.currentItem != null)
+                        {
+                            Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an object but an object was already here.");
+                            return;
+                        }
+                    }
+                }
                 else
+                {
                     Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with a box.");
+                }
             }
         }
     }

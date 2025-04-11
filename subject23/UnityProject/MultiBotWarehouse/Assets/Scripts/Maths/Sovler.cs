@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Solver.Task;
 
 public class Solver
 {
@@ -10,6 +11,26 @@ public class Solver
     public struct Job
     {
         public Task[] tasks;
+
+        public Job(Task[] tasks)
+        {
+            this.tasks = tasks;
+        }
+
+        public Job(Task task)
+        {
+            this.tasks = new Task[] { task };
+        }
+
+        public Job(int startLocationId, int endLocationId, int serviceTime, TaskType type)
+        {
+            this.tasks = new Task[] { new Task(startLocationId, endLocationId, serviceTime, type) };
+        }
+
+        public string Debug()
+        {
+            return string.Join("\n", tasks.Select(ele => ele.Debug()).ToArray());
+        }
     }
 
     [System.Serializable]
@@ -20,11 +41,13 @@ public class Solver
             { TaskType.Input, 4 },
             { TaskType.Shelf, 3 },
             { TaskType.Packer, 2 },
-            { TaskType.Devivery, 1 }
+            { TaskType.Devivery, 1 },
+            { TaskType.Pause, 0 }
         };
 
         public enum TaskType
         {
+            Pause,
             Charger,
             Input,
             Shelf,
@@ -36,10 +59,26 @@ public class Solver
         public int endLocationId;
         public int serviceTime;
         public TaskType type;
+
+        public Task(int startLocationId, int endLocationId, int serviceTime, TaskType type)
+        {
+            this.startLocationId = startLocationId;
+            this.endLocationId = endLocationId;
+            this.serviceTime = serviceTime;
+            this.type = type;
+        }
+
+        public string Debug()
+        {
+            return startLocationId + ", " + endLocationId + ", " + serviceTime + ", " + type;
+        }
     }
 
     public static int[][] Solve(int numRobots, Job[] jobs, int[][] travelTimes, long horizon = int.MaxValue, bool verbose = true)
     {
+        if (jobs.Length == 0)
+            return new int[0][];
+
         CpModel model = new CpModel();
 
         Task[] allTasks = jobs.Select(ele => ele.tasks).Aggregate(new List<Task>(), (acc, ele) => { acc.AddRange(ele); return acc; }).ToArray();
@@ -70,6 +109,14 @@ public class Solver
                         model.Add(startVars[j] >= endVars[i]);
                     }
                 }
+
+                if (allTasks[i].type == Task.TaskType.Pause)
+                {
+                    for (int n = 0; n < i; n++)
+                    {
+                        model.Add(startVars[i] >= endVars[n]);
+                    }
+                }
             }
 
             k += tasks.Length;
@@ -80,6 +127,9 @@ public class Solver
 
         for (int i = 0; i < totalTaskCount; i++)
         {
+            if (allTasks[i].type == Task.TaskType.Pause) 
+                continue;
+
             robotTaskIntervals[i] = new IntervalVar[numRobots];
             isAssigned[i] = new IntVar[numRobots];
             for (int r = 0; r < numRobots; r++)
@@ -94,6 +144,9 @@ public class Solver
             List<IntervalVar> intervalsForRobot = new List<IntervalVar>();
             for (int i = 0; i < totalTaskCount; i++)
             {
+                if (allTasks[i].type == Task.TaskType.Pause)
+                    continue;
+
                 intervalsForRobot.Add(robotTaskIntervals[i][r]);
             }
             if (verbose)
@@ -103,8 +156,12 @@ public class Solver
 
         for (int i = 0; i < totalTaskCount; i++)
         {
+            if (allTasks[i].type == Task.TaskType.Pause)
+                continue;
+
             if (verbose)
                 Debug.Log($"model.Add(LinearExpr.Sum(isAssigned[{i}]) == 1)");
+
             model.Add(LinearExpr.Sum(isAssigned[i]) == 1);
         }
 
@@ -118,7 +175,11 @@ public class Solver
             {
                 for (int j = 0; j < totalTaskCount; j++)
                 {
-                    if (i == j) continue;
+                    if (allTasks[i].type == Task.TaskType.Pause || allTasks[j].type == Task.TaskType.Pause)
+                        continue;
+
+                    if (i == j)
+                        continue;
 
                     ILiteral[] bothAssigned = new ILiteral[] { isAssigned[i][r], isAssigned[j][r] };
 
@@ -146,6 +207,7 @@ public class Solver
         }
 
         CpSolver solver = new CpSolver();
+        solver.StringParameters = "max_time_in_seconds:10.0";
 
         CpSolverStatus status = solver.Solve(model);
 
@@ -160,6 +222,9 @@ public class Solver
                 var tempResult = new List<KeyValuePair<int, long>>();
                 for (int i = 0; i < totalTaskCount; i++)
                 {
+                    if (allTasks[i].type == Task.TaskType.Pause)
+                        continue;
+
                     if (solver.BooleanValue(isAssigned[i][r]))
                     {
                         tempResult.Add(new KeyValuePair<int, long>(i, solver.Value(startVars[i])));

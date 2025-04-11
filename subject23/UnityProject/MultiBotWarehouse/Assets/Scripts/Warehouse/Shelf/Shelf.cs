@@ -37,5 +37,6 @@ public class Shelf : MonoBehaviour
 
         robotManager.currentItem.transform.SetParent(robotManager.storeTransform);
         robotManager.currentItem.transform.localPosition = Vector3.zero;
+        robotManager.currentItem.transform.localScale = Vector3.one * furnitureScale;
     }
 }

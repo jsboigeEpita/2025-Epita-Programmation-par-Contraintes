@@ -7,15 +7,15 @@ public class PackerManager : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField]
-    private PackerInputManager inputManager;
+    public PackerInputManager inputManager;
     [SerializeField]
-    private PackerOutputManager outputManager;
+    public PackerOutputManager outputManager;
     [SerializeField]
     private TMP_Text text;
     [SerializeField]
     private Furnitures furnitures;
 
-    private List<Item> buffer;
+    public List<Item> buffer;
 
     private void Awake()
     {

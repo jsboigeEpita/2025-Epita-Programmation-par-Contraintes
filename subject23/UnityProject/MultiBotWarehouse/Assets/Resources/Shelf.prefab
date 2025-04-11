@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   furnitures: {fileID: 11400000, guid: cda07a7c9251a3545a57bd033d3aa866, type: 2}
+  shelvingUnit: {fileID: 8239818643648753151}
   furnitureIndex: 0
   furniturePrefab: {fileID: 0}
 --- !u!114 &8239818643648753151

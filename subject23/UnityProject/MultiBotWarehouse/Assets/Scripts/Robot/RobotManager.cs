@@ -44,8 +44,6 @@ public class RobotManager : MonoBehaviour
 
     [Header("Monitors")]
     public Item currentItem;
-    [SerializeField]
-    public Vector3Int gridPosition { get { return Warehouse.convertPos2Grid(transform.position); } }
 
     private Rigidbody robotRigidbody;
 

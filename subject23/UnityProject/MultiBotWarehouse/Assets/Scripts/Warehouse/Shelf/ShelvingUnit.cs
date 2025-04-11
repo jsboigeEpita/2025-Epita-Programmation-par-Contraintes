@@ -256,6 +256,14 @@ public class ShelvingUnit : MonoBehaviour
         }
     }
 
+    public void DoOneRotation(float duration)
+    {
+        if (!isRolling)
+        {
+            StartCoroutine(LerpShelves(duration));
+        }
+    }
+
     private IEnumerator LerpShelves(float duration)
     {
         isRolling = true;

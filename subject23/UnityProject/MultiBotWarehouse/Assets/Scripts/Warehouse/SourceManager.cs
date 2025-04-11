@@ -22,7 +22,7 @@ public class SourceManager : MonoBehaviour
     
     [Header("Prefab")]
     [SerializeField]
-    private int furnitureIndex;
+    public int furnitureIndex;
     [SerializeField]
     private GameObject furniturePrefab;
 
