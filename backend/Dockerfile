@@ -4,4 +4,7 @@ WORKDIR /app
 COPY target/quarkus-app/ ./
 
 # Définir le point d'entrée
-CMD ["java", "-jar", "quarkus-app/quarkus-run.jar"]
+CMD ["java", "-jar", "quarkus-run.jar"]
+
+
+#DockerFile to mvn install projec
