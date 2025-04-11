@@ -204,3 +204,9 @@ watch(
         </template>
     </v-dialog>
 </template>
+
+<style>
+.v-text-field input {
+    background-color: var(--color-background-secondary-dark) !important;
+}
+</style>
