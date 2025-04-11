@@ -9,7 +9,7 @@ export type SelectedComponentsResponse = {
 	powerConsumption: number,
 	memory: Ram | null,
 	powerSupply: Powersupply | null,
-	storage: Storage | null,
+	storageDevice: Storage | null,
 	videoCard: Videocard | null,
 }
 

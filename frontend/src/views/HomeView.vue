@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import type { SelectedComponents, SelectedComponentsResponse } from '../types';
 import { getConfig } from '../api/api';
 import Modal from './modals/Modal.vue';
@@ -19,35 +19,72 @@ const selectedComponents = ref<SelectedComponents>({
 });
 const typeComponent = ref<string>('');
 const isModalOpen = ref<boolean>(false);
-const confgPrice = ref<number>(0);
+const configPrice = ref<number>(0);
 
 const handleSelectedComponentsUpdate = (components: SelectedComponents) => {
     selectedComponents.value = components;
 };
 
+const totalClasses = computed(() => {
+    return configPrice.value === 0
+        ? 'w-full flex justify-between p-2'
+        : 'w-full flex justify-between p-2 border-b-2 border-white';
+});
+
+function updateTotalPrice(): void {
+    let total = 0;
+    const comps = selectedComponents.value;
+    const keys: (keyof SelectedComponents)[] = [
+        'case',
+        'motherboard',
+        'cpu',
+        'cpuCooler',
+        'ram',
+        'videocard',
+        'powersupply',
+        'storage',
+    ];
+    keys.forEach((key) => {
+        const comp = comps[key];
+        if (comp && comp.price) {
+            const priceStr = comp.price.replace('$', '').trim();
+            const priceNum = parseFloat(priceStr);
+            if (!isNaN(priceNum)) {
+                total += priceNum;
+            }
+        }
+    });
+    configPrice.value = total;
+    return;
+}
+
 onMounted(async () => {
     const config = <SelectedComponentsResponse>await getConfig();
-    confgPrice.value = config.price;
+    configPrice.value = config.price;
     selectedComponents.value = {
         case: config.pcCase,
         powersupply: config.powerSupply,
         videocard: config.videoCard,
         cpuCooler: config.cpuCooler,
-        storage: config.storage,
+        storage: config.storageDevice,
         motherboard: config.motherboard,
         cpu: config.cpu,
         ram: config.memory,
     };
 });
+
+watch(
+    selectedComponents,
+    () => {
+        updateTotalPrice();
+    },
+    { deep: true }
+);
 </script>
 
 <template>
     <div class="flex items-center justify-center space-x-8 w-full mt-10">
-        <img
-            :src="Logo"
-            alt="Case"
-            class="w-24"
-        />
+        <img :src="Logo" alt="Case" class="w-24" />
         <span class="text-4xl font-bold text-white">CONFIGURATEUR</span>
     </div>
 
@@ -107,9 +144,10 @@ onMounted(async () => {
         <div class="w-[400px] text-white space-y-2">
             <span class="text-2xl font-semibold opacity-50">RECAPITULATIF</span>
             <div
-                class="p-4 bg-[var(--color-background-secondary-dark)] border-2 border-[green] border-opacity-50 rounded-md space-y-4"
+                class="p-4 bg-[var(--color-background-secondary-dark)] border-2 border-[green] border-opacity-50 rounded-md"
+				:class="{ 'space-y-4': configPrice !== 0 }"
             >
-                <div class="space-y-1 border-b-2 border-white">
+                <div class="space-y-1" :class="{ 'border-b-2 border-white': configPrice !== 0 }">
                     <RecapItem :component="selectedComponents.case" />
                     <RecapItem :component="selectedComponents.cpu" />
                     <RecapItem :component="selectedComponents.cpuCooler" />
@@ -120,9 +158,9 @@ onMounted(async () => {
                     <RecapItem :component="selectedComponents.ram" />
                 </div>
 
-                <div class="w-full flex justify-between p-2">
+                <div class="text-lg font-bold w-full flex justify-between p-2">
                     <span>TOTAL :</span>
-                    <span>${{ confgPrice }}</span>
+                    <span>${{ configPrice }}</span>
                 </div>
             </div>
         </div>

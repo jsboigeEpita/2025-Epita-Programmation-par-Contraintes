@@ -28,13 +28,6 @@ const internalDialog = ref(props.isOpen);
 const components = ref<Component[]>([]);
 const searchTerm = ref<string>('');
 
-function getRandomPrice(): string {
-	const min = 100;
-	const max = 200;
-	const randomValue = Math.random() * (max - min) + min;
-	return randomValue.toFixed(2);
-}
-
 const filteredComponents = computed(() => {
     if (!searchTerm.value.trim()) {
         return components.value;
@@ -72,7 +65,6 @@ const closeModal = async (component: Component) => {
     }
     internalDialog.value = false;
 };
-
 watch(
     () => props.isOpen,
     (newVal) => {
@@ -93,7 +85,7 @@ watch(
         internalDialog.value = true;
         components.value = [];
         getComponents(newVal, 1).then((res) => {
-            components.value = res;
+            components.value = res.slice(0, 500);
         });
     }
 );
@@ -173,7 +165,7 @@ watch(
                             </div>
                         </div>
 
-						<div class="w-[33%] flex justify-end">
+                        <div class="w-[33%] flex justify-end">
                             <v-text-field
                                 v-model="searchTerm"
                                 label="Rechercher"
@@ -193,15 +185,18 @@ watch(
                         :key="component.id"
                     >
                         <button
+                            v-if="component.price"
                             @click="closeModal(component)"
                             class="px-4 pt-1 flex flex-col w-full h-[80px] border-b-2 hover:bg-[green] hover:border-opacity-50"
                         >
-							<div class="flex w-full justify-between">
-								<span>{{ component.name }}</span>
-                            	<span v-if="component.price">{{ component.price }}</span>
-								<span v-else="component.price">${{ getRandomPrice() }}</span>
-							</div>
-							<ComponentDescription :componentType="props.componentType" :component="component "/>
+                            <div class="flex w-full justify-between">
+                                <span>{{ component.name }}</span>
+                                <span>{{ component.price }}</span>
+                            </div>
+                            <ComponentDescription
+                                :componentType="props.componentType"
+                                :component="component"
+                            />
                         </button>
                     </div>
                 </v-card-text>
