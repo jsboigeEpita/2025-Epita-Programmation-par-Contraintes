@@ -451,3 +451,14 @@ Chaque année, plusieurs compétitions internationales dédiées à la résoluti
 - [BenchExec (outil standardisé pour l&#39;évaluation des solveurs)](https://github.com/sosy-lab/benchexec)
 
 Ce sujet représente une excellente opportunité pour acquérir une visibilité scientifique en contribuant directement aux progrès internationaux dans le domaine de la résolution automatique de problèmes complexes.
+
+## 35. Quoridor : L'exploration des possibilite
+
+**Contexte** :
+Le jeu de plateau *Quoridor* est un jeu de stratégie combinatoire abstrait pour deux ou quatre joueurs. Chacun des joueurs tente d’atteindre le côté opposé du plateau en déplaçant un pion, tout en posant des murs pour bloquer la progression de l’adversaire. La particularité du jeu réside dans l’alternance entre le mouvement du pion et le placement stratégique de murs limités en nombre. L’aspect spatial, combiné à une logique de cheminement et de blocage, en fait un jeu idéal pour la mise en œuvre de techniques d’intelligence artificielle.
+
+**Objectif** :
+Le présent projet s'inscrit dans le cadre de la conception d'une intelligence artificielle (IA) jouant à un jeu inspiré de *Quoridor*, un jeu de stratégie à deux joueurs. L'objectif principal est de développer une IA capable d'évaluer, d'explorer et de choisir les coups les plus judicieux dans un environnement où la pose de murs peut modifier dynamiquement le chemin optimal vers la victoire. La particularité de ce jeu réside dans sa composante spatiale et dans la nécessité d'anticiper les coups adverses tout en gérant les ressources limitées que sont les murs.
+
+**Approche** :
+L’approche choisie est un backtracking orienté victoire : on commence par les positions terminales (c’est-à-dire gagnantes), puis on remonte les coups qui y mènent. À chaque état, les coups légaux sont simulés, et le meilleur coup est choisi selon une stratégie minimax très simplifiée (recherche du plus court chemin en nombre de coups).
