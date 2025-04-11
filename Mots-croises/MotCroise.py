@@ -196,6 +196,17 @@ def afficher_grille(structure_grille, la_solution=None, les_emplacements=None):
         print(ligne_texte.strip())
         num_ligne = num_ligne + 1
 
+def WaitForConfirmation():
+    input("Press enter to reveal answer...")
+    answer = input("Reveal? [Y/N]\n")
+    if answer.lower() in ["y","yes"]:
+        return
+    elif answer.lower() in ["n","no"]:
+        WaitForConfirmation()
+    else:
+        print("Wrong input")
+        WaitForConfirmation()
+
 if __name__ == "__main__":
     les_emplacements, les_croisements, les_longueurs_requises = trouver_emplacements_et_croisements(LA_GRILLE)
 
@@ -221,6 +232,8 @@ if __name__ == "__main__":
 
     if not probleme_valide:
         sys.exit(1)
+
+    print("Création du mot croisé...")
 
     modele = cp_model.CpModel()
 
@@ -293,7 +306,6 @@ if __name__ == "__main__":
                 mots_vertical[e[3]].append(defs[i])
             i += 1
 
-        afficher_grille(LA_GRILLE, la_solution_finale, les_emplacements)
 
         print("\nHORIZONTAL:")
         for k, v in mots_horizontal.items():
@@ -301,6 +313,9 @@ if __name__ == "__main__":
         print("VERTICAL:")
         for k, v in mots_vertical.items():
             print(k + 1, '-', " // ".join(v))
+
+        WaitForConfirmation()
+        afficher_grille(LA_GRILLE, la_solution_finale, les_emplacements)
 
     else:
         print("pas faisable apparement")
