@@ -2,7 +2,6 @@ import io
 from contextlib import redirect_stdout
 import unittest
 import itertools
-import coverage
 
 
 def generate_all_possible_test_cases(values):

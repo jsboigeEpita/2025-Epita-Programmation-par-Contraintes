@@ -1,14 +1,13 @@
 from itertools import pairwise
 import chat
-import twise
+import coverage_utils
 import io_utils
 import testsuite
-import coverage_utils
+import twise
+import weighted_cit
 
-import unittest
 import logging
 import random
-import time
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,7 +41,12 @@ def generate_and_run_testsuite(filename, function_name):
         f"Selecting {len(initial_test_set)} random test cases from {len(all_test_cases)} possible test cases..."
     )
 
-    pairwise_test_set = twise.t_wise_testing(values, [], t=3)
+    pairwise_test_set = twise.t_wise_testing(values, [], t=2)
+    logging.info(f"Total test cases generated: {len(pairwise_test_set)}")
+
+    weighted_twise_test_set = weighted_cit.weighted_cit_testing(
+        filename, function_name, values, []
+    )
     logging.info(f"Total test cases generated: {len(pairwise_test_set)}")
 
     # 6. Evaluation
@@ -52,6 +56,7 @@ def generate_and_run_testsuite(filename, function_name):
         # "All Combinations": all_test_cases,
         "10_Sample": initial_test_set,
         "Pairwise": pairwise_test_set,
+        "Weighted twise": weighted_twise_test_set,
     }
     for strategy in strategies.keys():
         print(
