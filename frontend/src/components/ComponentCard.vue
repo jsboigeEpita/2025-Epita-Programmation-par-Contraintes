@@ -4,6 +4,7 @@ import { images } from '../assets/index';
 import Modal from '../views/modals/Modal.vue';
 import type { Component, SelectedComponents, SelectedComponentsResponse } from '../types';
 import { deleteComponent, getConfig } from '../api/api';
+import ComponentDescription from './ComponentDescription.vue';
 
 const props = defineProps<{
     componentType: string;
@@ -32,7 +33,7 @@ const deleteComponents = async (type: string) => {
         cpu: config.cpu,
         ram: config.memory,
     };
-	emit('selected-components', selectedComponents.value);
+    emit('selected-components', selectedComponents.value);
 };
 
 const openModal = (type: string) => {
@@ -143,23 +144,30 @@ watch(
             <v-icon>mdi-plus</v-icon>
         </div>
         <div
-            class="bg-[var(--color-primary)] h-20 p-2 px-4 ml-12 flex justify-between rounded-b-md"
+            class="bg-[var(--color-primary)] h-auto p-2 px-4 ml-12 flex flex-col rounded-b-md"
             v-if="component"
         >
-            <span class="text-xl font-bold">{{ component.name }}</span>
-            <div>
-                <span>{{ component.price }}</span>
-                <v-btn
-                    @click="deleteComponents(props.componentType)"
-                    color="green-700"
-                    width="40"
-                    height="40"
-                    variant="plain"
-                    class="text-xl"
-                >
-                    <v-icon>mdi-delete</v-icon>
-                </v-btn>
+            <div class="flex items-center justify-between w-full">
+                <span class="text-xl font-bold">{{ component.name }}</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-lg">{{ component.price }}</span>
+                    <v-btn
+                        @click="deleteComponents(props.componentType)"
+                        color="green-700"
+                        width="40"
+                        height="40"
+                        variant="plain"
+                        class="text-xl"
+                    >
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                </div>
             </div>
+
+            <ComponentDescription
+                :componentType="props.componentType"
+                :component="props.component"
+            />
         </div>
     </div>
 

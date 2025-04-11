@@ -8,8 +8,8 @@ defineProps<{
 </script>
 
 <template>
-    <div class="p-2 rounded text-lg flex justify-between" v-if="component">
-        <span>{{ component.name }}</span>
-        <span>{{ component.price }} </span>
+    <div class="p-2 rounded text-lg flex justify-between" v-if="props.component">
+        <span>{{ props.component.name }}</span>
+        <span>{{ props.component.price }} </span>
     </div>
 </template>
