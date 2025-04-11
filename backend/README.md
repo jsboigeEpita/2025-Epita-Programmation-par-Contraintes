@@ -1,5 +1,24 @@
+# Backend - Simulation et API
 
-# Documentation du Code
+Ce dossier contient le backend pour la simulation des robots et l'API utilisée par le frontend.
+
+## Prérequis
+
+- Python 3.10 ou supérieur
+- Un environnement virtuel Python (recommandé)
+
+## Installation
+
+1. Créez un environnement virtuel :
+   ```bash
+   python3 -m venv env
+   source env/bin/activate
+   ```
+2. Lancement du serveur :
+   ```bash
+   python3 robots-api.py
+   ```
+# Explication du fichier utilitaire robots_or_tools.py
 
 Ce dépôt contient du code Python illustrant différentes fonctionnalités liées à la gestion et la planification de tâches pour des robots sur une grille. Il comprend :
 
