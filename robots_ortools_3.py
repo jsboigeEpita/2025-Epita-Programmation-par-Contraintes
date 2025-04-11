@@ -4,6 +4,7 @@ from heapq import heappop, heappush
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from tabulate import tabulate
+from colorama import Fore, Style
 
 class Task:
     """Une tâche consiste à aller sur une position (x, y) et faire une action."""
@@ -18,7 +19,6 @@ class Task:
 
     def complete(self):
         self.completed = True
-
 
 class Robot:
     id_counter = 0
@@ -473,25 +473,24 @@ def a_star_pathfinding(start, goal, grid, empty_cell=0, obstacle_cell=1):
 
     rows, cols = len(grid), len(grid[0])
     open_set = []
-    heappush(open_set, (0, start))  # Priority queue with (cost, position)
-    came_from = {}  # To reconstruct the path
-    g_score = {start: 0}  # Cost from start to current node
-    f_score = {start: heuristic(start, goal)}  # Estimated cost from start to goal
+    heappush(open_set, (0, start))  
+    came_from = {}
+    g_score = {start: 0} 
+    f_score = {start: heuristic(start, goal)}
 
     while open_set:
         _, current = heappop(open_set)
 
         if current == goal:
-            # Reconstruct the path
             path = []
             while current in came_from:
                 path.append(current)
                 current = came_from[current]
             path.append(start)
-            return path[::-1]  # Return reversed path
+            return path[::-1]
 
         x, y = current
-        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:  # Neighboring cells (up, down, left, right)
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             neighbor = (x + dx, y + dy)
             if 0 <= neighbor[0] < rows and 0 <= neighbor[1] < cols and (grid[neighbor[0]][neighbor[1]] == empty_cell or (neighbor[0] == goal[0] and neighbor[1] == goal[1]) or (grid[neighbor[0]][neighbor[1]] == '@')):
                 tentative_g_score = g_score[current] + 1
@@ -501,7 +500,7 @@ def a_star_pathfinding(start, goal, grid, empty_cell=0, obstacle_cell=1):
                     f_score[neighbor] = tentative_g_score + heuristic(neighbor, goal)
                     heappush(open_set, (f_score[neighbor], neighbor))
 
-    return []  # Return an empty list if no path is found
+    return []
 
 def solve_robot_task_scheduling(robots, tasks, total_time_limit):
     model = cp_model.CpModel()
@@ -518,7 +517,6 @@ def solve_robot_task_scheduling(robots, tasks, total_time_limit):
             for time in all_time_slots:
                 assignments[(r, t, time)] = model.NewBoolVar(f"assign_r{r}_t{t}_time{time}")
 
-    # 3. Constraints
     # Each task must be assigned to exactly one robot in one time slot
     for t in all_tasks:
         model.AddExactlyOne(assignments[(r, t, time)] for r in all_robots for time in all_time_slots)
@@ -536,7 +534,7 @@ def solve_robot_task_scheduling(robots, tasks, total_time_limit):
                 if time + tasks[t].duration > total_time_limit:
                     model.Add(assignments[(r, t, time)] == 0)
 
-    # A robot can only do one task at a time
+    # One task at a time
     for r in all_robots:
         for time in all_time_slots:
             for t1 in all_tasks:
@@ -546,36 +544,22 @@ def solve_robot_task_scheduling(robots, tasks, total_time_limit):
                             model.Add(assignments[(r, t1, time)] + assignments[(r, t2, time2)] <= 1)
 
     # Energy Constraint:
-    # A robot must have enough energy to perform a task
     for r in all_robots:
         for t in all_tasks:
             for time in all_time_slots:
-                # Calculate the energy needed for the task and the time it takes
                 energy_needed = tasks[t].energy_cost + tasks[t].duration * robots[r].energy_consumption
-                # Check if the robot has enough energy at the start of the task
-                # Create a Boolean variable to represent whether the robot has insufficient energy
                 insufficient_energy = model.NewBoolVar(f"insufficient_energy_r{r}_t{t}_time{time}")
 
-                # Add constraints to set the Boolean variable based on the energy condition
                 model.Add(robots[r].energy < energy_needed).OnlyEnforceIf(insufficient_energy)
                 model.Add(robots[r].energy >= energy_needed).OnlyEnforceIf(insufficient_energy.Not())
 
-                # Prevent the task assignment if the robot has insufficient energy
                 model.Add(assignments[(r, t, time)] == 0).OnlyEnforceIf(insufficient_energy)
 
-    # ... (Add other constraints: inventory, travel, etc.)
-
-    # 4. Objective (Optional)
-    # ... (Define an objective function)
-
-    # 5. Solve
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-    # Build a schedule
     schedule = defaultdict(list)
 
-    # 6. Interpret Solution
     if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
         for r in all_robots:
             for t in all_tasks:
@@ -638,7 +622,6 @@ def plot_paths_and_gantt(agent_paths,schedule):
     """
     fig, ax = plt.subplots(2, 1, figsize=(10, 12))
 
-    # Plot paths
     for agent, path in agent_paths.items():
         x, y = zip(*path)
         ax[0].plot(x, y, marker='o', label=f'Agent {agent}')
@@ -649,7 +632,6 @@ def plot_paths_and_gantt(agent_paths,schedule):
     ax[0].grid(True)
     ax[0].legend()
 
-    # Plot Gantt chart
     for agent, path in agent_paths.items():
         for step_index in range(len(path) - 1):
             start_time = schedule[agent][step_index]
@@ -672,15 +654,12 @@ def display_animated_agent_moves(agent_paths, schedule):
 
     fig, ax = plt.subplots(figsize=(len(agent_paths) * 2, len(agent_paths) * 2))
     
-    # Define a list of colors for agents
     colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown']
 
-    # Plot the entire path for each agent in its assigned color
     for agent, path in agent_paths.items():
         x, y = zip(*path)
         ax.plot(x, y, linestyle='--', color=colors[agent % len(colors)], label=f'Agent {agent}')
 
-    # Create a scatter plot for the moving dots
     scat = ax.scatter([], [], s=100)
 
     def init():
@@ -706,8 +685,6 @@ def display_animated_agent_moves(agent_paths, schedule):
                         init_func=init, blit=True, interval=1000)
     
     plt.show()
-
-from colorama import Fore, Style
 
 def print_grid_with_paths(grid, agent_paths):
     """
@@ -859,7 +836,59 @@ if __name__ == "__main__":
     # print("Grid with paths:")
     # print_grid_with_paths(grid, agent_paths_example_1)
 
-    scenario_1()
+    # 5 robots and 5 tasks with collisions
+    grid = Grid(15, 15, pattern='PH', nb_robots=5)
+    robot_1 = Robot(0, 0, base_station=(19, 19))
+    robot_2 = Robot(0, 1, base_station=(19, 19))
+    robot_3 = Robot(0, 2, base_station=(19, 19))
+    robot_4 = Robot(0, 3, base_station=(19, 19))
+    robot_5 = Robot(0, 4, base_station=(19, 19))
+    grid.place_robot(robot_1.current_position[0], robot_1.current_position[1], robot_1)
+    grid.place_robot(robot_2.current_position[0], robot_2.current_position[1], robot_2)
+    grid.place_robot(robot_3.current_position[0], robot_3.current_position[1], robot_3)
+    grid.place_robot(robot_4.current_position[0], robot_4.current_position[1], robot_4)
+    grid.place_robot(robot_5.current_position[0], robot_5.current_position[1], robot_5)
+    # Define tasks with their target positions
+    task_1 = Task("Task 1", 5, 4, 4, id=0)
+    task_2 = Task("Task 2", 3, 9, 9, id=1)
+    task_3 = Task("Task 3", 3, 12, 2, id=2)
+    task_4 = Task("Task 4", 3, 12, 2, id=3)
+    task_5 = Task("Task 5", 3, 12, 2, id=4)
+    grid.place_task(task_1.target[0], task_1.target[1], task_1)
+    grid.place_task(task_2.target[0], task_2.target[1], task_2)
+    grid.place_task(task_3.target[0], task_3.target[1], task_3)
+    grid.place_task(task_4.target[0], task_4.target[1], task_4)
+    grid.place_task(task_5.target[0], task_5.target[1], task_5)
+    robot_1.set_task(task_1)
+    robot_2.set_task(task_2)
+    robot_3.set_task(task_3)
+    robot_4.set_task(task_4)
+    robot_5.set_task(task_5)
+    print("Initial grid:")
+    grid.print_grid()
+    path1 = robot_1.path_to_task(grid)
+    path2 = robot_2.path_to_task(grid)
+    path3 = robot_3.path_to_task(grid)
+    path4 = robot_4.path_to_task(grid)
+    path5 = robot_5.path_to_task(grid)
+    
+    
+    robots_paths = {
+        0: path1,
+        1: path2,
+        2: path3,
+        3: path4,
+        4: path5
+    }
+
+    # Call the function to solve the multi-agent pathfinding problem
+    schedule = multi_agent_pathfinding(robots_paths)
+
+    print_grid_with_paths(grid.grid, robots_paths)
+
+
+    # display animation 
+    display_animated_agent_moves(robots_paths, schedule)
 
     # if schedule:
     #     # Plot the paths and Gantt chart
