@@ -8,8 +8,8 @@ import { solveMinesweeperCSP } from "@/lib/csp-solver"
 import type { Cell } from "@/lib/types"
 
 export function useMinesweeper(refreshView: () => void) {
-  const [difficulty, setDifficulty] = useState<string>("medium")
-  const [gameConfig, setGameConfig] = useState(DIFFICULTY_PRESETS.medium)
+  const [difficulty, setDifficulty] = useState<string>("easy")
+  const [gameConfig, setGameConfig] = useState(DIFFICULTY_PRESETS.easy)
   const [customConfig, setCustomConfig] = useState({ rows: 5, cols: 5, mines: 5 })
   const [board, setBoard] = useState<Cell[][]>([])
   const [gameState, setGameState] = useState<"playing" | "won" | "lost">("playing")

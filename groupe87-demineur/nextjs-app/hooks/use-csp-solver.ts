@@ -14,7 +14,7 @@ const DIFFICULTY_PRESETS = {
   custom: { rows: 8, cols: 8, mines: 10 }, // Valeurs par défaut pour "custom"
 }
 
-export function useCSPSolver(refreshView: () => void, initialDifficulty: string = "medium") {
+export function useCSPSolver(refreshView: () => void, initialDifficulty: string = "easy") {
   const [rows, setRows] = useState(() => {
     const preset = DIFFICULTY_PRESETS[initialDifficulty as keyof typeof DIFFICULTY_PRESETS] 
     return preset.rows
