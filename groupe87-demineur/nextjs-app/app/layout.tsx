@@ -9,7 +9,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Minesweeper with CSP Solver",
   description: "A Next.js application that combines Minesweeper with a CSP solver",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -27,6 +26,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-import './globals.css'

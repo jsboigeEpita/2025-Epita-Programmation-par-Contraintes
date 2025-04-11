@@ -15,8 +15,6 @@ interface SolutionDisplayProps {
 
 export default function SolutionDisplay({ solution, animating = false }: SolutionDisplayProps) {
   const { solutions, probabilities, safeRecommendations, mineRecommendations } = solution
-
-  // Si l'animation est active, nous allons afficher les solutions une par une
   const [currentSolutionIndex, setCurrentSolutionIndex] = useState(0)
 
   useEffect(() => {

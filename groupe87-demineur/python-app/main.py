@@ -14,14 +14,15 @@ def main():
         ]
     ).ask()
     if choice == "Voir les solutions (CSP) pour une grille prédéfinie":
-        grid5x5 = {
-            (0, 0): 0, (0, 1): 1, (0, 2): 1, (0, 3): 1, (0, 4): 0,
-            (1, 0): 1, (1, 1): "?", (1, 2): "?", (1, 3): "?", (1, 4): 1,
-            (2, 0): 1, (2, 1): "?", (2, 2): "?", (2, 3): "?", (2, 4): 1,
-            (3, 0): 1, (3, 1): "?", (3, 2): "?", (3, 3): "?", (3, 4): 1,
-            (4, 0): 0, (4, 1): 1, (4, 2): 1, (4, 3): 1, (4, 4): 0,
+        grid_6x6 = {
+            (0, 0): 0, (0, 1): 1, (0, 2): 1, (0, 3): 2, (0, 4): 1, (0, 5): 1,
+            (1, 0): 1, (1, 1): "?", (1, 2): "?", (1, 3): "?", (1, 4): "?", (1, 5): 1,
+            (2, 0): 1, (2, 1): "?", (2, 2): "?", (2, 3): "?", (2, 4): "?", (2, 5): 2,
+            (3, 0): 2, (3, 1): "?", (3, 2): "?", (3, 3): "?", (3, 4): "?", (3, 5): 1,
+            (4, 0): 1, (4, 1): "?", (4, 2): "?", (4, 3): "?", (4, 4): "?", (4, 5): 1,
+            (5, 0): 1, (5, 1): 1, (5, 2): 2, (5, 3): 1, (5, 4): 1, (5, 5): 0,
         }
-        mgrid = MinesweeperGrid(grid5x5, 5, 5)
+        mgrid = MinesweeperGrid(grid_6x6, 6, 6)
         solver = MinesweeperSolver(mgrid)
         solutions = solver.solve()
         console.clear()
@@ -29,7 +30,7 @@ def main():
         for num, solution in enumerate(solutions, start=1):
             console.print(f"Solution {num}:", style="underline bold")
             result_grid = mgrid.apply_solution(solution)
-            PrettyPrinter.print_grid(result_grid, mgrid.grid, 5, 5)
+            PrettyPrinter.print_grid(result_grid, mgrid.grid, 6, 6)
             console.print("-" * 40)
         questionary.text("Appuyez sur Entrée pour quitter...").ask()
     elif choice == "Jouer à Minesweeper":

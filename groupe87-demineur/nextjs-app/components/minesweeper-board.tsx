@@ -4,8 +4,8 @@ import type React from "react"
 
 import type { Cell } from "@/lib/types"
 import { Bomb, Flag } from "lucide-react"
+import { NUMBER_COLORS } from "@/lib/constants"
 
-// Mettre à jour l'interface pour inclure les nouvelles props
 interface MinesweeperBoardProps {
   board: Cell[][]
   onCellClick: (row: number, col: number) => void
@@ -14,20 +14,6 @@ interface MinesweeperBoardProps {
   animatingSolution?: number[][] | null
 }
 
-// Color mapping for adjacent mine numbers
-const numberColors = [
-  "", // 0 has no color
-  "text-blue-600",
-  "text-green-600",
-  "text-red-600",
-  "text-purple-800",
-  "text-yellow-800",
-  "text-teal-600",
-  "text-black",
-  "text-gray-600",
-]
-
-// Mettre à jour le composant pour utiliser les nouvelles props
 export default function MinesweeperBoard({
   board,
   onCellClick,
@@ -35,7 +21,6 @@ export default function MinesweeperBoard({
   showHint = [],
   animatingSolution = null,
 }: MinesweeperBoardProps) {
-  // Convertir les indices en chaînes pour une recherche facile
   const hintCells = new Set(showHint.map(([r, c]) => `${r},${c}`))
 
   return (
@@ -77,7 +62,7 @@ export default function MinesweeperBoard({
                     <Bomb className="h-6 w-6 text-black" />
                   ) : (
                     cell.adjacentMines > 0 && (
-                      <span className={`font-bold ${numberColors[cell.adjacentMines]}`}>{cell.adjacentMines}</span>
+                      <span className={`font-bold ${NUMBER_COLORS[cell.adjacentMines]}`}>{cell.adjacentMines}</span>
                     )
                   )
                 ) : cell.isFlagged ? (
