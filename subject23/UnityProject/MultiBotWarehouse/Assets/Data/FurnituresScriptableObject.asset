@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5488bea419dfc40a1a8a495cb3ee74, type: 3}
+  m_Name: FurnituresScriptableObject
+  m_EditorClassIdentifier: 
+  furnitures:
+  - {fileID: 7321423145260268018, guid: d5076481aac507e4a8a37c3b0eea7727, type: 3}
+  - {fileID: 830209003240761726, guid: ebcde7b85f0afbb42983365ec2774818, type: 3}
+  - {fileID: 3800496436466665405, guid: 82f624b1964c7ba4fb21eae95f185a9c, type: 3}
+  - {fileID: 8768485004339793628, guid: 23e60ffe52c59f64ab40ec6e6ce36781, type: 3}
+  - {fileID: 1554047866927877844, guid: 74ecb4ff10fc70546aa59fc2118a8502, type: 3}
+  - {fileID: 2950561190879039325, guid: f55d7df03694fd244a9b29dcc29c2175, type: 3}
+  - {fileID: 5862214619906347925, guid: fb10bf7391b6c704ea27ed75d5eee5df, type: 3}
+  - {fileID: 2088343256679243690, guid: 29d2ff71ee4088643b56e70ff038b92f, type: 3}
+  - {fileID: 6879242674631676303, guid: 9f9cd54077faf65438d05b189cdde7f5, type: 3}
+  - {fileID: 6701537745073358240, guid: 2ba5ac2de7ff0764e8874d18fcb4484c, type: 3}
+  - {fileID: 5475051098011276006, guid: a457d02d5bf10c9459386d5931ca3a94, type: 3}
+  - {fileID: 6801617912666992229, guid: 528a0e588f6fa5447928329240509219, type: 3}
+  - {fileID: 3992247911085159402, guid: 9f5e01d181b4aca42913e46cd6c8023d, type: 3}
+  - {fileID: 917278889609147279, guid: 7ffe462c97c4b684991a6f9472318357, type: 3}
+  - {fileID: 8225997399151032839, guid: a47bc71942f460a47ab5fdebb4abd678, type: 3}
+  - {fileID: 2513341517135006344, guid: d586cdda16abbf74e84b1e76b588d8bf, type: 3}
+  - {fileID: 4237530767371831047, guid: 4c4b2b0935db72a45a61b3a6e86d95bf, type: 3}
+  - {fileID: 5236796929895147717, guid: 9212441ed0520ab47817284a41f94845, type: 3}
+  - {fileID: 873254747532052552, guid: ff8bf27806498b14db60a3c20a21eec2, type: 3}
+  - {fileID: 6848563262574193425, guid: 70f2476d20751ab40955cefa08b6f978, type: 3}
+  - {fileID: 7608240248841205652, guid: d74f3a8534dcedd46838d03042f5cf27, type: 3}
+  - {fileID: 8775740971403266423, guid: c12cbdd8c7f58cc4e82747b66b152ca9, type: 3}
+  - {fileID: 6557717566896455631, guid: eeaad410de59e8c408e89f8f1260dece, type: 3}
+  - {fileID: 1355281140056533860, guid: a9b3dec6c36033744a62441b6a92cd76, type: 3}
+  - {fileID: 6075769524634383316, guid: 2343b3a108edf9a49b06659f0928a030, type: 3}
+  - {fileID: 3400182943182319669, guid: 9ee87d91e053366428e82a8869a714cc, type: 3}
+  names:
+  - Air Hockey
+  - Bathroom Bin
+  - Bed
+  - Office Bin
+  - Camera
+  - Large Closet
+  - Medium Closet
+  - Coffee Machine
+  - Coffee Table
+  - Dresser
+  - Fridge
+  - Kitchen Chair
+  - Kitchen Sink
+  - Kitchen Table
+  - Table Lamp
+  - Lamp
+  - Lounge Chair
+  - Microwave Oven
+  - Piano
+  - Office Table
+  - Cat Scratching Post
+  - Sofa
+  - Toy Car
+  - Chalk Board
+  - Washing Machine

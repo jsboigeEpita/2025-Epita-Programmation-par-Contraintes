@@ -1,0 +1,9 @@
+Step by step :
+1. There are 5 nurses for a period of 7 days
+2. 3
+3. 2
+4. Helene wants the last day of the first week off, janna wants the first day off while Marc wants the third day off
+5. Marc prefers to work the night shift of the second day and Arthur wants to work on the morning shift the first day, Helene wants to work on the evening shift on fourth day
+
+
+One shot prompt: i have 7 days to plan. 5 nurses, 2 of them are senior. And the maximum number of consecutive work days is six divided by two. As for the preferred day offs Helene who's a senior nurse wants the last day of the first week off and Janna wants the fourth day off, the rest of the nurses have no preferrences for day offs. And finally for the requested shifts, i  have Marc who prefers to work the night shift of the second day and Anna who wants to work on the morning shift the first day, the rest of the nurses have no preferences for shifts.

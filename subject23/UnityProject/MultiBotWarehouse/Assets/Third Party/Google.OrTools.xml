@@ -1,0 +1,2837 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Google.OrTools</name>
+    </assembly>
+    <members>
+        <member name="T:Google.OrTools.Algorithms.Int64Vector.Int64VectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Algorithms.Int64VectorVector.Int64VectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Algorithms.IntVector.IntVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Algorithms.IntVectorVector.IntVectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.DoubleVector.DoubleVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.Int64Vector.Int64VectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.Int64VectorVector.Int64VectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.IntVector.IntVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.IntVectorVector.IntVectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.MPConstraintVector.MPConstraintVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.LinearSolver.MPVariableVector.MPVariableVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.DecisionBuilderVector.DecisionBuilderVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.Int64Vector.Int64VectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.Int64VectorVector.Int64VectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.IntervalVarVector.IntervalVarVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.IntVarVector.IntVarVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.IntVector.IntVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.IntVectorVector.IntVectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.LocalSearchFilterVector.LocalSearchFilterVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.LocalSearchOperatorVector.LocalSearchOperatorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingEnumsReflection">
+            <summary>Holder for reflection information generated from ortools/constraint_solver/routing_enums.proto</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingEnumsReflection.Descriptor">
+            <summary>File descriptor for ortools/constraint_solver/routing_enums.proto</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.FirstSolutionStrategy">
+            <summary>
+            First solution strategies, used as starting point of local search.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types">
+            <summary>Container for nested types declared in the FirstSolutionStrategy message type.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.Unset">
+            <summary>
+            See the homonymous value in LocalSearchMetaheuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.Automatic">
+            <summary>
+            Lets the solver detect which strategy to use according to the model being
+            solved.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.PathCheapestArc">
+            <summary>
+            --- Path addition heuristics ---
+            Starting from a route "start" node, connect it to the node which produces
+            the cheapest route segment, then extend the route by iterating on the
+            last node added to the route.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.PathMostConstrainedArc">
+            <summary>
+            Same as PATH_CHEAPEST_ARC, but arcs are evaluated with a comparison-based
+            selector which will favor the most constrained arc first. To assign a
+            selector to the routing model, see
+            RoutingModel::ArcIsMoreConstrainedThanArc() in routing.h for details.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.EvaluatorStrategy">
+            <summary>
+            Same as PATH_CHEAPEST_ARC, except that arc costs are evaluated using the
+            function passed to RoutingModel::SetFirstSolutionEvaluator()
+            (cf. routing.h).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.Savings">
+            <summary>
+            Savings algorithm (Clarke &amp; Wright).
+            Reference: Clarke, G. &amp; Wright, J.W.:
+            "Scheduling of Vehicles from a Central Depot to a Number of Delivery
+            Points", Operations Research, Vol. 12, 1964, pp. 568-581
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.Sweep">
+            <summary>
+            Sweep algorithm (Wren &amp; Holliday).
+            Reference: Anthony Wren &amp; Alan Holliday: Computer Scheduling of Vehicles
+            from One or More Depots to a Number of Delivery Points Operational
+            Research Quarterly (1970-1977),
+            Vol. 23, No. 3 (Sep., 1972), pp. 333-344
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.Christofides">
+            <summary>
+            Christofides algorithm (actually a variant of the Christofides algorithm
+            using a maximal matching instead of a maximum matching, which does
+            not guarantee the 3/2 factor of the approximation on a metric travelling
+            salesman). Works on generic vehicle routing models by extending a route
+            until no nodes can be inserted on it.
+            Reference: Nicos Christofides, Worst-case analysis of a new heuristic for
+            the travelling salesman problem, Report 388, Graduate School of
+            Industrial Administration, CMU, 1976.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.AllUnperformed">
+            <summary>
+            --- Path insertion heuristics ---
+            Make all nodes inactive. Only finds a solution if nodes are optional (are
+            element of a disjunction constraint with a finite penalty cost).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.BestInsertion">
+            <summary>
+            Iteratively build a solution by inserting the cheapest node at its
+            cheapest position; the cost of insertion is based on the global cost
+            function of the routing model. As of 2/2012, only works on models with
+            optional nodes (with finite penalty costs).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.ParallelCheapestInsertion">
+            <summary>
+            Iteratively build a solution by inserting the cheapest node at its
+            cheapest position; the cost of insertion is based on the arc cost
+            function. Is faster than BEST_INSERTION.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.SequentialCheapestInsertion">
+            <summary>
+            Iteratively build a solution by constructing routes sequentially, for
+            each route inserting the cheapest node at its cheapest position until the
+            route is completed; the cost of insertion is based on the arc cost
+            function. Is faster than PARALLEL_CHEAPEST_INSERTION.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.LocalCheapestInsertion">
+            <summary>
+            Iteratively build a solution by inserting each node at its cheapest
+            position; the cost of insertion is based on the arc cost function.
+            Differs from PARALLEL_CHEAPEST_INSERTION by the node selected for
+            insertion; here nodes are considered in decreasing order of distance to
+            the start/ends of the routes, i.e. farthest nodes are inserted first.
+            Is faster than SEQUENTIAL_CHEAPEST_INSERTION.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.GlobalCheapestArc">
+            <summary>
+            --- Variable-based heuristics ---
+            Iteratively connect two nodes which produce the cheapest route segment.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.LocalCheapestArc">
+            <summary>
+            Select the first node with an unbound successor and connect it to the
+            node which produces the cheapest route segment.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.FirstSolutionStrategy.Types.Value.FirstUnboundMinValue">
+            <summary>
+            Select the first node with an unbound successor and connect it to the
+            first available node.
+            This is equivalent to the CHOOSE_FIRST_UNBOUND strategy combined with
+            ASSIGN_MIN_VALUE (cf. constraint_solver.h).
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic">
+            <summary>
+            Local search metaheuristics used to guide the search. Apart from greedy
+            descent, they will try to escape local minima.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types">
+            <summary>Container for nested types declared in the LocalSearchMetaheuristic message type.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.Unset">
+            <summary>
+            Means "not set". If the solver sees that, it'll behave like for
+            AUTOMATIC. But this value won't override others upon a proto MergeFrom(),
+            whereas "AUTOMATIC" will.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.Automatic">
+            <summary>
+            Lets the solver select the metaheuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.GreedyDescent">
+            <summary>
+            Accepts improving (cost-reducing) local search neighbors until a local
+            minimum is reached.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.GuidedLocalSearch">
+            <summary>
+            Uses guided local search to escape local minima
+            (cf. http://en.wikipedia.org/wiki/Guided_Local_Search); this is generally
+            the most efficient metaheuristic for vehicle routing.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.SimulatedAnnealing">
+            <summary>
+            Uses simulated annealing to escape local minima
+            (cf. http://en.wikipedia.org/wiki/Simulated_annealing).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.TabuSearch">
+            <summary>
+            Uses tabu search to escape local minima
+            (cf. http://en.wikipedia.org/wiki/Tabu_search).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.LocalSearchMetaheuristic.Types.Value.GenericTabuSearch">
+            <summary>
+            Uses tabu search on a list of variables to escape local minima. The list
+            of variables to use must be provided via the SetTabuVarsCallback
+            callback.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingParametersReflection">
+            <summary>Holder for reflection information generated from ortools/constraint_solver/routing_parameters.proto</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingParametersReflection.Descriptor">
+            <summary>File descriptor for ortools/constraint_solver/routing_parameters.proto</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingSearchParameters">
+             <summary>
+             Parameters defining the search used to solve vehicle routing problems.
+            
+             If a parameter is unset (or, equivalently, set to its default value),
+             then the routing library will pick its preferred value for that parameter
+             automatically: this should be the case for most parameters.
+             To see those "default" parameters, call GetDefaultRoutingSearchParameters().
+             Next ID: 47
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.FirstSolutionStrategyFieldNumber">
+            <summary>Field number for the "first_solution_strategy" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.FirstSolutionStrategy">
+            <summary>
+            First solution strategies, used as starting point of local search.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseUnfilteredFirstSolutionStrategyFieldNumber">
+            <summary>Field number for the "use_unfiltered_first_solution_strategy" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseUnfilteredFirstSolutionStrategy">
+             <summary>
+             --- Advanced first solutions strategy settings ---
+             Don't touch these unless you know what you are doing.
+            
+             Use filtered version of first solution strategy if available.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsNeighborsRatioFieldNumber">
+            <summary>Field number for the "savings_neighbors_ratio" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsNeighborsRatio">
+            <summary>
+            Parameters specific to the Savings first solution heuristic.
+            Ratio (in ]0, 1]) of neighbors to consider for each node when constructing
+            the savings. If unspecified, its value is considered to be 1.0.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsMaxMemoryUsageBytesFieldNumber">
+            <summary>Field number for the "savings_max_memory_usage_bytes" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsMaxMemoryUsageBytes">
+            <summary>
+            The number of neighbors considered for each node in the Savings heuristic
+            is chosen so that the space used to store the savings doesn't exceed
+            savings_max_memory_usage_bytes, which must be in ]0, 1e10].
+            NOTE: If both savings_neighbors_ratio and savings_max_memory_usage_bytes
+            are specified, the number of neighbors considered for each node will be the
+            minimum of the two numbers determined by these parameters.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsAddReverseArcsFieldNumber">
+            <summary>Field number for the "savings_add_reverse_arcs" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsAddReverseArcs">
+            <summary>
+            Add savings related to reverse arcs when finding the nearest neighbors
+            of the nodes.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsArcCoefficientFieldNumber">
+            <summary>Field number for the "savings_arc_coefficient" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsArcCoefficient">
+            <summary>
+            Coefficient of the cost of the arc for which the saving value is being
+            computed:
+            Saving(a-->b) = Cost(a-->end) + Cost(start-->b)
+                            - savings_arc_coefficient * Cost(a-->b)
+            This parameter must be greater than 0, and its default value is 1.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsParallelRoutesFieldNumber">
+            <summary>Field number for the "savings_parallel_routes" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SavingsParallelRoutes">
+            <summary>
+            When true, the routes are built in parallel, sequentially otherwise.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFarthestSeedsRatioFieldNumber">
+            <summary>Field number for the "cheapest_insertion_farthest_seeds_ratio" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFarthestSeedsRatio">
+            <summary>
+            Ratio (between 0 and 1) of available vehicles in the model on which
+            farthest nodes of the model are inserted as seeds in the
+            GlobalCheapestInsertion first solution heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFirstSolutionNeighborsRatioFieldNumber">
+            <summary>Field number for the "cheapest_insertion_first_solution_neighbors_ratio" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFirstSolutionNeighborsRatio">
+             <summary>
+             Ratio (in ]0, 1]) of closest non start/end nodes to consider as neighbors
+             for each node when creating new insertions in the parallel/sequential
+             cheapest insertion heuristic.
+             If not overridden, its default value is 1, meaning all neighbors will be
+             considered.
+             The neighborhood ratio is coupled with the corresponding min_neighbors
+             integer, indicating the minimum number of neighbors to consider for each
+             node:
+             num_closest_neighbors =
+                    max(min_neighbors, neighbors_ratio * NUM_NON_START_END_NODES)
+             This minimum number of neighbors must be greater or equal to 1, its
+             default value.
+            
+             Neighbors ratio and minimum number of neighbors for the first solution
+             heuristic.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFirstSolutionMinNeighborsFieldNumber">
+            <summary>Field number for the "cheapest_insertion_first_solution_min_neighbors" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionLsOperatorNeighborsRatioFieldNumber">
+            <summary>Field number for the "cheapest_insertion_ls_operator_neighbors_ratio" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionLsOperatorNeighborsRatio">
+            <summary>
+            Neighbors ratio and minimum number of neighbors for the heuristic when used
+            in a local search operator (see
+            local_search_operators.use_global_cheapest_insertion_path_lns and
+            local_search_operators.use_global_cheapest_insertion_chain_lns below).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionLsOperatorMinNeighborsFieldNumber">
+            <summary>Field number for the "cheapest_insertion_ls_operator_min_neighbors" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFirstSolutionUseNeighborsRatioForInitializationFieldNumber">
+            <summary>Field number for the "cheapest_insertion_first_solution_use_neighbors_ratio_for_initialization" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionFirstSolutionUseNeighborsRatioForInitialization">
+            <summary>
+            Whether or not to only consider closest neighbors when initializing the
+            assignment for the first solution.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionAddUnperformedEntriesFieldNumber">
+            <summary>Field number for the "cheapest_insertion_add_unperformed_entries" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.CheapestInsertionAddUnperformedEntries">
+            <summary>
+            Whether or not to consider entries making the nodes/pairs unperformed in
+            the GlobalCheapestInsertion heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.ChristofidesUseMinimumMatchingFieldNumber">
+            <summary>Field number for the "christofides_use_minimum_matching" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.ChristofidesUseMinimumMatching">
+            <summary>
+            If true use minimum matching instead of minimal matching in the
+            Christofides algorithm.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LocalSearchOperatorsFieldNumber">
+            <summary>Field number for the "local_search_operators" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseMultiArmedBanditConcatenateOperatorsFieldNumber">
+            <summary>Field number for the "use_multi_armed_bandit_concatenate_operators" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseMultiArmedBanditConcatenateOperators">
+            <summary>
+            If true, the solver will use multi-armed bandit concatenate operators. It
+            dynamically chooses the next neighbor operator in order to get the best
+            objective improvement.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.MultiArmedBanditCompoundOperatorMemoryCoefficientFieldNumber">
+            <summary>Field number for the "multi_armed_bandit_compound_operator_memory_coefficient" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.MultiArmedBanditCompoundOperatorMemoryCoefficient">
+            <summary>
+            Memory coefficient related to the multi-armed bandit compound operator.
+            Sets how much the objective improvement of previous accepted neighbors
+            influence the current average improvement.
+            This parameter should be between 0 and 1.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.MultiArmedBanditCompoundOperatorExplorationCoefficientFieldNumber">
+            <summary>Field number for the "multi_armed_bandit_compound_operator_exploration_coefficient" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.MultiArmedBanditCompoundOperatorExplorationCoefficient">
+            <summary>
+            Positive parameter defining the exploration coefficient of the multi-armed
+            bandit compound operator. Sets how often we explore rarely used and
+            unsuccessful in the past operators
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.RelocateExpensiveChainNumArcsToConsiderFieldNumber">
+            <summary>Field number for the "relocate_expensive_chain_num_arcs_to_consider" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.RelocateExpensiveChainNumArcsToConsider">
+            <summary>
+            Number of expensive arcs to consider cutting in the RelocateExpensiveChain
+            neighborhood operator (see
+            LocalSearchNeighborhoodOperators.use_relocate_expensive_chain()).
+            This parameter must be greater than 2.
+            NOTE(user): The number of neighbors generated by the operator for
+            relocate_expensive_chain_num_arcs_to_consider = K is around
+            K*(K-1)/2 * number_of_routes * number_of_nodes.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.HeuristicExpensiveChainLnsNumArcsToConsiderFieldNumber">
+            <summary>Field number for the "heuristic_expensive_chain_lns_num_arcs_to_consider" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.HeuristicExpensiveChainLnsNumArcsToConsider">
+            <summary>
+            Number of expensive arcs to consider cutting in the
+            FilteredHeuristicExpensiveChainLNSOperator operator.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.HeuristicCloseNodesLnsNumNodesFieldNumber">
+            <summary>Field number for the "heuristic_close_nodes_lns_num_nodes" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.HeuristicCloseNodesLnsNumNodes">
+            <summary>
+            Number of closest nodes to consider for each node during the destruction
+            phase of the FilteredHeuristicCloseNodesLNSOperator.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LocalSearchMetaheuristicFieldNumber">
+            <summary>Field number for the "local_search_metaheuristic" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LocalSearchMetaheuristic">
+            <summary>
+            Local search metaheuristics used to guide the search.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.GuidedLocalSearchLambdaCoefficientFieldNumber">
+            <summary>Field number for the "guided_local_search_lambda_coefficient" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.GuidedLocalSearchLambdaCoefficient">
+            <summary>
+            These are advanced settings which should not be modified unless you know
+            what you are doing.
+            Lambda coefficient used to penalize arc costs when GUIDED_LOCAL_SEARCH is
+            used. Must be positive.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseDepthFirstSearchFieldNumber">
+            <summary>Field number for the "use_depth_first_search" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseDepthFirstSearch">
+             <summary>
+             --- Search control ---
+            
+             If true, the solver should use depth-first search rather than local search
+             to solve the problem.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseCpFieldNumber">
+            <summary>Field number for the "use_cp" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseCp">
+            <summary>
+            If true, use the CP solver to find a solution. Either local or depth-first
+            search will be used depending on the value of use_depth_first_search. Will
+            be run before the CP-SAT solver (cf. use_cp_sat).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseCpSatFieldNumber">
+            <summary>Field number for the "use_cp_sat" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseCpSat">
+            <summary>
+            If true, use the CP-SAT solver to find a solution. If use_cp is also true,
+            the CP-SAT solver will be run after the CP solver if there is time
+            remaining and will use the CP solution as a hint for the CP-SAT search.
+            As of 5/2019, only TSP models can be solved.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.ContinuousSchedulingSolverFieldNumber">
+            <summary>Field number for the "continuous_scheduling_solver" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.MixedIntegerSchedulingSolverFieldNumber">
+            <summary>Field number for the "mixed_integer_scheduling_solver" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.OptimizationStepFieldNumber">
+            <summary>Field number for the "optimization_step" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.OptimizationStep">
+            <summary>
+            Minimum step by which the solution must be improved in local search. 0
+            means "unspecified". If this value is fractional, it will get rounded to
+            the nearest integer.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.NumberOfSolutionsToCollectFieldNumber">
+            <summary>Field number for the "number_of_solutions_to_collect" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.NumberOfSolutionsToCollect">
+            <summary>
+            Number of solutions to collect during the search. Corresponds to the best
+            solutions found during the search. 0 means "unspecified".
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SolutionLimitFieldNumber">
+            <summary>Field number for the "solution_limit" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.SolutionLimit">
+            <summary>
+            -- Search limits --
+            Limit to the number of solutions generated during the search. 0 means
+            "unspecified".
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.TimeLimitFieldNumber">
+            <summary>Field number for the "time_limit" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.TimeLimit">
+            <summary>
+            Limit to the time spent in the search.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LnsTimeLimitFieldNumber">
+            <summary>Field number for the "lns_time_limit" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LnsTimeLimit">
+            <summary>
+            Limit to the time spent in the completion search for each local search
+            neighbor.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.ImprovementLimitParametersFieldNumber">
+            <summary>Field number for the "improvement_limit_parameters" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.ImprovementLimitParameters">
+            <summary>
+            The improvement search limit is added to the solver if the following
+            parameters are set.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseFullPropagationFieldNumber">
+            <summary>Field number for the "use_full_propagation" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.UseFullPropagation">
+             <summary>
+             --- Propagation control ---
+             These are advanced settings which should not be modified unless you know
+             what you are doing.
+            
+             Use constraints with full propagation in routing model (instead of 'light'
+             propagation only). Full propagation is only necessary when using
+             depth-first search or for models which require strong propagation to
+             finalize the value of secondary variables.
+             Changing this setting to true will slow down the search in most cases and
+             increase memory consumption in all cases.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogSearchFieldNumber">
+            <summary>Field number for the "log_search" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogSearch">
+             <summary>
+             --- Miscellaneous ---
+             Some of these are advanced settings which should not be modified unless you
+             know what you are doing.
+            
+             Activates search logging. For each solution found during the search, the
+             following will be displayed: its objective value, the maximum objective
+             value since the beginning of the search, the elapsed time since the
+             beginning of the search, the number of branches explored in the search
+             tree, the number of failures in the search tree, the depth of the search
+             tree, the number of local search neighbors explored, the number of local
+             search neighbors filtered by local search filters, the number of local
+             search neighbors accepted, the total memory used and the percentage of the
+             search done.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogCostScalingFactorFieldNumber">
+            <summary>Field number for the "log_cost_scaling_factor" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogCostScalingFactor">
+            <summary>
+            In logs, cost values will be scaled and offset by the given values in the
+            following way: log_cost_scaling_factor * (cost + log_cost_offset)
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogCostOffsetFieldNumber">
+            <summary>Field number for the "log_cost_offset" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogTagFieldNumber">
+            <summary>Field number for the "log_tag" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.LogTag">
+            <summary>
+            In logs, this tag will be appended to each line corresponding to a new
+            solution. Useful to sort out logs when several solves are run in parallel.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types">
+            <summary>Container for nested types declared in the RoutingSearchParameters message type.</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.SchedulingSolver">
+            <summary>
+            Underlying solver to use in dimension scheduling, respectively for
+            continuous and mixed models.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators">
+            <summary>
+            Local search neighborhood operators used to build a solutions neighborhood.
+            Next ID: 34
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateFieldNumber">
+            <summary>Field number for the "use_relocate" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocate">
+            <summary>
+            --- Inter-route operators ---
+            Operator which moves a single node to another position.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 -> 5
+            (where (1, 5) are first and last nodes of the path and can therefore not
+            be moved):
+              1 ->  3  -> [2] ->  4  -> 5
+              1 ->  3  ->  4  -> [2] -> 5
+              1 ->  2  ->  4  -> [3] -> 5
+              1 -> [4] ->  2  ->  3  -> 5
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocatePairFieldNumber">
+            <summary>Field number for the "use_relocate_pair" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocatePair">
+            <summary>
+            Operator which moves a pair of pickup and delivery nodes to another
+            position where the first node of the pair must be before the second node
+            on the same path. Compared to the light_relocate_pair operator, tries all
+            possible positions of insertion of a pair (not only after another pair).
+            Possible neighbors for the path 1 -> A -> B -> 2 -> 3 (where (1, 3) are
+            first and last nodes of the path and can therefore not be moved, and
+            (A, B) is a pair of nodes):
+              1 -> [A] ->  2  -> [B] -> 3
+              1 ->  2  -> [A] -> [B] -> 3
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLightRelocatePairFieldNumber">
+            <summary>Field number for the "use_light_relocate_pair" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLightRelocatePair">
+            <summary>
+            Operator which moves a pair of pickup and delivery nodes after another
+            pair.
+            Possible neighbors for paths 1 -> A -> B -> 2, 3 -> C -> D -> 4 (where
+            (1, 2) and (3, 4) are first and last nodes of paths and can therefore not
+            be moved, and (A, B) and (C, D) are pair of nodes):
+              1 -> 2, 3 -> C -> [A] -> D -> [B] -> 4
+              1 -> A -> [C] -> B -> [D] -> 2, 3 -> 4
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateNeighborsFieldNumber">
+            <summary>Field number for the "use_relocate_neighbors" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateNeighbors">
+            <summary>
+            Relocate neighborhood which moves chains of neighbors.
+            The operator starts by relocating a node n after a node m, then continues
+            moving nodes which were after n as long as the "cost" added is less than
+            the "cost" of the arc (m, n). If the new chain doesn't respect the domain
+            of next variables, it will try reordering the nodes until it finds a
+            valid path.
+            Possible neighbors for path 1 -> A -> B -> C -> D -> E -> 2 (where (1, 2)
+            are first and last nodes of the path and can therefore not be moved, A
+            must be performed before B, and A, D and E are located at the same
+            place):
+            1 -> A -> C -> [B] -> D -> E -> 2
+            1 -> A -> C -> D -> [B] -> E -> 2
+            1 -> A -> C -> D -> E -> [B] -> 2
+            1 -> A -> B -> D -> [C] -> E -> 2
+            1 -> A -> B -> D -> E -> [C] -> 2
+            1 -> A -> [D] -> [E] -> B -> C -> 2
+            1 -> A -> B -> [D] -> [E] ->  C -> 2
+            1 -> A -> [E] -> B -> C -> D -> 2
+            1 -> A -> B -> [E] -> C -> D -> 2
+            1 -> A -> B -> C -> [E] -> D -> 2
+            This operator is extremelly useful to move chains of nodes which are
+            located at the same place (for instance nodes part of a same stop).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateSubtripFieldNumber">
+            <summary>Field number for the "use_relocate_subtrip" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateSubtrip">
+             <summary>
+             Relocate neighborhood that moves subpaths all pickup and delivery
+             pairs have both pickup and delivery inside the subpath or both outside
+             the subpath. For instance, for given paths:
+             0 -> A -> B -> A' -> B' -> 5 -> 6 -> 8
+             7 -> 9
+             Pairs (A,A') and (B,B') are interleaved, so the expected neighbors are:
+             0 -> 5 -> A -> B -> A' -> B' -> 6 -> 8
+             7 -> 9
+            
+             0 -> 5 -> 6 -> A -> B -> A' -> B' -> 8
+             7 -> 9
+            
+             0 -> 5 -> 6 -> 8
+             7 -> A -> B -> A' -> B' -> 9
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExchangeFieldNumber">
+            <summary>Field number for the "use_exchange" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExchange">
+            <summary>
+            Operator which exchanges the positions of two nodes.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 -> 5
+            (where (1, 5) are first and last nodes of the path and can therefore not
+            be moved):
+              1 -> [3] -> [2] ->  4  -> 5
+              1 -> [4] ->  3  -> [2] -> 5
+              1 ->  2  -> [4] -> [3] -> 5
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExchangePairFieldNumber">
+            <summary>Field number for the "use_exchange_pair" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExchangePair">
+            <summary>
+            Operator which exchanges the positions of two pair of nodes. Pairs
+            correspond to the pickup and delivery pairs defined in the routing model.
+            Possible neighbor for the paths
+            1 -> A -> B -> 2 -> 3 and 4 -> C -> D -> 5
+            (where (1, 3) and (4, 5) are first and last nodes of the paths and can
+            therefore not be moved, and (A, B) and (C,D) are pairs of nodes):
+              1 -> [C] ->  [D] -> 2 -> 3, 4 -> [A] -> [B] -> 5
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExchangeSubtripFieldNumber">
+            <summary>Field number for the "use_exchange_subtrip" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExchangeSubtrip">
+            <summary>
+            Operator which exchanges subtrips associated to two pairs of nodes,
+            see use_relocate_subtrip for a definition of subtrips.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseCrossFieldNumber">
+            <summary>Field number for the "use_cross" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseCross">
+            <summary>
+            Operator which cross exchanges the starting chains of 2 paths, including
+            exchanging the whole paths.
+            First and last nodes are not moved.
+            Possible neighbors for the paths 1 -> 2 -> 3 -> 4 -> 5 and 6 -> 7 -> 8
+            (where (1, 5) and (6, 8) are first and last nodes of the paths and can
+            therefore not be moved):
+              1 -> [7] -> 3 -> 4 -> 5  6 -> [2] -> 8
+              1 -> [7] -> 4 -> 5       6 -> [2 -> 3] -> 8
+              1 -> [7] -> 5            6 -> [2 -> 3 -> 4] -> 8
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseCrossExchangeFieldNumber">
+            <summary>Field number for the "use_cross_exchange" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseCrossExchange">
+            <summary>
+            Not implemented yet. TODO(b/68128619): Implement.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateExpensiveChainFieldNumber">
+            <summary>Field number for the "use_relocate_expensive_chain" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateExpensiveChain">
+            <summary>
+            Operator which detects the relocate_expensive_chain_num_arcs_to_consider
+            most expensive arcs on a path, and moves the chain resulting from cutting
+            pairs of arcs among these to another position.
+            Possible neighbors for paths 1 -> 2 (empty) and
+            3 -> A ------> B --> C -----> D -> 4 (where A -> B and C -> D are the 2
+            most expensive arcs, and the chain resulting from breaking them is
+            B -> C):
+              1 -> [B -> C] -> 2     3 -> A -> D -> 4
+              1 -> 2      3 -> [B -> C] -> A -> D -> 4
+              1 -> 2      3 -> A -> D -> [B -> C] -> 4
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseTwoOptFieldNumber">
+            <summary>Field number for the "use_two_opt" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseTwoOpt">
+            <summary>
+            --- Intra-route operators ---
+            Operator which reverves a sub-chain of a path. It is called TwoOpt
+            because it breaks two arcs on the path; resulting paths are called
+            two-optimal.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 -> 5
+            (where (1, 5) are first and last nodes of the path and can therefore not
+            be moved):
+              1 -> [3 -> 2] -> 4  -> 5
+              1 -> [4 -> 3  -> 2] -> 5
+              1 ->  2 -> [4 -> 3] -> 5
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseOrOptFieldNumber">
+            <summary>Field number for the "use_or_opt" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseOrOpt">
+            <summary>
+            Operator which moves sub-chains of a path of length 1, 2 and 3 to another
+            position in the same path.
+            When the length of the sub-chain is 1, the operator simply moves a node
+            to another position.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 -> 5, for a sub-chain
+            length of 2 (where (1, 5) are first and last nodes of the path and can
+            therefore not be moved):
+              1 ->  4 -> [2 -> 3] -> 5
+              1 -> [3 -> 4] -> 2  -> 5
+            The OR_OPT operator is a limited version of 3-Opt (breaks 3 arcs on a
+            path).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLinKernighanFieldNumber">
+            <summary>Field number for the "use_lin_kernighan" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLinKernighan">
+            <summary>
+            Lin-Kernighan operator.
+            While the accumulated local gain is positive, performs a 2-OPT or a 3-OPT
+            move followed by a series of 2-OPT moves. Returns a neighbor for which
+            the global gain is positive.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseTspOptFieldNumber">
+            <summary>Field number for the "use_tsp_opt" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseTspOpt">
+            <summary>
+            Sliding TSP operator.
+            Uses an exact dynamic programming algorithm to solve the TSP
+            corresponding to path sub-chains.
+            For a subchain 1 -> 2 -> 3 -> 4 -> 5 -> 6, solves the TSP on
+            nodes A, 2, 3, 4, 5, where A is a merger of nodes 1 and 6 such that
+            cost(A,i) = cost(1,i) and cost(i,A) = cost(i,6).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseMakeActiveFieldNumber">
+            <summary>Field number for the "use_make_active" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseMakeActive">
+            <summary>
+            --- Operators on inactive nodes ---
+            Operator which inserts an inactive node into a path.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 with 5 inactive
+            (where 1 and 4 are first and last nodes of the path) are:
+              1 -> [5] ->  2  ->  3  -> 4
+              1 ->  2  -> [5] ->  3  -> 4
+              1 ->  2  ->  3  -> [5] -> 4
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateAndMakeActiveFieldNumber">
+            <summary>Field number for the "use_relocate_and_make_active" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocateAndMakeActive">
+            <summary>
+            Operator which relocates a node while making an inactive one active.
+            As of 3/2017, the operator is limited to two kinds of moves:
+            - Relocating a node and replacing it by an inactive node.
+              Possible neighbor for path 1 -> 5, 2 -> 3 -> 6 and 4 inactive
+              (where 1,2 and 5,6 are first and last nodes of paths) is:
+              1 -> 3 -> 5, 2 -> 4 -> 6.
+            - Relocating a node and inserting an inactive node next to it.
+              Possible neighbor for path 1 -> 5, 2 -> 3 -> 6 and 4 inactive
+              (where 1,2 and 5,6 are first and last nodes of paths) is:
+              1 -> 4 -> 3 -> 5, 2 -> 6.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseMakeInactiveFieldNumber">
+            <summary>Field number for the "use_make_inactive" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseMakeInactive">
+            <summary>
+            Operator which makes path nodes inactive.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 (where 1 and 4 are first
+            and last nodes of the path) are:
+              1 -> 3 -> 4 with 2 inactive
+              1 -> 2 -> 4 with 3 inactive
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseMakeChainInactiveFieldNumber">
+            <summary>Field number for the "use_make_chain_inactive" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseMakeChainInactive">
+            <summary>
+            Operator which makes a "chain" of path nodes inactive.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 (where 1 and 4 are first
+            and last nodes of the path) are:
+              1 -> 3 -> 4 with 2 inactive
+              1 -> 2 -> 4 with 3 inactive
+              1 -> 4 with 2 and 3 inactive
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseSwapActiveFieldNumber">
+            <summary>Field number for the "use_swap_active" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseSwapActive">
+            <summary>
+            Operator which replaces an active node by an inactive one.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 with 5 inactive
+            (where 1 and 4 are first and last nodes of the path) are:
+              1 -> [5] ->  3  -> 4 with 2 inactive
+              1 ->  2  -> [5] -> 4 with 3 inactive
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExtendedSwapActiveFieldNumber">
+            <summary>Field number for the "use_extended_swap_active" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseExtendedSwapActive">
+            <summary>
+            Operator which makes an inactive node active and an active one inactive.
+            It is similar to SwapActiveOperator excepts that it tries to insert the
+            inactive node in all possible positions instead of just the position of
+            the node made inactive.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 with 5 inactive
+            (where 1 and 4 are first and last nodes of the path) are:
+              1 -> [5] ->  3  -> 4 with 2 inactive
+              1 ->  3  -> [5] -> 4 with 2 inactive
+              1 -> [5] ->  2  -> 4 with 3 inactive
+              1 ->  2  -> [5] -> 4 with 3 inactive
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseNodePairSwapActiveFieldNumber">
+            <summary>Field number for the "use_node_pair_swap_active" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseNodePairSwapActive">
+            <summary>
+            Operator which makes an inactive node active and an active pair of nodes
+            inactive OR makes an inactive pair of nodes active and an active node
+            inactive.
+            Possible neighbors for the path 1 -> 2 -> 3 -> 4 with 5 inactive
+            (where 1 and 4 are first and last nodes of the path and (2,3) is a pair
+            of nodes) are:
+              1 -> [5] -> 4 with (2,3) inactive
+            Possible neighbors for the path 1 -> 2 -> 3 with (4,5) inactive
+            (where 1 and 3 are first and last nodes of the path and (4,5) is a pair
+            of nodes) are:
+              1 -> [4] -> [5] -> 3 with 2 inactive
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UsePathLnsFieldNumber">
+            <summary>Field number for the "use_path_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UsePathLns">
+            <summary>
+            --- Large neighborhood search operators ---
+            Operator which relaxes two sub-chains of three consecutive arcs each.
+            Each sub-chain is defined by a start node and the next three arcs. Those
+            six arcs are relaxed to build a new neighbor.
+            PATH_LNS explores all possible pairs of starting nodes and so defines
+            n^2 neighbors, n being the number of nodes.
+            Note that the two sub-chains can be part of the same path; they even may
+            overlap.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseFullPathLnsFieldNumber">
+            <summary>Field number for the "use_full_path_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseFullPathLns">
+            <summary>
+            Operator which relaxes one entire path and all unactive nodes.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseTspLnsFieldNumber">
+            <summary>Field number for the "use_tsp_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseTspLns">
+            <summary>
+            TSP-base LNS.
+            Randomly merges consecutive nodes until n "meta"-nodes remain and solves
+            the corresponding TSP.
+            This defines an "unlimited" neighborhood which must be stopped by search
+            limits. To force diversification, the operator iteratively forces each
+            node to serve as base of a meta-node.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseInactiveLnsFieldNumber">
+            <summary>Field number for the "use_inactive_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseInactiveLns">
+            <summary>
+            Operator which relaxes all inactive nodes and one sub-chain of six
+            consecutive arcs. That way the path can be improved by inserting inactive
+            nodes or swaping arcs.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseGlobalCheapestInsertionPathLnsFieldNumber">
+            <summary>Field number for the "use_global_cheapest_insertion_path_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseGlobalCheapestInsertionPathLns">
+            <summary>
+            --- LNS-like large neighborhood search operators using heuristics ---
+            Operator which makes all nodes on a route unperformed, and reinserts them
+            using the GlobalCheapestInsertion heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLocalCheapestInsertionPathLnsFieldNumber">
+            <summary>Field number for the "use_local_cheapest_insertion_path_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLocalCheapestInsertionPathLns">
+            <summary>
+            Same as above but using LocalCheapestInsertion as a heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocatePathGlobalCheapestInsertionInsertUnperformedFieldNumber">
+            <summary>Field number for the "use_relocate_path_global_cheapest_insertion_insert_unperformed" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseRelocatePathGlobalCheapestInsertionInsertUnperformed">
+            <summary>
+            The following operator relocates an entire route to an empty path and
+            then tries to insert the unperformed nodes using the global cheapest
+            insertion heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseGlobalCheapestInsertionExpensiveChainLnsFieldNumber">
+            <summary>Field number for the "use_global_cheapest_insertion_expensive_chain_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseGlobalCheapestInsertionExpensiveChainLns">
+            <summary>
+            This operator finds heuristic_expensive_chain_lns_num_arcs_to_consider
+            most expensive arcs on a route, makes the nodes in between pairs of these
+            expensive arcs unperformed, and reinserts them using the
+            GlobalCheapestInsertion heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLocalCheapestInsertionExpensiveChainLnsFieldNumber">
+            <summary>Field number for the "use_local_cheapest_insertion_expensive_chain_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLocalCheapestInsertionExpensiveChainLns">
+            <summary>
+            Same as above but using LocalCheapestInsertion as a heuristic for
+            insertion.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseGlobalCheapestInsertionCloseNodesLnsFieldNumber">
+            <summary>Field number for the "use_global_cheapest_insertion_close_nodes_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseGlobalCheapestInsertionCloseNodesLns">
+            <summary>
+            The following operator makes a node and its
+            heuristic_close_nodes_lns_num_nodes closest neighbors unperformed along
+            with each of their corresponding performed pickup/delivery pairs, and
+            then reinserts them using the GlobalCheapestInsertion heuristic.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLocalCheapestInsertionCloseNodesLnsFieldNumber">
+            <summary>Field number for the "use_local_cheapest_insertion_close_nodes_lns" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.LocalSearchNeighborhoodOperators.UseLocalCheapestInsertionCloseNodesLns">
+            <summary>
+            Same as above, but insertion positions for nodes are determined by the
+            LocalCheapestInsertion heuristic.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.ImprovementSearchLimitParameters">
+            <summary>
+            Parameters required for the improvement search limit.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.ImprovementSearchLimitParameters.ImprovementRateCoefficientFieldNumber">
+            <summary>Field number for the "improvement_rate_coefficient" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.ImprovementSearchLimitParameters.ImprovementRateCoefficient">
+            <summary>
+            Parameter that regulates exchange rate between objective improvement and
+            number of neighbors spent. The smaller the value, the sooner the limit
+            stops the search. Must be positive.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.ImprovementSearchLimitParameters.ImprovementRateSolutionsDistanceFieldNumber">
+            <summary>Field number for the "improvement_rate_solutions_distance" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingSearchParameters.Types.ImprovementSearchLimitParameters.ImprovementRateSolutionsDistance">
+            <summary>
+            Parameter that specifies the distance between improvements taken into
+            consideration for calculating the improvement rate.
+            Example: For 5 objective improvements = (10, 8, 6, 4, 2), and the
+            solutions_distance parameter of 2, then the improvement_rate will be
+            computed for (10, 6), (8, 4), and (6, 2).
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RoutingModelParameters">
+            <summary>
+            Parameters which have to be set when creating a RoutingModel.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingModelParameters.SolverParametersFieldNumber">
+            <summary>Field number for the "solver_parameters" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingModelParameters.SolverParameters">
+            <summary>
+            Parameters to use in the underlying constraint solver.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingModelParameters.ReduceVehicleCostModelFieldNumber">
+            <summary>Field number for the "reduce_vehicle_cost_model" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingModelParameters.ReduceVehicleCostModel">
+            <summary>
+            Advanced settings.
+            If set to true reduction of the underlying constraint model will be
+            attempted when all vehicles have exactly the same cost structure. This can
+            result in significant speedups.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RoutingModelParameters.MaxCallbackCacheSizeFieldNumber">
+            <summary>Field number for the "max_callback_cache_size" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RoutingModelParameters.MaxCallbackCacheSize">
+            <summary>
+            Cache callback calls if the number of nodes in the model is less or equal
+            to this value.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.SearchLimitReflection">
+            <summary>Holder for reflection information generated from ortools/constraint_solver/search_limit.proto</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.SearchLimitReflection.Descriptor">
+            <summary>File descriptor for ortools/constraint_solver/search_limit.proto</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.RegularLimitParameters">
+            <summary>
+            A search limit
+            The default values for int64 fields is the maxima value, i.e., 2^63-1
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RegularLimitParameters.TimeFieldNumber">
+            <summary>Field number for the "time" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.RegularLimitParameters.Time">
+            <summary>
+            TODO(user): Specify the time units or switch to google.Duration proto.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RegularLimitParameters.BranchesFieldNumber">
+            <summary>Field number for the "branches" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RegularLimitParameters.FailuresFieldNumber">
+            <summary>Field number for the "failures" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RegularLimitParameters.SolutionsFieldNumber">
+            <summary>Field number for the "solutions" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RegularLimitParameters.SmartTimeCheckFieldNumber">
+            <summary>Field number for the "smart_time_check" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.RegularLimitParameters.CumulativeFieldNumber">
+            <summary>Field number for the "cumulative" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.SearchMonitorVector.SearchMonitorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.SequenceVarVector.SequenceVarVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.SolverParametersReflection">
+            <summary>Holder for reflection information generated from ortools/constraint_solver/solver_parameters.proto</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.SolverParametersReflection.Descriptor">
+            <summary>File descriptor for ortools/constraint_solver/solver_parameters.proto</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.ConstraintSolverParameters">
+            <summary>
+            Solver parameters.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.CompressTrailFieldNumber">
+            <summary>Field number for the "compress_trail" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.CompressTrail">
+            <summary>
+            This parameter indicates if the solver should compress the trail
+            during the search. No compression means that the solver will be faster,
+            but will use more memory.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.TrailBlockSizeFieldNumber">
+            <summary>Field number for the "trail_block_size" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.TrailBlockSize">
+            <summary>
+            This parameter indicates the default size of a block of the trail.
+            Compression applies at the block level.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ArraySplitSizeFieldNumber">
+            <summary>Field number for the "array_split_size" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ArraySplitSize">
+            <summary>
+            When a sum/min/max operation is applied on a large array, this
+            array is recursively split into blocks of size 'array_split_size'.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.StoreNamesFieldNumber">
+            <summary>Field number for the "store_names" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.StoreNames">
+            <summary>
+            This parameters indicates if the solver should store the names of
+            the objets it manages.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.NameCastVariablesFieldNumber">
+            <summary>Field number for the "name_cast_variables" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.NameCastVariables">
+            <summary>
+            Create names for cast variables.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.NameAllVariablesFieldNumber">
+            <summary>Field number for the "name_all_variables" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.NameAllVariables">
+            <summary>
+            Should anonymous variables be given a name.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ProfilePropagationFieldNumber">
+            <summary>Field number for the "profile_propagation" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ProfilePropagation">
+            <summary>
+            Activate propagation profiling.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ProfileFileFieldNumber">
+            <summary>Field number for the "profile_file" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ProfileFile">
+            <summary>
+            Export propagation profiling data to file.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ProfileLocalSearchFieldNumber">
+            <summary>Field number for the "profile_local_search" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.ProfileLocalSearch">
+            <summary>
+            Activate local search profiling.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintLocalSearchProfileFieldNumber">
+            <summary>Field number for the "print_local_search_profile" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintLocalSearchProfile">
+            <summary>
+            Print local search profiling data after solving.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.TracePropagationFieldNumber">
+            <summary>Field number for the "trace_propagation" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.TracePropagation">
+            <summary>
+            Activate propagate tracing.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.TraceSearchFieldNumber">
+            <summary>Field number for the "trace_search" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.TraceSearch">
+            <summary>
+            Trace search.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintModelFieldNumber">
+            <summary>Field number for the "print_model" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintModel">
+            <summary>
+            Print the model before solving.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintModelStatsFieldNumber">
+            <summary>Field number for the "print_model_stats" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintModelStats">
+            <summary>
+            Print model statistics before solving.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintAddedConstraintsFieldNumber">
+            <summary>Field number for the "print_added_constraints" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.PrintAddedConstraints">
+            <summary>
+            Print added constraints.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.DisableSolveFieldNumber">
+            <summary>Field number for the "disable_solve" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseSmallTableFieldNumber">
+            <summary>Field number for the "use_small_table" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseSmallTable">
+             <summary>
+            
+             Control the implementation of the table constraint.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseCumulativeEdgeFinderFieldNumber">
+            <summary>Field number for the "use_cumulative_edge_finder" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseCumulativeEdgeFinder">
+             <summary>
+            
+             Control the propagation of the cumulative constraint.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseCumulativeTimeTableFieldNumber">
+            <summary>Field number for the "use_cumulative_time_table" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseCumulativeTimeTableSyncFieldNumber">
+            <summary>Field number for the "use_cumulative_time_table_sync" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseSequenceHighDemandTasksFieldNumber">
+            <summary>Field number for the "use_sequence_high_demand_tasks" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseAllPossibleDisjunctionsFieldNumber">
+            <summary>Field number for the "use_all_possible_disjunctions" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.MaxEdgeFinderSizeFieldNumber">
+            <summary>Field number for the "max_edge_finder_size" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.DiffnUseCumulativeFieldNumber">
+            <summary>Field number for the "diffn_use_cumulative" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.DiffnUseCumulative">
+             <summary>
+            
+             Control the propagation of the diffn constraint.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseElementRmqFieldNumber">
+            <summary>Field number for the "use_element_rmq" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.UseElementRmq">
+             <summary>
+            
+             Control the implementation of the element constraint.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.SkipLocallyOptimalPathsFieldNumber">
+            <summary>Field number for the "skip_locally_optimal_paths" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.SkipLocallyOptimalPaths">
+             <summary>
+            
+             Skip locally optimal pairs of paths in PathOperators. Setting this
+             parameter to true might skip valid neighbors if there are constraints
+             linking paths together (such as precedences). In any other case this
+             should only speed up the search without omitting any neighbors.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.CheckSolutionPeriodFieldNumber">
+            <summary>Field number for the "check_solution_period" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.CheckSolutionPeriod">
+             <summary>
+            
+             Control the behavior of local search.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.Types">
+            <summary>Container for nested types declared in the ConstraintSolverParameters message type.</summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.ConstraintSolverParameters.Types.TrailCompression">
+             <summary>
+            
+             Internal parameters of the solver.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.SymmetryBreakerVector.SymmetryBreakerVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.NetDecisionBuilder">
+             This class acts as a intermediate step between a c++ decision builder and a
+             .Net one. Its main purpose is to catch the .Net application exception
+             launched when a failure occurs during the Next() call, and to return
+             silently a System.ApplicationException that will propagate the failure back
+             to the C++ code.
+            
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDecisionBuilder.NextWrapper(Google.OrTools.ConstraintSolver.Solver)">
+            This methods wraps the calls to next() and catches fail exceptions.
+            It currently catches all application exceptions.
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDecisionBuilder.Next(Google.OrTools.ConstraintSolver.Solver)">
+            This is the new method to subclass when defining a .Net decision builder.
+        </member>
+        <member name="T:Google.OrTools.ConstraintSolver.NetDecision">
+             This class acts as a intermediate step between a c++ decision and a
+             .Net one. Its main purpose is to catch the .Net application
+             exception launched when a failure occurs during the
+             Apply()/Refute() calls, and to set the ShouldFail() flag on the
+             solver that will propagate the failure back to the C++ code.
+            
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDecision.ApplyWrapper(Google.OrTools.ConstraintSolver.Solver)">
+            This methods wraps the calls to Apply() and catches fail exceptions.
+            It currently catches all application exceptions.
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDecision.Apply(Google.OrTools.ConstraintSolver.Solver)">
+            This is a new method to subclass when defining a .Net decision.
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDecision.Refute(Google.OrTools.ConstraintSolver.Solver)">
+            This is a new method to subclass when defining a .Net decision.
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDemon.RunWrapper(Google.OrTools.ConstraintSolver.Solver)">
+            This methods wraps the calls to next() and catches fail exceptions.
+        </member>
+        <member name="M:Google.OrTools.ConstraintSolver.NetDemon.Run(Google.OrTools.ConstraintSolver.Solver)">
+            This is the new method to subclass when defining a .Net decision builder.
+        </member>
+        <member name="T:Google.OrTools.Sat.CpModelReflection">
+            <summary>Holder for reflection information generated from ortools/sat/cp_model.proto</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelReflection.Descriptor">
+            <summary>File descriptor for ortools/sat/cp_model.proto</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CpSolverStatus">
+            <summary>
+            The status returned by a solver trying to solve a CpModelProto.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverStatus.Unknown">
+            <summary>
+            The status of the model is still unknown. A search limit has been reached
+            before any of the statuses below could be determined.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverStatus.ModelInvalid">
+            <summary>
+            The given CpModelProto didn't pass the validation step. You can get a
+            detailed error by calling ValidateCpModel(model_proto).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverStatus.Feasible">
+            <summary>
+            A feasible solution has been found. But the search was stopped before we
+            could prove optimality or before we enumerated all solutions of a
+            feasibility problem (if asked).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverStatus.Infeasible">
+            <summary>
+            The problem has been proven infeasible.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverStatus.Optimal">
+             <summary>
+             An optimal feasible solution has been found.
+            
+             More generally, this status represent a success. So we also return OPTIMAL
+             if we find a solution for a pure feasiblity problem or if a gap limit has
+             been specified and we return a solution within this limit. In the case
+             where we need to return all the feasible solution, this status will only be
+             returned if we enumerated all of them; If we stopped before, we will return
+             FEASIBLE.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.IntegerVariableProto">
+             <summary>
+             An integer variable.
+            
+             It will be referred to by an int32 corresponding to its index in a
+             CpModelProto variables field.
+            
+             Depending on the context, a reference to a variable whose domain is in [0, 1]
+             can also be seen as a Boolean that will be true if the variable value is 1
+             and false if it is 0. When used in this context, the field name will always
+             contain the word "literal".
+            
+             Negative reference (advanced usage): to simplify the creation of a model and
+             for efficiency reasons, all the "literal" or "variable" fields can also
+             contain a negative index. A negative index i will refer to the negation of
+             the integer variable at index -i -1 or to NOT the literal at the same index.
+            
+             Ex: A variable index 4 will refer to the integer variable model.variables(4)
+             and an index of -5 will refer to the negation of the same variable. A literal
+             index 4 will refer to the logical fact that model.variable(4) == 1 and a
+             literal index of -5 will refer to the logical fact model.variable(4) == 0.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntegerVariableProto.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.IntegerVariableProto.Name">
+            <summary>
+            For debug/logging only. Can be empty.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntegerVariableProto.DomainFieldNumber">
+            <summary>Field number for the "domain" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.IntegerVariableProto.Domain">
+             <summary>
+             The variable domain given as a sorted list of n disjoint intervals
+             [min, max] and encoded as [min_0, max_0,  ..., min_{n-1}, max_{n-1}].
+            
+             The most common example being just [min, max].
+             If min == max, then this is a constant variable.
+            
+             We have:
+              - domain_size() is always even.
+              - min == domain.front();
+              - max == domain.back();
+              - for all i &lt; n   :      min_i &lt;= max_i
+              - for all i &lt; n-1 :  max_i + 1 &lt; min_{i+1}.
+            
+             Note that we check at validation that a variable domain is small enough so
+             that we don't run into integer overflow in our algorithms. Because of that,
+             you cannot just have "unbounded" variable like [0, kint64max] and should
+             try to specify tighter domains.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.BoolArgumentProto">
+            <summary>
+            Argument of the constraints of the form OP(literals).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.BoolArgumentProto.LiteralsFieldNumber">
+            <summary>Field number for the "literals" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.IntegerArgumentProto">
+            <summary>
+            Argument of the constraints of the form target_var = OP(vars).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntegerArgumentProto.TargetFieldNumber">
+            <summary>Field number for the "target" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntegerArgumentProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.LinearExpressionProto">
+            <summary>
+            Some constraints supports linear expression instead of just using a reference
+            to a variable. This is especially useful during presolve to reduce the model
+            size.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearExpressionProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearExpressionProto.CoeffsFieldNumber">
+            <summary>Field number for the "coeffs" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearExpressionProto.OffsetFieldNumber">
+            <summary>Field number for the "offset" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearArgumentProto.TargetFieldNumber">
+            <summary>Field number for the "target" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearArgumentProto.ExprsFieldNumber">
+            <summary>Field number for the "exprs" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.AllDifferentConstraintProto">
+            <summary>
+            All variables must take different values.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AllDifferentConstraintProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.LinearConstraintProto">
+             <summary>
+             The linear sum vars[i] * coeffs[i] must fall in the given domain. The domain
+             has the same format as the one in IntegerVariableProto.
+            
+             Note that the validation code currently checks using the domain of the
+             involved variables that the sum can always be computed without integer
+             overflow and throws an error otherwise.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearConstraintProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearConstraintProto.CoeffsFieldNumber">
+            <summary>Field number for the "coeffs" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.LinearConstraintProto.Coeffs">
+            <summary>
+            Same size as vars.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.LinearConstraintProto.DomainFieldNumber">
+            <summary>Field number for the "domain" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.ElementConstraintProto">
+            <summary>
+            The constraint target = vars[index].
+            This enforces that index takes one of the value in [0, vars_size()).
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ElementConstraintProto.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ElementConstraintProto.TargetFieldNumber">
+            <summary>Field number for the "target" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ElementConstraintProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.IntervalConstraintProto">
+            <summary>
+            This "special" constraint not only enforces (start + size == end) and (size
+            >= 0) but can also be referred by other constraints using this "interval"
+            concept.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntervalConstraintProto.StartFieldNumber">
+            <summary>Field number for the "start" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntervalConstraintProto.EndFieldNumber">
+            <summary>Field number for the "end" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntervalConstraintProto.SizeFieldNumber">
+            <summary>Field number for the "size" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntervalConstraintProto.StartViewFieldNumber">
+            <summary>Field number for the "start_view" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.IntervalConstraintProto.StartView">
+             <summary>
+             EXPERIMENTAL: This will become the new way to specify an interval.
+             Depending on the parameters, the presolve will convert the old way to the
+             new way. Do not forget to add an associated linear constraint if you use
+             this directly.
+            
+             If any of this field is set, then all must be set and the ones above will
+             be ignored.
+            
+             IMPORTANT: For now, this constraint do not enforce any relations on the
+             view, and a linear constraint must be added together with this to enforce
+             enforcement => start_view + size_view == end_view. An enforcement =>
+             size_view >=0 might also be needed.
+            
+             IMPORTANT: For now, we just support affine relation. We could easily
+             create an intermediate variable to support full linear expression, but this
+             isn't done currently.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntervalConstraintProto.EndViewFieldNumber">
+            <summary>Field number for the "end_view" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.IntervalConstraintProto.SizeViewFieldNumber">
+            <summary>Field number for the "size_view" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.NoOverlapConstraintProto">
+            <summary>
+            All the intervals (index of IntervalConstraintProto) must be disjoint. More
+            formally, there must exist a sequence so that for each consecutive intervals,
+            we have end_i &lt;= start_{i+1}. In particular, intervals of size zero do matter
+            for this constraint. This is also known as a disjunctive constraint in
+            scheduling.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.NoOverlapConstraintProto.IntervalsFieldNumber">
+            <summary>Field number for the "intervals" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.NoOverlap2DConstraintProto">
+            <summary>
+            The boxes defined by [start_x, end_x) * [start_y, end_y) cannot overlap.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.NoOverlap2DConstraintProto.XIntervalsFieldNumber">
+            <summary>Field number for the "x_intervals" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.NoOverlap2DConstraintProto.YIntervalsFieldNumber">
+            <summary>Field number for the "y_intervals" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.NoOverlap2DConstraintProto.YIntervals">
+            <summary>
+            Same size as x_intervals.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.NoOverlap2DConstraintProto.BoxesWithNullAreaCanOverlapFieldNumber">
+            <summary>Field number for the "boxes_with_null_area_can_overlap" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CumulativeConstraintProto">
+            <summary>
+            The sum of the demands of the intervals at each interval point cannot exceed
+            a capacity. Note that intervals are interpreted as [start, end) and as
+            such intervals like [2,3) and [3,4) do not overlap for the point of view of
+            this constraint. Moreover, intervals of size zero are ignored.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CumulativeConstraintProto.CapacityFieldNumber">
+            <summary>Field number for the "capacity" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CumulativeConstraintProto.IntervalsFieldNumber">
+            <summary>Field number for the "intervals" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CumulativeConstraintProto.DemandsFieldNumber">
+            <summary>Field number for the "demands" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CumulativeConstraintProto.Demands">
+            <summary>
+            Same size as intervals.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.ReservoirConstraintProto">
+             <summary>
+             Maintain a reservoir level within bounds. The water level starts at 0, and at
+             any time, it must be within [min_level, max_level].
+            
+             If the variable actives[i] is true, and if the variable times[i] is assigned
+             a value t, then the current level changes by demands[i] (which is constant)
+             at the time t. Therefore, at any time t:
+                  sum(demands[i] * actives[i] if times[i] &lt;= t) in [min_level, max_level]
+            
+             Note that min level must be &lt;= 0, and the max level must be >= 0. Please use
+             fixed demands to simulate initial state.
+            
+             The array of boolean variables 'actives', if defined, indicates which actions
+             are actually performed. If this array is not defined, then it is assumed that
+             all actions will be performed.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ReservoirConstraintProto.MinLevelFieldNumber">
+            <summary>Field number for the "min_level" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ReservoirConstraintProto.MaxLevelFieldNumber">
+            <summary>Field number for the "max_level" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ReservoirConstraintProto.TimesFieldNumber">
+            <summary>Field number for the "times" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ReservoirConstraintProto.Times">
+            <summary>
+            variables.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ReservoirConstraintProto.DemandsFieldNumber">
+            <summary>Field number for the "demands" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ReservoirConstraintProto.Demands">
+            <summary>
+            constants, can be negative.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ReservoirConstraintProto.ActivesFieldNumber">
+            <summary>Field number for the "actives" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ReservoirConstraintProto.Actives">
+            <summary>
+            literals.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CircuitConstraintProto">
+             <summary>
+             The circuit constraint is defined on a graph where the arc presence are
+             controlled by literals. Each arc is given by an index in the
+             tails/heads/literals lists that must have the same size.
+            
+             For now, we ignore node indices with no incident arc. All the other nodes
+             must have exactly one incoming and one outgoing selected arc (i.e. literal at
+             true). All the selected arcs that are not self-loops must form a single
+             circuit. Note that multi-arcs are allowed, but only one of them will be true
+             at the same time. Multi-self loop are disallowed though.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CircuitConstraintProto.TailsFieldNumber">
+            <summary>Field number for the "tails" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CircuitConstraintProto.HeadsFieldNumber">
+            <summary>Field number for the "heads" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CircuitConstraintProto.LiteralsFieldNumber">
+            <summary>Field number for the "literals" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.RoutesConstraintProto">
+             <summary>
+             The "VRP" (Vehicle Routing Problem) constraint.
+            
+             The direct graph where arc #i (from tails[i] to head[i]) is present iff
+             literals[i] is true must satisfy this set of properties:
+             - #incoming arcs == 1 except for node 0.
+             - #outgoing arcs == 1 except for node 0.
+             - for node zero, #incoming arcs == #outgoing arcs.
+             - There are no duplicate arcs.
+             - Self-arcs are allowed except for node 0.
+             - There is no cycle in this graph, except through node 0.
+            
+             TODO(user): It is probably possible to generalize this constraint to a
+             no-cycle in a general graph, or a no-cycle with sum incoming &lt;= 1 and sum
+             outgoing &lt;= 1 (more efficient implementation). On the other hand, having this
+             specific constraint allow us to add specific "cuts" to a VRP problem.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.RoutesConstraintProto.TailsFieldNumber">
+            <summary>Field number for the "tails" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.RoutesConstraintProto.HeadsFieldNumber">
+            <summary>Field number for the "heads" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.RoutesConstraintProto.LiteralsFieldNumber">
+            <summary>Field number for the "literals" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.RoutesConstraintProto.DemandsFieldNumber">
+            <summary>Field number for the "demands" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.RoutesConstraintProto.Demands">
+             <summary>
+             Experimental. The demands for each node, and the maximum capacity for each
+             route. Note that this is currently only used for the LP relaxation and one
+             need to add the corresponding constraint to enforce this outside of the LP.
+            
+             TODO(user): Ideally, we should be able to extract any dimension like these
+             (i.e. capacity, route_length, etc..) automatically from the encoding. The
+             classical way to encode that is to have "current_capacity" variables along
+             the route and linear equations of the form:
+               arc_literal => (current_capacity_tail + demand &lt;= current_capacity_head)
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.RoutesConstraintProto.CapacityFieldNumber">
+            <summary>Field number for the "capacity" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.TableConstraintProto">
+            <summary>
+            The values of the n-tuple formed by the given variables can only be one of
+            the listed n-tuples in values. The n-tuples are encoded in a flattened way:
+                [tuple0_v0, tuple0_v1, ..., tuple0_v{n-1}, tuple1_v0, ...].
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.TableConstraintProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.TableConstraintProto.ValuesFieldNumber">
+            <summary>Field number for the "values" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.TableConstraintProto.NegatedFieldNumber">
+            <summary>Field number for the "negated" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.TableConstraintProto.Negated">
+            <summary>
+            If true, the meaning is "negated", that is we forbid any of the given
+            tuple from a feasible assignment.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.InverseConstraintProto">
+            <summary>
+            The two arrays of variable each represent a function, the second is the
+            inverse of the first: f_direct[i] == j &lt;=> f_inverse[j] == i.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.InverseConstraintProto.FDirectFieldNumber">
+            <summary>Field number for the "f_direct" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.InverseConstraintProto.FInverseFieldNumber">
+            <summary>Field number for the "f_inverse" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.AutomatonConstraintProto">
+            <summary>
+            This constraint forces a sequence of variables to be accepted by an
+            automaton.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AutomatonConstraintProto.StartingStateFieldNumber">
+            <summary>Field number for the "starting_state" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.AutomatonConstraintProto.StartingState">
+            <summary>
+            A state is identified by a non-negative number. It is preferable to keep
+            all the states dense in says [0, num_states). The automaton starts at
+            starting_state and must finish in any of the final states.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AutomatonConstraintProto.FinalStatesFieldNumber">
+            <summary>Field number for the "final_states" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AutomatonConstraintProto.TransitionTailFieldNumber">
+            <summary>Field number for the "transition_tail" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.AutomatonConstraintProto.TransitionTail">
+            <summary>
+            List of transitions (all 3 vectors have the same size). Both tail and head
+            are states, label is any variable value. No two outgoing transitions from
+            the same state can have the same label.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AutomatonConstraintProto.TransitionHeadFieldNumber">
+            <summary>Field number for the "transition_head" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AutomatonConstraintProto.TransitionLabelFieldNumber">
+            <summary>Field number for the "transition_label" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.AutomatonConstraintProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.AutomatonConstraintProto.Vars">
+            <summary>
+            The sequence of variables. The automaton is ran for vars_size() "steps" and
+            the value of vars[i] corresponds to the transition label at step i.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.ConstraintProto">
+            <summary>
+            Next id: 30
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Name">
+            <summary>
+            For debug/logging only. Can be empty.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.EnforcementLiteralFieldNumber">
+            <summary>Field number for the "enforcement_literal" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.EnforcementLiteral">
+             <summary>
+             The constraint will be enforced iff all literals listed here are true. If
+             this is empty, then the constraint will always be enforced. An enforced
+             constraint must be satisfied, and an un-enforced one will simply be
+             ignored.
+            
+             This is also called half-reification. To have an equivalence between a
+             literal and a constraint (full reification), one must add both a constraint
+             (controlled by a literal l) and its negation (controlled by the negation of
+             l).
+            
+             Important: as of September 2018, only a few constraint support enforcement:
+             - bool_or, bool_and, linear: fully supported.
+             - interval: only support a single enforcement literal.
+             - other: no support (but can be added on a per-demand basis).
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.BoolOrFieldNumber">
+            <summary>Field number for the "bool_or" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.BoolOr">
+            <summary>
+            The bool_or constraint forces at least one literal to be true.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.BoolAndFieldNumber">
+            <summary>Field number for the "bool_and" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.BoolAnd">
+             <summary>
+             The bool_and constraint forces all of the literals to be true.
+            
+             This is a "redundant" constraint in the sense that this can easily be
+             encoded with many bool_or or at_most_one. It is just more space efficient
+             and handled slightly differently internally.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.AtMostOneFieldNumber">
+            <summary>Field number for the "at_most_one" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.AtMostOne">
+             <summary>
+             The at_most_one constraint enforces that no more than one literal is
+             true at the same time.
+            
+             Note that an at most one constraint of length n could be encoded with n
+             bool_and constraint with n-1 term on the right hand side. So in a sense,
+             this constraint contribute directly to the "implication-graph" or the
+             2-SAT part of the model.
+            
+             This constraint does not support enforcement_literal. Just use a linear
+             constraint if you need to enforce it. You also do not need to use it
+             directly, we will extract it from the model in most situations.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.ExactlyOneFieldNumber">
+            <summary>Field number for the "exactly_one" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.ExactlyOne">
+             <summary>
+             The exactly_one constraint force exactly one literal to true and no more.
+            
+             Anytime a bool_or (it could have been called at_least_one) is included
+             into an at_most_one, then the bool_or is actually an exactly one
+             constraint, and the extra literal in the at_most_one can be set to false.
+             So in this sense, this constraint is not really needed. it is just here
+             for a better description of the problem structure and to facilitate some
+             algorithm.
+            
+             This constraint does not support enforcement_literal. Just use a linear
+             constraint if you need to enforce it. You also do not need to use it
+             directly, we will extract it from the model in most situations.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.BoolXorFieldNumber">
+            <summary>Field number for the "bool_xor" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.BoolXor">
+            <summary>
+            The bool_xor constraint forces an odd number of the literals to be true.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.IntDivFieldNumber">
+            <summary>Field number for the "int_div" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.IntDiv">
+            <summary>
+            The int_div constraint forces the target to equal vars[0] / vars[1].
+            In particular, vars[1] can never take the value 0.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.IntModFieldNumber">
+            <summary>Field number for the "int_mod" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.IntMod">
+            <summary>
+            The int_mod constraint forces the target to equal vars[0] % vars[1].
+            The domain of vars[1] must be strictly positive.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.IntMaxFieldNumber">
+            <summary>Field number for the "int_max" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.IntMax">
+             <summary>
+             The int_max constraint forces the target to equal the maximum of all
+             variables.
+            
+             The lin_max constraint forces the target to equal the maximum of all
+             linear expressions.
+            
+             TODO(user): Remove int_max in favor of lin_max.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.LinMaxFieldNumber">
+            <summary>Field number for the "lin_max" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.IntMinFieldNumber">
+            <summary>Field number for the "int_min" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.IntMin">
+             <summary>
+             The int_min constraint forces the target to equal the minimum of all
+             variables.
+            
+             The lin_min constraint forces the target to equal the minimum of all
+             linear expressions.
+            
+             TODO(user): Remove int_min in favor of lin_min.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.LinMinFieldNumber">
+            <summary>Field number for the "lin_min" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.IntProdFieldNumber">
+            <summary>Field number for the "int_prod" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.IntProd">
+             <summary>
+             The int_prod constraint forces the target to equal the product of all
+             variables. By convention, because we can just remove term equal to one,
+             the empty product forces the target to be one.
+            
+             TODO(user): Support more than two terms in the product.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.LinearFieldNumber">
+            <summary>Field number for the "linear" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Linear">
+            <summary>
+            The linear constraint enforces a linear inequality among the variables,
+            such as 0 &lt;= x + 2y &lt;= 10.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.AllDiffFieldNumber">
+            <summary>Field number for the "all_diff" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.AllDiff">
+            <summary>
+            The all_diff constraint forces all variables to take different values.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.ElementFieldNumber">
+            <summary>Field number for the "element" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Element">
+            <summary>
+            The element constraint forces the variable with the given index
+            to be equal to the target.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.CircuitFieldNumber">
+            <summary>Field number for the "circuit" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Circuit">
+            <summary>
+            The circuit constraint takes a graph and forces the arcs present
+            (with arc presence indicated by a literal) to form a unique cycle.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.RoutesFieldNumber">
+            <summary>Field number for the "routes" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Routes">
+            <summary>
+            The routes constraint implements the vehicle routing problem.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.TableFieldNumber">
+            <summary>Field number for the "table" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Table">
+            <summary>
+            The table constraint enforces what values a tuple of variables may
+            take.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.AutomatonFieldNumber">
+            <summary>Field number for the "automaton" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Automaton">
+            <summary>
+            The automaton constraint forces a sequence of variables to be accepted
+            by an automaton.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.InverseFieldNumber">
+            <summary>Field number for the "inverse" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Inverse">
+            <summary>
+            The inverse constraint forces two arrays to be inverses of each other:
+            the values of one are the indices of the other, and vice versa.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.ReservoirFieldNumber">
+            <summary>Field number for the "reservoir" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Reservoir">
+            <summary>
+            The reservoir constraint forces the sum of a set of active demands
+            to always be between a specified minimum and maximum value during
+            specific times.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.IntervalFieldNumber">
+            <summary>Field number for the "interval" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Interval">
+            <summary>
+            The interval constraint takes a start, end, and size, and forces
+            start + size == end.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.NoOverlapFieldNumber">
+            <summary>Field number for the "no_overlap" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.NoOverlap">
+            <summary>
+            The no_overlap constraint prevents a set of intervals from
+            overlapping; in scheduling, this is called a disjunctive
+            constraint.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.NoOverlap2DFieldNumber">
+            <summary>Field number for the "no_overlap_2d" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.NoOverlap2D">
+            <summary>
+            The no_overlap_2d constraint prevents a set of boxes from overlapping.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.ConstraintProto.CumulativeFieldNumber">
+            <summary>Field number for the "cumulative" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.ConstraintProto.Cumulative">
+            <summary>
+            The cumulative constraint ensures that for any integer point, the sum
+            of the demands of the intervals containing that point does not exceed
+            the capacity.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.ConstraintProto.ConstraintOneofCase">
+            <summary>Enum of possible cases for the "constraint" oneof.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CpObjectiveProto">
+             <summary>
+             Optimization objective.
+            
+             This is in a message because decision problems don't have any objective.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpObjectiveProto.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpObjectiveProto.Vars">
+            <summary>
+            The linear terms of the objective to minimize.
+            For a maximization problem, one can negate all coefficients in the
+            objective and set a scaling_factor to -1.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpObjectiveProto.CoeffsFieldNumber">
+            <summary>Field number for the "coeffs" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpObjectiveProto.OffsetFieldNumber">
+            <summary>Field number for the "offset" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpObjectiveProto.Offset">
+             <summary>
+             The displayed objective is always:
+               scaling_factor * (sum(coefficients[i] * objective_vars[i]) + offset).
+             This is needed to have a consistent objective after presolve or when
+             scaling a double problem to express it with integers.
+            
+             Note that if scaling_factor is zero, then it is assumed to be 1, so that by
+             default these fields have no effect.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpObjectiveProto.ScalingFactorFieldNumber">
+            <summary>Field number for the "scaling_factor" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpObjectiveProto.DomainFieldNumber">
+            <summary>Field number for the "domain" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpObjectiveProto.Domain">
+            <summary>
+            If non-empty, only look for an objective value in the given domain.
+            Note that this does not depend on the offset or scaling factor, it is a
+            domain on the sum of the objective terms only.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.DecisionStrategyProto">
+            <summary>
+            Define the strategy to follow when the solver needs to take a new decision.
+            Note that this strategy is only defined on a subset of variables.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.VariablesFieldNumber">
+            <summary>Field number for the "variables" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.DecisionStrategyProto.Variables">
+            <summary>
+            The variables to be considered for the next decision. The order matter and
+            is always used as a tie-breaker after the variable selection strategy
+            criteria defined below.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.VariableSelectionStrategyFieldNumber">
+            <summary>Field number for the "variable_selection_strategy" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.DomainReductionStrategyFieldNumber">
+            <summary>Field number for the "domain_reduction_strategy" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.TransformationsFieldNumber">
+            <summary>Field number for the "transformations" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.DecisionStrategyProto.Types">
+            <summary>Container for nested types declared in the DecisionStrategyProto message type.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.DecisionStrategyProto.Types.VariableSelectionStrategy">
+             <summary>
+             The order in which the variables above should be considered. Note that only
+             variables that are not already fixed are considered.
+            
+             TODO(user): extend as needed.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.DecisionStrategyProto.Types.DomainReductionStrategy">
+             <summary>
+             Once a variable has been chosen, this enum describe what decision is taken
+             on its domain.
+            
+             TODO(user): extend as needed.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.DecisionStrategyProto.Types.AffineTransformation">
+            <summary>
+            Advanced usage. Some of the variable listed above may have been transformed
+            by the presolve so this is needed to properly follow the given selection
+            strategy. Instead of using a value X for variables[index], we will use
+            positive_coeff * X + offset instead.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.Types.AffineTransformation.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.Types.AffineTransformation.OffsetFieldNumber">
+            <summary>Field number for the "offset" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DecisionStrategyProto.Types.AffineTransformation.PositiveCoeffFieldNumber">
+            <summary>Field number for the "positive_coeff" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.PartialVariableAssignment">
+            <summary>
+            This message encodes a partial (or full) assignment of the variables of a
+            CpModelProto. The variable indices should be unique and valid variable
+            indices.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.PartialVariableAssignment.VarsFieldNumber">
+            <summary>Field number for the "vars" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.PartialVariableAssignment.ValuesFieldNumber">
+            <summary>Field number for the "values" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.SparsePermutationProto">
+            <summary>
+            A permutation of integers encoded as a list of cycles, hence the "sparse"
+            format. The image of an element cycle[i] is cycle[(i + 1) % cycle_length].
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.SparsePermutationProto.SupportFieldNumber">
+            <summary>Field number for the "support" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.SparsePermutationProto.Support">
+            <summary>
+            Each cycle is listed one after the other in the support field.
+            The size of each cycle is given (in order) in the cycle_sizes field.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.SparsePermutationProto.CycleSizesFieldNumber">
+            <summary>Field number for the "cycle_sizes" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.DenseMatrixProto">
+            <summary>
+            A dense matrix of numbers encoded in a flat way, row by row.
+            That is matrix[i][j] = entries[i * num_cols + j];
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DenseMatrixProto.NumRowsFieldNumber">
+            <summary>Field number for the "num_rows" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DenseMatrixProto.NumColsFieldNumber">
+            <summary>Field number for the "num_cols" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.DenseMatrixProto.EntriesFieldNumber">
+            <summary>Field number for the "entries" field.</summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.SymmetryProto">
+             <summary>
+             Experimental. For now, this is meant to be used by the solver and not filled
+             by clients.
+            
+             Hold symmetry information about the set of feasible solutions. If we permute
+             the variable values of any feasible solution using one of the permutation
+             described here, we should always get another feasible solution.
+            
+             We usually also enforce that the objective of the new solution is the same.
+            
+             The group of permutations encoded here is usually computed from the encoding
+             of the model, so it is not meant to be a complete representation of the
+             feasible solution symmetries, just a valid subgroup.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.SymmetryProto.PermutationsFieldNumber">
+            <summary>Field number for the "permutations" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.SymmetryProto.Permutations">
+            <summary>
+            A list of variable indices permutations that leave the feasible space of
+            solution invariant. Usually, we only encode a set of generators of the
+            group.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.SymmetryProto.OrbitopesFieldNumber">
+            <summary>Field number for the "orbitopes" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.SymmetryProto.Orbitopes">
+             <summary>
+             An orbitope is a special symmetry structure of the solution space. If the
+             variable indices are arranged in a matrix (with no duplicates), then any
+             permutation of the columns will be a valid permutation of the feasible
+             space.
+            
+             This arise quite often. The typical example is a graph coloring problem
+             where for each node i, you have j booleans to indicate its color. If the
+             variables color_of_i_is_j are arranged in a matrix[i][j], then any columns
+             permutations leave the problem invariant.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CpModelProto">
+            <summary>
+            A constraint programming problem.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.Name">
+            <summary>
+            For debug/logging only. Can be empty.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.VariablesFieldNumber">
+            <summary>Field number for the "variables" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.Variables">
+            <summary>
+            The associated Protos should be referred by their index in these fields.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.ConstraintsFieldNumber">
+            <summary>Field number for the "constraints" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.ObjectiveFieldNumber">
+            <summary>Field number for the "objective" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.Objective">
+            <summary>
+            The objective to minimize. Can be empty for pure decision problems.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.SearchStrategyFieldNumber">
+            <summary>Field number for the "search_strategy" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.SearchStrategy">
+             <summary>
+             Defines the strategy that the solver should follow when the
+             search_branching parameter is set to FIXED_SEARCH. Note that this strategy
+             is also used as a heuristic when we are not in fixed search.
+            
+             Advanced Usage: if not all variables appears and the parameter
+             "instantiate_all_variables" is set to false, then the solver will not try
+             to instantiate the variables that do not appear. Thus, at the end of the
+             search, not all variables may be fixed and this is why we have the
+             solution_lower_bounds and solution_upper_bounds fields in the
+             CpSolverResponse.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.SolutionHintFieldNumber">
+            <summary>Field number for the "solution_hint" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.SolutionHint">
+             <summary>
+             Solution hint.
+            
+             If a feasible or almost-feasible solution to the problem is already known,
+             it may be helpful to pass it to the solver so that it can be used. The
+             solver will try to use this information to create its initial feasible
+             solution.
+            
+             Note that it may not always be faster to give a hint like this to the
+             solver. There is also no guarantee that the solver will use this hint or
+             try to return a solution "close" to this assignment in case of multiple
+             optimal solutions.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.AssumptionsFieldNumber">
+            <summary>Field number for the "assumptions" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.Assumptions">
+             <summary>
+             A list of literals. The model will be solved assuming all these literals
+             are true. Compared to just fixing the domain of these literals, using this
+             mechanism is slower but allows in case the model is INFEASIBLE to get a
+             potentially small subset of them that can be used to explain the
+             infeasibility.
+            
+             Think (IIS), except when you are only concerned by the provided
+             assumptions. This is powerful as it allows to group a set of logicially
+             related constraint under only one enforcement literal which can potentially
+             give you a good and interpretable explanation for infeasiblity.
+            
+             Such infeasibility explanation will be available in the
+             sufficient_assumptions_for_infeasibility response field.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpModelProto.SymmetryFieldNumber">
+            <summary>Field number for the "symmetry" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpModelProto.Symmetry">
+             <summary>
+             For now, this is not meant to be filled by a client writing a model, but
+             by our preprocessing step.
+            
+             Information about the symmetries of the feasible solution space.
+             These usually leaves the objective invariant.
+             </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CpSolverResponse">
+             <summary>
+             The response returned by a solver trying to solve a CpModelProto.
+            
+             TODO(user): support returning multiple solutions. Look at the Stubby
+             streaming API as we probably wants to get them as they are found.
+             Next id: 27
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.StatusFieldNumber">
+            <summary>Field number for the "status" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.Status">
+            <summary>
+            The status of the solve.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.SolutionFieldNumber">
+            <summary>Field number for the "solution" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.Solution">
+            <summary>
+            A feasible solution to the given problem. Depending on the returned status
+            it may be optimal or just feasible. This is in one-to-one correspondence
+            with a CpModelProto::variables repeated field and list the values of all
+            the variables.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.ObjectiveValueFieldNumber">
+            <summary>Field number for the "objective_value" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.ObjectiveValue">
+            <summary>
+            Only make sense for an optimization problem. The objective value of the
+            returned solution if it is non-empty. If there is no solution, then for a
+            minimization problem, this will be an upper-bound of the objective of any
+            feasible solution, and a lower-bound for a maximization problem.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.BestObjectiveBoundFieldNumber">
+            <summary>Field number for the "best_objective_bound" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.BestObjectiveBound">
+            <summary>
+            Only make sense for an optimization problem. A proven lower-bound on the
+            objective for a minimization problem, or a proven upper-bound for a
+            maximization problem.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.SolutionLowerBoundsFieldNumber">
+            <summary>Field number for the "solution_lower_bounds" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.SolutionLowerBounds">
+             <summary>
+             Advanced usage.
+            
+             If the problem has some variables that are not fixed at the end of the
+             search (because of a particular search strategy in the CpModelProto) then
+             this will be used instead of filling the solution above. The two fields
+             will then contains the lower and upper bounds of each variable as they were
+             when the best "solution" was found.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.SolutionUpperBoundsFieldNumber">
+            <summary>Field number for the "solution_upper_bounds" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.TightenedVariablesFieldNumber">
+            <summary>Field number for the "tightened_variables" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.TightenedVariables">
+             <summary>
+             Advanced usage.
+            
+             If the option fill_tightened_domains_in_response is set, then this field
+             will be a copy of the CpModelProto.variables where each domain has been
+             reduced using the information the solver was able to derive. Note that this
+             is only filled with the info derived during a normal search and we do not
+             have any dedicated algorithm to improve it.
+            
+             If the problem is a feasibility problem, then these bounds will be valid
+             for any feasible solution. If the problem is an optimization problem, then
+             these bounds will only be valid for any OPTIMAL solutions, it can exclude
+             sub-optimal feasible ones.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.SufficientAssumptionsForInfeasibilityFieldNumber">
+            <summary>Field number for the "sufficient_assumptions_for_infeasibility" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.SufficientAssumptionsForInfeasibility">
+             <summary>
+             A subset of the model "assumptions" field. This will only be filled if the
+             status is INFEASIBLE. This subset of assumption will be enough to still get
+             an infeasible problem.
+            
+             This is related to what is called the irreducible inconsistent subsystem or
+             IIS. Except one is only concerned by the provided assumptions. There is
+             also no guarantee that we return an irreducible (aka minimal subset).
+             However, this is based on SAT explanation and there is a good chance it is
+             not too large.
+            
+             If you really want a minimal subset, a possible way to get one is by
+             changing your model to minimize the number of assumptions at false, but
+             this is likely an harder problem to solve.
+            
+             TODO(user): Allows for returning multiple core at once.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.AllSolutionsWereFoundFieldNumber">
+            <summary>Field number for the "all_solutions_were_found" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.AllSolutionsWereFound">
+             <summary>
+             This will be true iff the solver was asked to find all solutions to a
+             satisfiability problem (or all optimal solutions to an optimization
+             problem), and it was successful in doing so.
+            
+             TODO(user): Remove as we also use the OPTIMAL vs FEASIBLE status for that.
+             </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumBooleansFieldNumber">
+            <summary>Field number for the "num_booleans" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.NumBooleans">
+            <summary>
+            Some statistics about the solve.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumConflictsFieldNumber">
+            <summary>Field number for the "num_conflicts" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumBranchesFieldNumber">
+            <summary>Field number for the "num_branches" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumBinaryPropagationsFieldNumber">
+            <summary>Field number for the "num_binary_propagations" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumIntegerPropagationsFieldNumber">
+            <summary>Field number for the "num_integer_propagations" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumRestartsFieldNumber">
+            <summary>Field number for the "num_restarts" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.NumLpIterationsFieldNumber">
+            <summary>Field number for the "num_lp_iterations" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.WallTimeFieldNumber">
+            <summary>Field number for the "wall_time" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.UserTimeFieldNumber">
+            <summary>Field number for the "user_time" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.DeterministicTimeFieldNumber">
+            <summary>Field number for the "deterministic_time" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.PrimalIntegralFieldNumber">
+            <summary>Field number for the "primal_integral" field.</summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.SolutionInfoFieldNumber">
+            <summary>Field number for the "solution_info" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.SolutionInfo">
+            <summary>
+            Additional information about how the solution was found.
+            </summary>
+        </member>
+        <member name="F:Google.OrTools.Sat.CpSolverResponse.SolveLogFieldNumber">
+            <summary>Field number for the "solve_log" field.</summary>
+        </member>
+        <member name="P:Google.OrTools.Sat.CpSolverResponse.SolveLog">
+            <summary>
+            The solve log will be filled if the parameter log_to_response is set to
+            true.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Sat.CpModel">
+            <summary>
+             Wrapper class around the cp_model proto.
+            </summary>
+        </member>
+        <member name="T:Google.OrTools.Util.Int64Vector.Int64VectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Util.Int64VectorVector.Int64VectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Util.IntVector.IntVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Util.IntVectorVector.IntVectorVectorEnumerator">
+            Note that the IEnumerator documentation requires an InvalidOperationException to be thrown
+            whenever the collection is modified. This has been done for changes in the size of the
+            collection but not when one of the elements of the collection is modified as it is a bit
+            tricky to detect unmanaged code that modifies the collection under our feet.
+        </member>
+        <member name="T:Google.OrTools.Util.OptionalBooleanReflection">
+            <summary>Holder for reflection information generated from ortools/util/optional_boolean.proto</summary>
+        </member>
+        <member name="P:Google.OrTools.Util.OptionalBooleanReflection.Descriptor">
+            <summary>File descriptor for ortools/util/optional_boolean.proto</summary>
+        </member>
+        <member name="T:Google.OrTools.Util.OptionalBoolean">
+             <summary>
+             A "three-way" boolean: unspecified, false or true.
+            
+             We don't use the value of 1 to increase the chance to catch bugs: eg. in
+             python, a user may set a proto field of this type enum to a boolean value
+             without type checks, if they set it to True, the proto validity code will
+             catch it (because it'll be cast to 1, which is an invalid enum value).
+             Note that if the user sets if to False (i.e. 0), it will be caught by the
+             routing library's parameter validity check too.
+             </summary>
+        </member>
+    </members>
+</doc>

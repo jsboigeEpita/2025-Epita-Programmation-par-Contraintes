@@ -1,0 +1,6 @@
+z3-solver
+ortools
+eel
+noise
+notebook
+ipywidgets
