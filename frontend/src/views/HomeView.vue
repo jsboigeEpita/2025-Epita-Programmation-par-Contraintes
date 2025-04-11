@@ -25,12 +25,6 @@ const handleSelectedComponentsUpdate = (components: SelectedComponents) => {
     selectedComponents.value = components;
 };
 
-const totalClasses = computed(() => {
-    return configPrice.value === 0
-        ? 'w-full flex justify-between p-2'
-        : 'w-full flex justify-between p-2 border-b-2 border-white';
-});
-
 function updateTotalPrice(): void {
     let total = 0;
     const comps = selectedComponents.value;
