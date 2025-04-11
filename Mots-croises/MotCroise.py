@@ -3,9 +3,12 @@ import time
 from ortools.sat.python import cp_model
 import re
 import random
+import definitions
 
+rows = 6
+columns = 6
 
-def generate_table(rows = 6, columns = 6):
+def generate_table():
     noir_colonne_precedente = True
     res = []
     for i in range(rows):
@@ -34,7 +37,7 @@ for r in LA_GRILLE:
     print(r)
 
 dictionnaire_mots = 'dictionnaire.txt'
-longueur_min_mot = 3
+longueur_min_mot = 2
 
 #Emplacement structure tuple : (num, sens, ligne_debug, col_debut, longueur)
 
@@ -193,6 +196,17 @@ def afficher_grille(structure_grille, la_solution=None, les_emplacements=None):
         print(ligne_texte.strip())
         num_ligne = num_ligne + 1
 
+def WaitForConfirmation():
+    input("Press enter to reveal answer...")
+    answer = input("Reveal? [Y/N]\n")
+    if answer.lower() in ["y","yes"]:
+        return
+    elif answer.lower() in ["n","no"]:
+        WaitForConfirmation()
+    else:
+        print("Wrong input")
+        WaitForConfirmation()
+
 if __name__ == "__main__":
     les_emplacements, les_croisements, les_longueurs_requises = trouver_emplacements_et_croisements(LA_GRILLE)
 
@@ -218,6 +232,8 @@ if __name__ == "__main__":
 
     if not probleme_valide:
         sys.exit(1)
+
+    print("Création du mot croisé...")
 
     modele = cp_model.CpModel()
 
@@ -272,6 +288,33 @@ if __name__ == "__main__":
             mot_retenu = mots_possibles_par_emplacement[id_emp][index_mot_retenu]
             la_solution_finale[id_emp] = mot_retenu
 
+
+        defs = definitions.create_definitions(la_solution_finale)
+
+        mots_horizontal = {}
+        mots_vertical = {}  
+        for i in range(rows):
+            mots_horizontal[i] = []
+        for i in range(columns):
+            mots_vertical[i] = []
+        
+        i = 0
+        for e in les_emplacements:
+            if e[1] == 'H':
+                mots_horizontal[e[2]].append(defs[i])
+            else:
+                mots_vertical[e[3]].append(defs[i])
+            i += 1
+
+
+        print("\nHORIZONTAL:")
+        for k, v in mots_horizontal.items():
+            print(k + 1, '-', " // ".join(v))
+        print("VERTICAL:")
+        for k, v in mots_vertical.items():
+            print(k + 1, '-', " // ".join(v))
+
+        WaitForConfirmation()
         afficher_grille(LA_GRILLE, la_solution_finale, les_emplacements)
 
     else:
