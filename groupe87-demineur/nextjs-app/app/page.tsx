@@ -3,18 +3,16 @@
 import { useState, useCallback } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import CSPSolver from "@/components/csp-solver"
-import MinesweeperGameRefactored from "@/components/minesweeper-game-refactored"
+import MinesweeperGame from "@/components/minesweeper-game-refactored"
 
 export default function Home() {
   const [key, setKey] = useState(0)
   const [activeTab, setActiveTab] = useState("play")
 
-  // Utiliser useCallback pour éviter les recréations inutiles de la fonction
   const refreshView = useCallback(() => {
     setKey((prev) => prev + 1)
   }, [])
 
-  // Gérer le changement d'onglet
   const handleTab = useCallback(
     (value: string) => {
       setActiveTab(value)
@@ -35,7 +33,7 @@ export default function Home() {
 
         <TabsContent value="play" key={`play-${key}`}>
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <MinesweeperGameRefactored refreshView={refreshView} />
+            <MinesweeperGame refreshView={refreshView} />
           </div>
         </TabsContent>
 

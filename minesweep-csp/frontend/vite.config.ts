@@ -1,11 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Check if we're in development mode
+const isDevelopment = process.env.NODE_ENV === "development";
+
 export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist",
-    sourcemap: true,
+    sourcemap: false,
+    minify: "esbuild",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+        },
+      },
+    },
   },
   server: {
     port: 8080,
@@ -33,4 +44,6 @@ export default defineConfig({
       },
     },
   },
+  // Add base URL for production
+  base: isDevelopment ? "/" : "/",
 });

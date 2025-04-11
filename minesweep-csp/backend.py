@@ -1,38 +1,23 @@
 from typing import Tuple, Optional
 import random
-from solver import MinesweeperSolver
-from astarsolver import AstarSolver
-from astarboostedsolver import AstarBoostedSolver
-from greedysolver import GreedySolver
+from solvers.astarsolver import AstarSolver
+from solvers.astarboostedsolver import AstarBoostedSolver
+from solvers.greedysolver import GreedySolver
+
 
 class SolverFactory:
     """Factory for creating different solver instances."""
 
     @staticmethod
     def create_solver(solver_type, game):
-        """
-        Create a solver instance based on the specified type.
-
-        Args:
-            solver_type (str): The type of solver to create ('basic', 'csp', 'astar', 'astar_boost')
-            game: The game instance to create a solver for
-
-        Returns:
-            A solver instance
-        """
         if solver_type == "basic":
             return GreedySolver(game)
-        elif solver_type == "csp":
-            return MinesweeperSolver(game)
         elif solver_type == "astar":
-            # This will be implemented later
             return AstarSolver(game)
         elif solver_type == "astar_boost":
-            # This will be implemented later
             return AstarBoostedSolver(game)
         else:
-            # Default to basic solver
-            return MinesweeperSolver(game)
+            return GreedySolver(game)
 
 
 class MinesweeperBackend:
@@ -46,7 +31,7 @@ class MinesweeperBackend:
             width (int): Width of the game board
             height (int): Height of the game board
             num_mines (int): Number of mines to place
-            solver_type (str): Type of solver to use ('basic', 'csp', 'astar', 'astar_boost')
+            solver_type (str): Type of solver to use ('basic', 'astar', 'astar_boost')
         """
         self.width = width
         self.height = height
@@ -145,7 +130,6 @@ class MinesweeperBackend:
 
     def _check_win(self) -> bool:
         """Check if the game has been won."""
-        print("Checking if won")
         for y in range(self.height):
             for x in range(self.width):
                 if self.grid[y][x] == -1 and not self.flagged[y][x]:
@@ -172,6 +156,7 @@ class MinesweeperBackend:
             "height": self.height,
             "num_mines": self.num_mines,
             "solver_type": self.solver_type,
+            "explosions": self.nb_explosions,
         }
 
     def change_solver(self, solver_type: str):
@@ -247,14 +232,14 @@ class MinesweeperBackend:
         while not self.game_over and iterations < max_iterations:
             # Try to get and apply the next solver move
             move = self.solve_next_move()
-            
+
             # If no move is available, break the loop
             if move is None:
                 break
-            
+
             # Apply the solver move
             move_result = self.apply_solver_move()
-            
+
             # Increment iterations
             iterations += 1
 
@@ -264,8 +249,8 @@ class MinesweeperBackend:
 
         # Prepare and return results
         return {
-            'success': self.won,
-            'iterations': iterations,
-            'explosions': self.nb_explosions - initial_explosions,
-            'won': self.won
+            "success": self.won,
+            "iterations": iterations,
+            "explosions": self.nb_explosions - initial_explosions,
+            "won": self.won,
         }
