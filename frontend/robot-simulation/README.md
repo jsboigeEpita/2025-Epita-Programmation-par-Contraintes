@@ -1,12 +1,55 @@
-# React + Vite
+# Lancer le frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ce dossier contient l'interface utilisateur pour la simulation des robots, développée avec React et Vite.
 
-Currently, two official plugins are available:
+## Prérequis
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 16 ou supérieur
+- npm ou yarn
 
-## Expanding the ESLint configuration
+1. Installez les dépendances :
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+   npm install
+```
+
+2. Démarrez le serveur de développement
+    
+
+Ouvrez votre navigateur à l'adresse indiquée dans le terminal (par défaut ``http://localhost:5173``).
+
+# Simulation Locale
+
+Ce dossier contient les composants React pour la simulation locale des robots.
+
+## Fonctionnalités
+
+- Simulation des mouvements des robots sur une grille.
+- Gestion des tâches et des positions des robots.
+- Mode backend réel ou simulation locale.
+
+## Lancer la simulation
+
+1. Assurez-vous que le frontend est lancé (voir le fichier `README.md` du frontend).
+2. Accédez à l'interface utilisateur et configurez les paramètres de simulation.
+3. Cliquez sur "Démarrer la simulation" pour lancer la simulation.
+
+---
+
+Si vous avez besoin d'autres fichiers `README.md` ou de précisions, faites-le-moi savoir !# Simulation Locale
+
+Ce dossier contient les composants React pour la simulation locale des robots.
+
+## Fonctionnalités
+
+- Simulation des mouvements des robots sur une grille.
+- Gestion des tâches et des positions des robots.
+- Mode backend réel ou simulation locale.
+
+## Lancer la simulation
+
+1. Assurez-vous que le frontend est lancé (voir le fichier `README.md` du frontend).
+2. Accédez à l'interface utilisateur et configurez les paramètres de simulation.
+3. Cliquez sur "Démarrer la simulation" pour lancer la simulation.
+
+---
