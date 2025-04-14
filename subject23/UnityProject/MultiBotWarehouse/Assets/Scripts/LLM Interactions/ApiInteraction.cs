@@ -6,85 +6,56 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections;
+using UnityEngine.Events;
+using static ApiInteraction;
 
 public class ApiInteraction : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField]
     private ApiKeys apiKeys;
-
-    Task<string> currentLoop = null;
-    [SerializeField]
-    private bool inputButton = false;
-    [SerializeField]
-    private string inputText;
-    private string systemMessage = "You are a helpful assistant. We provide you the list of functions that you can call\n" +
-        "You can call them by using the function name and providing the required arguments in JSON format." +
-        "Your goal is to help the user by calling the functions and providing the results.\n" + 
-        "You need to evaluate the user input and decide whether to call a function or not and which one to call.\n" +
-        "You can call the functions by using the function name and providing the required arguments.\n" +
-        "It is your job to decide the parameters to pass to the function.\n" +
-        "If you don't want to call any function, just respond with \"END\".\n" +
-        "I zqnt you to output the function call in JSON format.\n" +
-        "The function call should be in the following format:\n" +
-        '{' + "\n" +
-        "  \"name\": \"function_name\",\n" +
-        "  \"arguments\": {\n" +
-        "    \"arg1\": \"value1\",\n" +
-        "    \"arg2\": \"value2\"\n" +
-        "  }\n" +
-        "}\n";
-
-    private void Update()
+    
+    public static string function1(int a, string b)
     {
-        if (inputButton)
-        {
-            if (currentLoop == null)
-                currentLoop = StartConversationAsync(systemMessage, inputText, "gpt-4o-mini", true, true);
-
-            if (currentLoop.Status == TaskStatus.RanToCompletion)
-            {
-                Debug.Log("Received the following message: " + currentLoop.Result);
-                currentLoop = null;
-                inputButton = false;
-            }
-        }
-    }
-    public static Task<string> function1(int a, string b)
-    {
-        return Task.Run(() =>
-        {
-            // Simulate some processing
-            System.Threading.Thread.Sleep(1000);
-            return $"Function 1 called with a: {a}, b: {b}";
-        });
+        System.Threading.Thread.Sleep(1000);
+        return $"Function 1 called with a: {a}, b: {b}";
     }
 
-    public static Task<string> function1Dico(Dictionary<string, string> args)
+    public static string function1Dico(Dictionary<string, string> args)
     {
         int a = int.Parse(args["a"]);
         string b = args["b"];
         return function1(a, b);
     }
 
-    private static Dictionary<string, Func<Dictionary<string, string>, Task<string>>> functionMapping = new Dictionary<string, Func<Dictionary<string, string>, Task<string>>>    
-    {};
+    private static Dictionary<string, Func<Dictionary<string, string>, string>> functionMapping = new Dictionary<string, Func<Dictionary<string, string>, string>>
+    {
+        { "function1", function1Dico }
+    };
 
     private static List<FunctionDefinition> functionDefinitions = new List<FunctionDefinition>
-    ();
-
-    private void Awake()
     {
-        functionMapping.Add("function1", function1Dico);
-
-        var properties = new { a = new ArgProperties() { type = "integer", description = "the desc of the first arg" },
-            b = new ArgProperties() { type = "string", description = "the desc of the second arg" } };
-
-    
-        functionDefinitions.Add(new FunctionDefinition("function1", "This is the first function",
-            new FunctionParameters("object", properties, new string[] {"a", "b"}, false)
-        ));
-    }
+        new FunctionDefinition(
+            "function1",
+            "This is the first function",
+            new FunctionParameters(
+                "object", 
+                new { 
+                    a = new ArgProperties() {
+                        type = "integer",
+                        description = "the desc of the first arg"
+                    },
+                    b = new ArgProperties() {
+                        type = "string",
+                        description = "the desc of the second arg"
+                    } 
+                }, 
+                new string[] {"a", "b"},
+                false
+            )
+        )
+    };
 
     #region JSON Objects
     [System.Serializable]
@@ -166,7 +137,7 @@ public class ApiInteraction : MonoBehaviour
     public class ChatMessage
     {
         [JsonProperty("role")]
-        public string role { get; set; } // user, function
+        public string role { get; set; } // system, user, function
 
         [JsonProperty("content")]
         public string content { get; set; }
@@ -203,7 +174,7 @@ public class ApiInteraction : MonoBehaviour
     }
     #endregion
 
-    private async Task<ChatResponse> SendAsync(ChatRequest chatRequest, bool verbose = false)
+    private IEnumerator SendAsync(ChatRequest chatRequest, UnityAction<string> callbackOnSuccess, UnityAction<string> callbackOnFail, bool verbose = false)
     {
         string jsonContent = JsonConvert.SerializeObject(chatRequest);
 
@@ -218,7 +189,7 @@ public class ApiInteraction : MonoBehaviour
             if (verbose)
                 Debug.Log("Sending request: " + jsonContent);
 
-            await request.SendWebRequest();
+            yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
@@ -226,20 +197,19 @@ public class ApiInteraction : MonoBehaviour
                 if (verbose)
                     Debug.Log("Received response: " + responseText);
 
-                var chatResponse = JsonConvert.DeserializeObject<ChatResponse>(responseText);
-                return chatResponse;
+                callbackOnSuccess(responseText);
             }
             else
             {
                 if (verbose)
                     Debug.LogError("Error: " + request.error + " | " + request.downloadHandler.text);
 
-                return null;
+                callbackOnFail(request.error);
             }
         }
     }
 
-    public async Task<string> StartConversationAsync(string systemMessage, string userMessage, string model, bool enableFunctionCalling, bool verbose = false)
+    public void StartConversationAsync(string systemMessage, string userMessage, string model, bool enableFunctionCalling, UnityAction<string> callbackOnSuccess, UnityAction<string> callbackOnFail, bool verbose = false)
     {
         List<ChatMessage> conversationHistory = new List<ChatMessage>
         {
@@ -254,31 +224,37 @@ public class ApiInteraction : MonoBehaviour
             Functions = enableFunctionCalling ? functionDefinitions.ToList() : null,
         };
 
-        ChatResponse chatResponse = await SendAsync(initialRequest, verbose);
-        if (chatResponse != null && chatResponse.choices != null && chatResponse.choices.Count > 0)
+        UnityAction<string> newCallbackOnSuccess = new UnityAction<string>(response =>
         {
-            ChatMessage responseMessage = chatResponse.choices[0].message;
-            conversationHistory.Add(responseMessage);
+            ChatResponse chatResponse = JsonConvert.DeserializeObject<ChatResponse>(response);
 
-            if (responseMessage.FunctionCall != null && enableFunctionCalling)
+            if (chatResponse != null && chatResponse.choices != null && chatResponse.choices.Count > 0)
             {
-                return await CallFunctionAsync(conversationHistory, responseMessage, model, verbose);
+                ChatMessage responseMessage = chatResponse.choices[0].message;
+                conversationHistory.Add(responseMessage);
+
+                if (responseMessage.FunctionCall != null && enableFunctionCalling)
+                {
+                    ContinueConversationWithFunctionResultAsync(conversationHistory, model, callbackOnSuccess, callbackOnFail, verbose);
+                }
+                else
+                {
+                    if (verbose)
+                        Debug.Log("Assistant response: " + responseMessage.content);
+
+                    callbackOnSuccess(responseMessage.content);
+                }
             }
             else
             {
-                if (verbose)
-                    Debug.Log("Assistant response: " + responseMessage.content);
-
-                return responseMessage.content;
+                callbackOnFail("Assistant didn't respond in StartConversationAsync.");
             }
-        }
-        else
-        {
-            return "Assistant didn't respond in StartConversationAsync.";
-        }
+        });
+
+        StartCoroutine(SendAsync(initialRequest, newCallbackOnSuccess, callbackOnFail, verbose));
     }
 
-    private async Task<string> ContinueConversationWithFunctionResultAsync(List<ChatMessage> conversationHistory, string model, bool verbose = false)
+    private void ContinueConversationWithFunctionResultAsync(List<ChatMessage> conversationHistory, string model, UnityAction<string> callbackOnSuccess, UnityAction<string> callbackOnFail, bool verbose = false)
     {
         ChatRequest newRequest = new ChatRequest
         {
@@ -287,29 +263,37 @@ public class ApiInteraction : MonoBehaviour
             Functions = functionDefinitions.ToList(),
         };
 
-        ChatResponse chatResponse = await SendAsync(newRequest, verbose);
-        if (chatResponse?.choices != null && chatResponse.choices.Count > 0)
+        UnityAction<string> newCallbackOnSuccess = new UnityAction<string>(response =>
         {
-            ChatMessage responseMessage = chatResponse.choices[0].message;
-            conversationHistory.Add(responseMessage);
+            ChatResponse chatResponse = JsonConvert.DeserializeObject<ChatResponse>(response);
 
-            if (responseMessage.FunctionCall != null)
+            if (chatResponse != null && chatResponse.choices != null && chatResponse.choices.Count > 0)
             {
-                return await CallFunctionAsync(conversationHistory, responseMessage, model, verbose);
+                ChatMessage responseMessage = chatResponse.choices[0].message;
+                conversationHistory.Add(responseMessage);
+
+                if (responseMessage.FunctionCall != null)
+                {
+                    CallFunctionAsync(conversationHistory, responseMessage, model, callbackOnSuccess, callbackOnFail, verbose);
+                }
+                else
+                {
+                    if (verbose)
+                        Debug.Log("Assistant response: " + responseMessage.content);
+
+                    callbackOnSuccess(responseMessage.content);
+                }
             }
             else
             {
-                if (verbose)
-                    Debug.Log("Assistant response: " + responseMessage.content);
-
-                return responseMessage.content;
+                callbackOnFail("Assistant didn't respond in ContinueConversationWithFunctionResultAsync.");
             }
-        }
+        });
 
-        return "Assistant didn't respond in ContinueConversationWithFunctionResultAsync.";
+        StartCoroutine(SendAsync(newRequest, newCallbackOnSuccess, callbackOnFail, verbose));
     }
 
-    private async Task<string> CallFunctionAsync(List<ChatMessage> conversationHistory, ChatMessage message, string model, bool verbose = false)
+    private void CallFunctionAsync(List<ChatMessage> conversationHistory, ChatMessage message, string model, UnityAction<string> callbackOnSuccess, UnityAction<string> callbackOnFail, bool verbose = false)
     {
         Dictionary<string, string> args = JsonConvert.DeserializeObject<Dictionary<string, string>>(message.FunctionCall.arguments);
 
@@ -318,7 +302,7 @@ public class ApiInteraction : MonoBehaviour
             if (verbose)
                 Debug.Log("LLM called \"" + message.FunctionCall.name + "\" with keys {" + string.Join(" ", args.Keys) + "} and values {" + string.Join(" ", args.Values) + "}.");
 
-            string result = await functionMapping[message.FunctionCall.name](args);
+            string result = functionMapping[message.FunctionCall.name](args);
 
             if (verbose)
                 Debug.Log("Got result: " + result);
@@ -331,14 +315,14 @@ public class ApiInteraction : MonoBehaviour
 
             conversationHistory.Add(functionResultMessage);
 
-            return await ContinueConversationWithFunctionResultAsync(conversationHistory, model, verbose);
+            ContinueConversationWithFunctionResultAsync(conversationHistory, model, callbackOnSuccess, callbackOnFail, verbose);
         }
         else
         {
             if (verbose)
                 Debug.Log("LLM called \"" + message.FunctionCall.name + "\" with keys {" + string.Join(" ", args.Keys) + "} and values {" + string.Join(" ", args.Values) + "} but it does not exist.");
 
-            return "The function " + message.FunctionCall.name + " does not exist.";
+            callbackOnFail("The function " + message.FunctionCall.name + " does not exist.");
         }
     }
 }

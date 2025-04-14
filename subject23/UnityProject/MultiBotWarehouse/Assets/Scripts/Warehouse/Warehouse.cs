@@ -1,19 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using AStar.Options;
 using AStar;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using static PathFindingCppWrapper;
 using static Solver;
-using static Warehouse.Robot;
 using static Warehouse;
+using static Warehouse.Robot;
 
 public class Warehouse : MonoBehaviour
 {
@@ -59,10 +56,6 @@ public class Warehouse : MonoBehaviour
     [SerializeField]
     private ClientOrderInteraction clientOrderInteraction;
 
-    [Header("Settings")]
-    [SerializeField]
-    private bool enableGridDebug = true;
-
     [Header("Situation")]
     [SerializeField]
     private List<SourceManager> sources;
@@ -91,8 +84,9 @@ public class Warehouse : MonoBehaviour
     private Dictionary<Robot.Role, int[][]> assignments;
     private Dictionary<Robot.Role, List<Robot>> assignedRobots;
     private Dictionary<Robot.Role, Solver.Job[]> roleJobs;
+    private Dictionary<Robot.Role, Task[]> flatRoleJobs;
 
-    private IndexedPoint[] robotGoals;
+    private IndexedPoint[] robotGoals = null;
 
     private void Awake()
     {
@@ -125,55 +119,64 @@ public class Warehouse : MonoBehaviour
         }
 
         roleJobs = new Dictionary<Role, Job[]>();
+        flatRoleJobs = new Dictionary<Role, Task[]>();
     }
 
     private void Start()
     {
-        if (enableGridDebug)
+        mapPath = Path.Combine(Application.persistentDataPath, "grid.ssv");
+        Debug.Log("Outputting map to " + mapPath);
+
+        using (StreamWriter writer = new StreamWriter(mapPath))
         {
-            mapPath = Path.Combine(Application.persistentDataPath, "grid.ssv");
-            Debug.Log("Outputting map to " + mapPath);
+            writer.WriteLine("height " + gridSize.x);
+            writer.WriteLine("width " + gridSize.y);
+            writer.WriteLine("map");
 
-            using (StreamWriter writer = new StreamWriter(mapPath))
+            for (int y = 0; y < gridSize.x; y++)
             {
-                writer.WriteLine("height " + gridSize.x);
-                writer.WriteLine("width " + gridSize.y);
-                writer.WriteLine("map");
-
-                for (int y = 0; y < gridSize.x; y++)
+                for (int x = 0; x < gridSize.y; x++)
                 {
-                    for (int x = 0; x < gridSize.y; x++)
-                    {
-                        writer.Write(grid[y][x] ? "." : "@");
-                    }
-
-                    if (y != gridSize.x - 1)
-                        writer.WriteLine("");
+                    writer.Write(grid[y][x] ? "." : "@");
                 }
-            }
 
-            wrapperMapPath = Path.Combine(Application.persistentDataPath, "map.ssv");
-            Debug.Log("Outputting wrapperMap to " + wrapperMapPath);
-
-            using (StreamWriter writer = new StreamWriter(wrapperMapPath))
-            {
-                writer.WriteLine("map_file=" + mapPath);
-                writer.WriteLine("agents=" + robots.Length);
-                writer.WriteLine("seed=0");
-                writer.WriteLine("random_problem=0");
-                writer.WriteLine("max_timestep=5000000");
-                writer.WriteLine("max_comp_time=30000000");
+                if (y != gridSize.x - 1)
+                    writer.WriteLine("");
             }
         }
 
-        //string[][] orders = clientOrderInteraction.GetRandomOrders(1);
+        wrapperMapPath = Path.Combine(Application.persistentDataPath, "map.ssv");
+        Debug.Log("Outputting wrapperMap to " + wrapperMapPath);
 
-        int[][] travelTimes = GenerateTravelTimes();
+        using (StreamWriter writer = new StreamWriter(wrapperMapPath))
+        {
+            writer.WriteLine("map_file=" + mapPath);
+            writer.WriteLine("agents=" + robots.Length);
+            writer.WriteLine("seed=0");
+            writer.WriteLine("random_problem=0");
+            writer.WriteLine("max_timestep=5000000");
+            writer.WriteLine("max_comp_time=30000000");
+        }
+    }
+
+    public void OnClickProduceButton()
+    {
+        StartProduce();
+    }
+
+    private void StartProduce()
+    {
+        string[][] orders = clientOrderInteraction.orders.Select(ele => ele.order.ToArray()).ToArray();
 
         roleJobs.Add(Role.Refill, GenerateRefillJobs());
-        //roleJobs.Add(Role.Order, GenerateOrderJobs(orders));
-
+        flatRoleJobs.Add(Role.Refill, roleJobs[Role.Refill].Select(ele => ele.tasks).Aggregate(new List<Task>(), (acc, ele) => { acc.AddRange(ele); return acc; }).ToArray());
         tasksTextDebug.text = string.Join("\n", roleJobs[Role.Refill].Select(ele => ele.Debug()).ToArray());
+
+        //roleJobs.Add(Role.Order, GenerateOrderJobs(orders));
+        //flatRoleJobs.Add(Role.Order, roleJobs[Role.Order].Select(ele => ele.tasks).Aggregate(new List<Task>(), (acc, ele) => { acc.AddRange(ele); return acc; }).ToArray());
+        //tasksTextDebug.text = string.Join("\n", roleJobs[Role.Order].Select(ele => ele.Debug()).ToArray());
+
+        int[][] travelTimes = GenerateTravelTimes();
 
         assignments.Add(Robot.Role.Refill, Solver.Solve(assignedRobots[Robot.Role.Refill].Count, roleJobs[Role.Refill], travelTimes, verbose: false));
         //assignments.Add(Robot.Role.Order, Solver.Solve(assignedRobots[Robot.Role.Order].Count, roleJobs[Role.Order], travelTimes, verbose: false));
@@ -181,45 +184,54 @@ public class Warehouse : MonoBehaviour
         refillTextDebug.text = AssignmentsToString(assignments[Robot.Role.Refill]);
         //orderTextDebug.text = AssignmentsToString(assignments[Robot.Role.Order]);
 
+        int id = 0;
+
         for (int i = 0; i < assignedRobots[Role.Refill].Count; i++)
         {
             Robot refillRobot = assignedRobots[Robot.Role.Refill][i];
 
             refillRobot.assignment = assignments[Robot.Role.Refill][i].ToList();
             refillRobot.homePosition = GetGridPosFromWorldPos(refillRobot.controller.transform.position);
-            refillRobot.id = i;
+            refillRobot.id = id++;
 
-            StartCoroutine(RefillRuntime(refillRobot));
+            StartCoroutine(Runtime(refillRobot));
         }
 
-        /*for (int i = 0; i < assignedRobots[Role.Refill].Count; i++)
+        /*
+        for (int i = 0; i < assignedRobots[Role.Refill].Count; i++)
         {
             Robot orderRobot = assignedRobots[Robot.Role.Order][i];
 
             orderRobot.assignment = assignments[Robot.Role.Order][i].ToList();
             orderRobot.homePosition = GetGridPosFromWorldPos(orderRobot.controller.transform.position);
-            orderRobot.id = i;
+            orderRobot.id = id++;
 
             StartCoroutine(RefillRuntime(orderRobot));
-        }*/
+        }
+        */
     }
 
-    private IEnumerator RefillRuntime(Robot robot)
+    private IEnumerator Runtime(Robot robot)
     {
         bool isGoingToStart = true;
 
         while (robot.assignment.Count > 0)
         {
             Vector2Int currentPos = GetGridPosFromWorldPos(robot.controller.transform.position);
-            Task currentTask = roleJobs[Role.Refill].Select(ele => ele.tasks).Aggregate(new List<Task>(), (acc, ele) => { acc.AddRange(ele); return acc; }).ToArray()[robot.assignment[0]];
+
+            Task currentTask = flatRoleJobs[robot.role][robot.assignment[0]];
             int goadId = isGoingToStart ? currentTask.startLocationId : currentTask.endLocationId;
             robot.goal = GetGridPosFromId(goadId);
 
-            if (robot.lastPosition != currentPos && grid[currentPos.x][currentPos.y])
+            if (robot.lastPosition != currentPos)
             {
                 computeGoals();
+
+                
+
                 robot.lastPosition = currentPos;
 
+                /*
                 mapTextDebug.text = "";
                 for (int y = 0; y < gridSize.x; y++)
                 {
@@ -234,13 +246,17 @@ public class Warehouse : MonoBehaviour
                     if (y != gridSize.x - 1)
                         mapTextDebug.text += "\n";
                 }
+                */
 
                 yield return null;
             }
 
-            if (robotGoals == null)
-                yield return null;
-
+            while (robotGoals == null)
+            {
+                computeGoals();
+                yield return new WaitForSeconds(0.2f);
+            }
+                
             robot.controller.enabled = true;
             robot.controller.target = ConvertGrid2Pos(robotGoals[robot.id].point, robot.controller.transform.position.y);
 
@@ -258,53 +274,77 @@ public class Warehouse : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
+
+        robot.goal = robot.homePosition;
+
+        while (robot.goal != robot.homePosition)
+        {
+            Vector2Int currentPos = GetGridPosFromWorldPos(robot.controller.transform.position);
+
+            if (robot.lastPosition != currentPos)
+            {
+                computeGoals();
+                robot.lastPosition = currentPos;
+            }
+
+            robot.controller.enabled = true;
+            robot.controller.target = ConvertGrid2Pos(robotGoals[robot.id].point, robot.controller.transform.position.y);
+        }
     }
 
     private void computeGoals()
     {
+        /*
+        if (!robots.Select(robot =>
+                {
+                    Vector2Int currentPos = GetGridPosFromWorldPos(robot.controller.transform.position);
+                    return grid[currentPos.x][currentPos.y];
+                }
+            ).Aggregate(true, (acc, ele) => acc && ele)
+        )
+            return;
+            
         AgentInfo[] agentInfos = new AgentInfo[robots.Length];
 
         for (int i = 0; i < robots.Length; i++)
         {
-            agentInfos[i].agentId = i;
+            agentInfos[i].agentId = robots[i].id;
             agentInfos[i].init = GetGridPosFromWorldPos(robots[i].controller.transform.position);
             agentInfos[i].goal = robots[i].goal;
-
-            Debug.Log("------------");
-            Debug.Log(i);
-            Debug.Log(agentInfos[i].init);
-            Debug.Log(agentInfos[i].goal);
         }
 
-        var temp = NextStep(agentInfos, robots.Length, wrapperMapPath).ToList();
+        List<IndexedPoint> temp = NextStep(agentInfos, robots.Length, wrapperMapPath).ToList();
         temp.Sort((ele1, ele2) => ele1.id.CompareTo(ele2.id));
         robotGoals = temp.ToArray();
+        */
 
-        Debug.Log(robotGoals[0].point);
+        robotGoals = new IndexedPoint[robots.Length];
 
-        /*for (int i = 0; i < robots.Length; i++)
+        for (int i = 0; i < robots.Length; i++)
         {
-            var pathfinderOptions = new PathFinderOptions
+            var pathfinderOptions = new AStar.Options.PathFinderOptions
             {
                 PunishChangeDirection = true,
                 UseDiagonals = false,
             };
 
-            var tiles = ;
+            short[][] tiles = grid.Select(ele => ele.Select(subEle => subEle ? (short)1 : (short)0).ToArray()).ToArray();
 
-            var worldGrid = new WorldGrid(tiles);
-            var pathfinder = new PathFinder(worldGrid, pathfinderOptions);
+            for (int k = 0; k < robots.Length; k++)
+            {
+                Vector2Int currentPos = GetGridPosFromWorldPos(robots[k].controller.transform.position);
+                tiles[currentPos.x][currentPos.y] = 0;
+            }
 
-            // The following are equivalent:
+            WorldGrid worldGrid = new WorldGrid(ConvertMultidimensionalArrayToMultipleArrays(tiles));
+            PathFinder pathfinder = new PathFinder(worldGrid, pathfinderOptions);
 
-            // matrix indexing
-            Position[] path = pathfinder.FindPath(new Position(0, 0), new Position(0, 2));
-        }*/
-    }
+            Position[] path = pathfinder.FindPath(Vector2IntToPosition(GetGridPosFromWorldPos(robots[i].controller.transform.position)), Vector2IntToPosition(robots[i].goal));
 
-    private void Update()
-    {
-        
+            Debug.Log(path.Length);
+
+            robotGoals[robots[i].id] = new IndexedPoint(i, PositionToVector2Int(path.Length >= 2 ? path[1] : path[0]));
+        }
     }
 
     private Solver.Job[] GenerateRefillJobs()
@@ -430,5 +470,28 @@ public class Warehouse : MonoBehaviour
         }
 
         return stringBuilder.ToString();
+    }
+
+    private static T[,] ConvertMultidimensionalArrayToMultipleArrays<T>(T[][] array)
+    {
+        var result = new T[array.Length, array[0].Length];
+
+        for (int i = 0; i < array.Length; i++)
+            for (int j = 0; j < array[0].Length; j++)
+            {
+                result[i, j] = array[i][j];
+            }
+
+        return result;
+    }
+
+    private static Position Vector2IntToPosition(Vector2Int position)
+    {
+        return new Position(position.y, position.x);
+    }
+
+    private static Vector2Int PositionToVector2Int(Position position)
+    {
+        return new Vector2Int(position.Column, position.Row);
     }
 }

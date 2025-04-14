@@ -144,6 +144,24 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Switch"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a95f7a4-aa9b-4198-be7e-728b3d74a5b6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Show"",
+                    ""type"": ""Button"",
+                    ""id"": ""8004f30e-09de-4523-92f5-bccd0e29f243"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -300,6 +318,28 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c1637fe-c1d0-4695-ab01-37dd5ab02489"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Switch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4f73424-6d00-4280-9d83-11a4e0051120"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Show"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -314,6 +354,8 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
         m_camera_LeftClick = m_camera.FindAction("LeftClick", throwIfNotFound: true);
         m_camera_RightClick = m_camera.FindAction("RightClick", throwIfNotFound: true);
         m_camera_Boost = m_camera.FindAction("Boost", throwIfNotFound: true);
+        m_camera_Switch = m_camera.FindAction("Switch", throwIfNotFound: true);
+        m_camera_Show = m_camera.FindAction("Show", throwIfNotFound: true);
     }
 
     ~@CameraInputAction()
@@ -400,6 +442,8 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_camera_LeftClick;
     private readonly InputAction m_camera_RightClick;
     private readonly InputAction m_camera_Boost;
+    private readonly InputAction m_camera_Switch;
+    private readonly InputAction m_camera_Show;
     /// <summary>
     /// Provides access to input actions defined in input action map "camera".
     /// </summary>
@@ -435,6 +479,14 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "camera/Boost".
         /// </summary>
         public InputAction @Boost => m_Wrapper.m_camera_Boost;
+        /// <summary>
+        /// Provides access to the underlying input action "camera/Switch".
+        /// </summary>
+        public InputAction @Switch => m_Wrapper.m_camera_Switch;
+        /// <summary>
+        /// Provides access to the underlying input action "camera/Show".
+        /// </summary>
+        public InputAction @Show => m_Wrapper.m_camera_Show;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -479,6 +531,12 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
             @Boost.started += instance.OnBoost;
             @Boost.performed += instance.OnBoost;
             @Boost.canceled += instance.OnBoost;
+            @Switch.started += instance.OnSwitch;
+            @Switch.performed += instance.OnSwitch;
+            @Switch.canceled += instance.OnSwitch;
+            @Show.started += instance.OnShow;
+            @Show.performed += instance.OnShow;
+            @Show.canceled += instance.OnShow;
         }
 
         /// <summary>
@@ -508,6 +566,12 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
             @Boost.started -= instance.OnBoost;
             @Boost.performed -= instance.OnBoost;
             @Boost.canceled -= instance.OnBoost;
+            @Switch.started -= instance.OnSwitch;
+            @Switch.performed -= instance.OnSwitch;
+            @Switch.canceled -= instance.OnSwitch;
+            @Show.started -= instance.OnShow;
+            @Show.performed -= instance.OnShow;
+            @Show.canceled -= instance.OnShow;
         }
 
         /// <summary>
@@ -590,5 +654,19 @@ public partial class @CameraInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBoost(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Switch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwitch(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Show" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShow(InputAction.CallbackContext context);
     }
 }

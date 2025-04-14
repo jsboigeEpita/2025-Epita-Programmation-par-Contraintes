@@ -20,6 +20,7 @@ public class RobotController : MonoBehaviour
     private void OnDisable()
     {
         robotInputAction.Disable();
+        robotManager.control = Vector2.zero;
     }
 
     private void Start()
