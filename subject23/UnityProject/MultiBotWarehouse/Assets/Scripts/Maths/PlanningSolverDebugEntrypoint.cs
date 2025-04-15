@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using static Solver;
+using static PlanningSolver;
 using static UnityEngine.Rendering.DebugUI.Table;
 
-public class SolverDebugEntrypoint : MonoBehaviour
+public class PlanningSolverDebugEntrypoint : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField]

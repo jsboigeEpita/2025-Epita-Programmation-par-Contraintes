@@ -70,11 +70,19 @@ public class SourceManager : MonoBehaviour
 
             if (robotManager.currentItem == null)
             {
-                PutOnRobot(robotManager);
+                if (robotManager.isTaking && robotManager.taskType == PlanningSolver.Task.TaskType.Input)
+                    PutOnRobot(robotManager);
             }
             else
             {
                 Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an object.");
+
+                if (robotManager.currentItem.itemIndex != furnitureIndex)
+                {
+                    Debug.LogError("And that was really a mistake.");
+                    robotManager.RemoveItem();
+                    PutOnRobot(robotManager);
+                }
             }
         }
     }
