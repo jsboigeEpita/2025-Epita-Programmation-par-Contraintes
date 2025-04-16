@@ -36,7 +36,8 @@ public class PackerOutputManager : MonoBehaviour
             if (robotManager.currentItem == null)
             {
                 if (packerManager.GetBuffer().Count != 0)
-                    PutOnRobot(robotManager);
+                    if (robotManager.isTaking && robotManager.taskType == PlanningSolver.Task.TaskType.Packer)
+                        PutOnRobot(robotManager);
                 else
                     Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " but there was nothing to pickup.");
             }

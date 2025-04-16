@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
+    [Header("Setup")]
+    [SerializeField]
+    private MonoBehaviour nextCam;
+    [SerializeField]
+    private RobotController controllerScript;
+    [SerializeField]
+    private GameObject canvas;
+
     [Header("Follow Settings")]
-    public Transform target;
-    public float distance = 10f;
-    public float zoomSpeed = 5f;
-    public float minDistance = 2f;
-    public float maxDistance = 20f;
+    [SerializeField]
+    private Transform target;
+    [SerializeField]
+    private float distance = 10f;
+    [SerializeField]
+    private float zoomSpeed = 5f;
+    [SerializeField]
+    private float minDistance = 2f;
+    [SerializeField]
+    private float maxDistance = 20f;
 
     [Header("Rotation Settings")]
-    public float sensitivity = 2f;
+    [SerializeField]
+    private float sensitivity = 2f;
 
     private CameraInputAction cameraInputAction;
 
@@ -25,16 +39,31 @@ public class FollowCamera : MonoBehaviour
         {
             Debug.LogError("FollowCamera: No target assigned.");
         }
+
+        cameraInputAction.camera.Switch.performed += _ =>
+        {
+            nextCam.enabled = true;
+            this.enabled = false;
+        };
+
+        cameraInputAction.camera.Show.performed += _ =>
+        {
+            canvas.SetActive(!canvas.activeSelf);
+        };
     }
 
     private void OnEnable()
     {
         cameraInputAction.Enable();
+        controllerScript.enabled = true;
     }
 
     private void OnDisable()
     {
         cameraInputAction.Disable();
+
+        if (controllerScript != null)
+            controllerScript.enabled = false;
     }
 
     private void Update()

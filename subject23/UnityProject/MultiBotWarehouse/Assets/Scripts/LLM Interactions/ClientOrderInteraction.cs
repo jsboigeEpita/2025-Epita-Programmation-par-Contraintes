@@ -1,16 +1,21 @@
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
-using static ApiInteraction;
+using UnityEngine.Events;
 
 public class ClientOrderInteraction : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField]
     private ApiInteraction apiInteraction;
+    [SerializeField]
+    private GameObject resultOrderTextPrefab;
+    [SerializeField]
+    private TMP_InputField inputField;
+    [SerializeField]
+    private RectTransform scrollViewContent;
 
     [Header("Settings")]
     [SerializeField]
@@ -23,10 +28,8 @@ public class ClientOrderInteraction : MonoBehaviour
     private bool inputButton = false;
     [SerializeField]
     private string inputText;
-    [SerializeField]
-    private List<string> orders;
 
-    private Task<string> currentLoop = null;
+    public List<ResultOrder> orders;
 
     [System.Serializable]
     public class ResultOrder
@@ -94,38 +97,87 @@ public class ClientOrderInteraction : MonoBehaviour
     {
         if (inputButton)
         {
-            if (currentLoop == null)
-                currentLoop = apiInteraction.StartConversationAsync(prompt, inputText, model, false, verbose);
-
-            if (currentLoop.Status == TaskStatus.RanToCompletion)
+            UnityAction<string> callbackOnSuccess = new UnityAction<string>(str =>
             {
-                Debug.Log("Received the following message: " + currentLoop.Result);
-                currentLoop = null;
-                inputButton = false;
-            }
+                Debug.Log(this.name + " received message: " + str);
+            });
+
+            UnityAction<string> callbackOnFail = new UnityAction<string>(str =>
+            {
+                Debug.Log(this.name + " received error: " + str);
+            });
+
+            apiInteraction.StartConversationAsync(prompt, inputText, model, false, callbackOnSuccess, callbackOnFail, verbose);
+
+            inputButton = false;
         }
     }
 
-    public string[][] GetRandomOrders()
+    public void OnClickSubmitButton()
     {
-        return orders.Select(ele => JsonConvert.DeserializeObject<ResultOrder>(ele).order.ToArray()).ToArray();
+        UnityAction<string> callbackOnSuccess = new UnityAction<string>(str =>
+        {
+            ResultOrder resultOrder = JsonConvert.DeserializeObject<ResultOrder>(str);
+
+            GameObject resultOrderText = GameObject.Instantiate(resultOrderTextPrefab);
+            resultOrderText.GetComponent<TMP_Text>().text = "Order: " + string.Join(",", resultOrder.order) + "\nMessage: " + resultOrder.message;
+            resultOrderText.transform.SetParent(scrollViewContent);
+            scrollViewContent.sizeDelta += new Vector2(scrollViewContent.sizeDelta.x, 50);
+
+            orders.Add(resultOrder);
+        });
+
+        UnityAction<string> callbackOnFail = new UnityAction<string>(str =>
+        {
+            Debug.Log(this.name + " received error: " + str);
+        });
+
+        apiInteraction.StartConversationAsync(prompt, inputField.text, model, false, callbackOnSuccess, callbackOnFail, verbose);
     }
 
-    /*public string[][] GetRandomOrders(int amount, bool verbose = true)
+    public void onClickRandomButton()
     {
-        string[][] orders = new string[amount][];
+        GenerateRandomOrders(Int32.Parse(inputField.text));
+    }
+
+    public void OnClickClearButton()
+    {
+        inputField.text = "";
+
+        orders.Clear();
+        scrollViewContent.sizeDelta = new Vector2(scrollViewContent.sizeDelta.x, 0);
+
+        foreach (RectTransform child in scrollViewContent.transform.GetComponentsInChildren<RectTransform>())
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void GenerateRandomOrders(int amount)
+    {
+        int amoundDone = 0;
+
+        UnityAction<string> callbackOnSuccess = new UnityAction<string>(str =>
+        {
+            ResultOrder resultOrder = JsonConvert.DeserializeObject<ResultOrder>(str);
+
+            GameObject resultOrderText = GameObject.Instantiate(resultOrderTextPrefab);
+            resultOrderText.GetComponent<TMP_Text>().text = "Order: " + string.Join(",", resultOrder.order) + "\nMessage: " + resultOrder.message;
+            resultOrderText.transform.SetParent(scrollViewContent);
+            scrollViewContent.sizeDelta += new Vector2(scrollViewContent.sizeDelta.x, 50);
+
+            amoundDone++;
+            orders.Add(resultOrder);
+        });
+
+        UnityAction<string> callbackOnFail = new UnityAction<string>(str =>
+        {
+            Debug.Log(this.name + " received error: " + str);
+        });
 
         for (int i = 0; i < amount; i++)
         {
-            UniTask.Run(async () =>
-            {
-                return await apiInteraction.StartConversationAsync(prompt, inputText, model, false, verbose);
-            }).ContinueWith(result =>
-            {
-                orders[i] = JsonConvert.DeserializeObject<ResultOrder>(result).order.ToArray();
-            });
+            apiInteraction.StartConversationAsync(prompt, "I would like to order a random number of random items.", model, false, callbackOnSuccess, callbackOnFail, verbose);
         }
-
-        return orders;
-    }*/
+    }
 }

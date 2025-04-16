@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using UnityEngine;
+using static PlanningSolver.Task;
 
 public class RobotManager : MonoBehaviour
 {
@@ -46,6 +48,9 @@ public class RobotManager : MonoBehaviour
     public Item currentItem;
 
     private Rigidbody robotRigidbody;
+
+    public bool isTaking = true;
+    public TaskType taskType = TaskType.Pause;
 
     private void Awake()
     {

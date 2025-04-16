@@ -50,7 +50,8 @@ public class DeliveryManager : MonoBehaviour
             if (robotManager.currentItem != null)
             {
                 if (robotManager.currentItem.itemIndexes != null)
-                    TakeFromRobot(robotManager);
+                    if (!robotManager.isTaking && robotManager.taskType == PlanningSolver.Task.TaskType.Packer)
+                        TakeFromRobot(robotManager);
                 else
                     Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " with an item (without packing).");
             }

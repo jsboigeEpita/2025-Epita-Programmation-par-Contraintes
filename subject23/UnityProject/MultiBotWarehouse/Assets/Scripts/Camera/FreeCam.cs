@@ -2,10 +2,19 @@ using UnityEngine;
 
 public class FreeCam : MonoBehaviour
 {
+    [Header("Setup")]
+    [SerializeField]
+    private MonoBehaviour nextCam;
+    [SerializeField]
+    private GameObject canvas;
+
     [Header("Movement Settings")]
-    public float moveSpeed = 10f;
-    public float boostMultiplier = 2f;
-    public float sensitivity = 2f;
+    [SerializeField]
+    private float moveSpeed = 10f;
+    [SerializeField]
+    private float boostMultiplier = 2f;
+    [SerializeField]
+    private float sensitivity = 2f;
 
     private CameraInputAction cameraInputAction;
 
@@ -15,6 +24,17 @@ public class FreeCam : MonoBehaviour
     private void Awake()
     {
         cameraInputAction = new CameraInputAction();
+
+        cameraInputAction.camera.Switch.performed += _ =>
+        {
+            nextCam.enabled = true;
+            this.enabled = false;
+        };
+
+        cameraInputAction.camera.Show.performed += _ =>
+        {
+            canvas.SetActive(!canvas.activeSelf);
+        };
     }
 
     private void OnEnable()

@@ -7,9 +7,14 @@ public class AutomatedRobotController : MonoBehaviour
     public Vector3 target;
     public float distanceThreshold;
 
-    private RobotManager robotManager;
+    public RobotManager robotManager;
 
-    private void Start()
+    private void OnDisable()
+    {
+        robotManager.control = Vector3.zero;
+    }
+
+    private void Awake()
     {
         robotManager = this.GetComponent<RobotManager>();
     }

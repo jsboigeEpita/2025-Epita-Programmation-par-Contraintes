@@ -28,15 +28,23 @@ public class ShelfManager : MonoBehaviour
 
             if (robotManager.currentItem == null)
             {
-                if (shelvingUnit.currentShelf.currentItem == null)
+                if (shelvingUnit.items.Where(ele => ele != null).Count() != 0)
                 {
-                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " without any objects.");
+                    if (robotManager.isTaking && robotManager.taskType == PlanningSolver.Task.TaskType.Shelf)
+                    {
+                        while (shelvingUnit.currentShelf.currentItem == null)
+                            shelvingUnit.DoOneRotation(0);
+
+                        shelvingUnit.currentShelf.PutOnRobot(robotManager);
+
+                        shelvingUnit.DoOneRotation(0.1f);
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning(robotManager.gameObject.name + " arrived to " + this.gameObject.name + " without any objects and there was nothing.");
                     return;
                 }
-
-                shelvingUnit.currentShelf.PutOnRobot(robotManager);
-
-                shelvingUnit.DoOneRotation(0.1f);
             }
             else if (robotManager.currentItem != null)
             {
@@ -44,15 +52,18 @@ public class ShelfManager : MonoBehaviour
                 {
                     if (shelvingUnit.items.Where(ele => ele != null).Count() < shelvingUnit.items.Count)
                     {
-                        while (shelvingUnit.currentShelf.currentItem != null)
-                            shelvingUnit.DoOneRotation(0.1f);
+                        if (!robotManager.isTaking && robotManager.taskType == PlanningSolver.Task.TaskType.Input)
+                        {
+                            while (shelvingUnit.currentShelf.currentItem != null)
+                                shelvingUnit.DoOneRotation(0.1f);
 
-                        string name = robotManager.currentItem.gameObject.name;
+                            string name = robotManager.currentItem.gameObject.name;
 
-                        shelvingUnit.currentShelf.TakeFromRobot(robotManager);
+                            shelvingUnit.currentShelf.TakeFromRobot(robotManager);
 
-                        if (name.Contains(shelvingUnit.currentShelf.itemName))
-                            shelvingUnit.DoOneRotation(0.1f);
+                            if (name.Contains(shelvingUnit.currentShelf.itemName))
+                                shelvingUnit.DoOneRotation(0.1f);
+                        }
                     }
                     else
                     {
