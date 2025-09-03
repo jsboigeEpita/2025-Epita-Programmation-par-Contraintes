@@ -1,6 +1,0 @@
-numpy
-yaml
-dotenv
-openai
-matplotlib
-ortools

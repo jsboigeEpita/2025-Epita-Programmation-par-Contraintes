@@ -1,4 +1,0 @@
-openai
-pandas
-ortools
-z3-solver

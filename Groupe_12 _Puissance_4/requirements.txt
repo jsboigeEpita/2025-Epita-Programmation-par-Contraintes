@@ -1,4 +1,0 @@
-numpy
-pygame
-pandas
-seaborn

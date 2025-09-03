@@ -1,9 +1,0 @@
-,Win %,Total Games,Wins,Losses,Draws,Games as P1,Games as P2
-Minimax,100.0,140,140,0,0,70,70
-Genetic,75.0,140,105,34,1,70,70
-Leo algo,65.7,140,92,48,0,70,70
-MonteCarlo,60.0,140,84,55,1,70,70
-Pattern-Based,54.3,140,76,64,0,70,70
-Negamax,27.9,140,39,101,0,70,70
-Always First,11.4,140,16,124,0,70,70
-Random,5.0,140,7,133,0,70,70

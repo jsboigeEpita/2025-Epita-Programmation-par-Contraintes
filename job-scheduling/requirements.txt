@@ -1,7 +1,0 @@
-ortools>=9.4.1874
-matplotlib>=3.5.1
-numpy>=1.22.3
-pandas>=1.4.2
-jupyter>=1.0.0
-notebook>=6.4.11
-openai>=1.0.0  # Added for AI integration

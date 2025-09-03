@@ -1,4 +1,0 @@
-python-constraint      
-colorama
-questionary
-rich

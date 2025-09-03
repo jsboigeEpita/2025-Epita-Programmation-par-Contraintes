@@ -1,7 +1,0 @@
-flask==2.3.3
-flask-cors==4.0.0
-pandas==2.1.0
-numpy==1.25.2
-ortools==9.7.2996
-openai==1.69.0
-python-dotenv==1.0.0

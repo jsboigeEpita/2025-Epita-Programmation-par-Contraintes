@@ -1,7 +1,0 @@
-ortools
-k-means-constrained>=0.7.2
-colorama
-matplotlib
-tabulate
-flask
-flask-cors

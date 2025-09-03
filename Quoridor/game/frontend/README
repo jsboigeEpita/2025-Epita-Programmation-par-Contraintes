@@ -1,7 +1,0 @@
-# Quoridor frontend
-
-## Build docker image
-
-```
-docker build -t quoridor-frontend:{TAG}
-```
