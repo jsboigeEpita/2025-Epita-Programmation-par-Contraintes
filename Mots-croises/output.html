@@ -1,0 +1,25 @@
+<div class='mot-croise'><table><tbody><tr><td contenteditable='true'></td><td contenteditable='true'></td><td class='full'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td></tr><tr><td contenteditable='true'></td><td class='full'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td></tr><tr><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td class='full'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td></tr><tr><td contenteditable='true'></td><td class='full'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td></tr><tr><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td class='full'></td><td contenteditable='true'></td></tr><tr><td contenteditable='true'></td><td contenteditable='true'></td><td class='full'></td><td class='full'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td></tr><tr><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td contenteditable='true'></td><td class='full'></td><td contenteditable='true'></td></tr></tbody></table><div>Horizontal :<ol><li>Initiales de l'Union européenne   // Récipient souvent décoratif  </li><li>Unité de mesure pour les diamants  </li><li>Agence de renseignement américaine   // Pratique de certains tireurs  </li><li>Dame du jeu d'échecs  </li><li>Provenant de  </li><li>Note de musique entre ré et fa   // Département français de la région Auvergne-Rhône-Alpes  </li><li>Affichage de cinéma ou d'ordinateur  </li></ol>Vertical :<ol><li>Sport avec fleuret ou épée  </li><li>Terme latin signifiant "ainsi"  </li><li>Autobus  </li><li>Synonyme de marche   // Participe passé de avoir  </li><li>Travailleur manuel spécialisé  </li><li>En bonne santé  </li><li>Cadeau offert au début de l'année</li></ol></div><style>
+    .mot-croise > table {
+        border-collapse: collapse;
+    }
+
+    .mot-croise > table > tbody > tr > td {
+        text-align: center;
+    
+        height: 3em;
+        width: 3em;
+
+        border: 1px solid black;
+    }
+
+    .mot-croise > table > tbody > tr > td.full {
+        background-color: black;
+    }
+    </style><script>
+    for (const cell of document.querySelectorAll(".mot-croise > table > tbody > tr > td")) {
+        cell.onkeypress = (e) => {
+            cell.textContent = String.fromCharCode(e.which);
+            e.preventDefault();
+        };
+    }
+    </script></div>
